@@ -84,7 +84,6 @@
     return Math.max(totalHeight, 0); // 確保不為負數，避免佈局錯誤
   });
 
-
   /**
    * 👀 監聽 activeUpperTab 變化 (Watch activeUpperTab Changes)
    * 當分頁切換時記錄日誌，用於除錯和狀態追蹤
@@ -92,9 +91,7 @@
   watch(
     () => props.activeUpperTab,
     (newTab, oldTab) => {
-      console.log(
-        `🔧 MiddleView Watcher: activeUpperTab changed from "${oldTab}" to "${newTab}"`
-      );
+      console.log(`🔧 MiddleView Watcher: activeUpperTab changed from "${oldTab}" to "${newTab}"`);
     }
   );
 
@@ -228,8 +225,6 @@
         @update:currentCoords="$emit('update:currentCoords', $event)"
         @update:activeMarkers="$emit('update:activeMarkers', $event)"
         @feature-selected="$emit('feature-selected', $event)"
-        @open-distance-modal="(lat, lng) => $emit('open-distance-modal', lat, lng)"
-        @open-isochrone-modal="(lat, lng) => $emit('open-isochrone-modal', lat, lng)"
       />
     </div>
   </div>

@@ -1080,6 +1080,7 @@ export const useDataStore = defineStore(
           layer.geoJsonData.features.forEach((feature) => {
             if (feature.geometry.type === 'Point') {
               const [lng, lat] = feature.geometry.coordinates;
+              const distance = calculateDistance(centerLat, centerLng, lat, lng);
 
               if (distance <= radiusMeters) {
                 // 創建增強的 feature 物件，包含距離和圖層資訊
@@ -1163,6 +1164,7 @@ export const useDataStore = defineStore(
       for (const polygon of coordinates) {
         for (const ring of polygon) {
           for (const [lng, lat] of ring) {
+            const distance = calculateDistance(centerLat, centerLng, lat, lng);
             if (distance <= radiusMeters) {
               return true; // 如果任何一個頂點在圓內，就認為有重疊
             }
@@ -1504,6 +1506,7 @@ export const useDataStore = defineStore(
               // 使用點在多邊形內判斷算法檢查此點是否在等時圈內
               if (isPointInPolygon([lng, lat], isochronePolygon.geometry)) {
                 // 計算點與等時圈中心的直線距離（雖然不是實際行車距離，但可作為參考）
+                const distance = calculateDistance(centerLat, centerLng, lat, lng);
 
                 // 創建增強的要素物件，包含原始數據和額外資訊
                 const enhancedFeature = {

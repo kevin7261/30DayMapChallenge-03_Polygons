@@ -129,16 +129,6 @@
       /** 🖱️ 側邊面板拖曳進行中狀態 */
       const isSidePanelDragging = ref(false);
 
-      // 📊 距離輸入 Modal 相關變數 (Distance Input Modal Related Variables)
-      const showDistanceModal = ref(false); // 是否顯示距離輸入 modal
-      const distanceModalPosition = ref({ lat: 0, lng: 0 }); // 點擊位置的座標
-      const distanceInput = ref(''); // 距離輸入值
-
-      // 📊 等時分析 Modal 相關變數 (Isochrone Analysis Modal Related Variables)
-      const showIsochroneModal = ref(false); // 是否顯示等時分析 modal
-      const isochroneModalPosition = ref({ lat: 0, lng: 0 }); // 點擊位置的座標
-      const isochroneInput = ref(''); // 車程時間輸入值
-
       // 🗺️ 地圖互動函數 (Map Interaction Functions)
 
       /**
@@ -192,10 +182,7 @@
             // 調整左側面板寬度
             let newWidth = startLeftWidth + deltaXPercent;
             // 限制寬度：最小值為 MIN_LEFT_PANEL_WIDTH_PERCENT，最大值為 100%
-            newWidth = Math.max(
-              MIN_LEFT_PANEL_WIDTH_PERCENT,
-              Math.min(100, newWidth)
-            );
+            newWidth = Math.max(MIN_LEFT_PANEL_WIDTH_PERCENT, Math.min(100, newWidth));
             leftViewWidth.value = newWidth;
           }
         };
@@ -237,136 +224,6 @@
 
         // 四捨五入到一位小數
         leftViewWidth.value = Math.round(leftViewWidth.value * 10) / 10;
-      };
-
-      // 📊 距離輸入 Modal 處理函數 (Distance Input Modal Handler Functions)
-      /**
-       * 📊 顯示距離輸入 Modal
-       * @param {number} lat - 緯度
-       * @param {number} lng - 經度
-       */
-      const openDistanceModal = (lat, lng) => {
-        console.log('🔍 openDistanceModal 被調用:', { lat, lng });
-        distanceModalPosition.value = { lat, lng };
-        distanceInput.value = '2'; // 預設為 2 公里
-        showDistanceModal.value = true;
-        console.log('🔍 Modal 狀態已設定:', {
-          showDistanceModal: showDistanceModal.value,
-          distanceInput: distanceInput.value,
-          distanceModalPosition: distanceModalPosition.value,
-        });
-      };
-
-      /**
-       * 📊 處理距離輸入確認
-       */
-      const handleDistanceConfirm = () => {
-        console.log('🔍 handleDistanceConfirm 被調用');
-        const distance = parseFloat(distanceInput.value);
-        console.log('🔍 解析的距離:', distance);
-        console.log('🔍 當前座標:', distanceModalPosition.value);
-
-        if (distance && distance > 0) {
-          // 將公里轉換為米，然後使用輸入的距離添加分析點
-          const radiusInMeters = distance * 1000;
-          console.log('🔍 轉換為米:', radiusInMeters);
-
-          try {
-            const result = dataStore.addAnalysisPoint(
-              distanceModalPosition.value.lat,
-              distanceModalPosition.value.lng,
-              radiusInMeters
-            );
-            console.log('🔍 addAnalysisPoint 結果:', result);
-          } catch (error) {
-            console.error('❌ addAnalysisPoint 錯誤:', error);
-          }
-
-          // 關閉 modal
-          showDistanceModal.value = false;
-          // 通知地圖組件停止點擊模式
-          if (middlePanelRef.value && middlePanelRef.value.stopClickMode) {
-            console.log('🔍 調用 middlePanelRef.stopClickMode');
-            middlePanelRef.value.stopClickMode();
-          } else if (mobileUpperViewRef.value && mobileUpperViewRef.value.stopClickMode) {
-            console.log('🔍 調用 mobileUpperViewRef.stopClickMode');
-            mobileUpperViewRef.value.stopClickMode();
-          } else {
-            console.warn('⚠️ 無法找到 stopClickMode 方法');
-          }
-        } else {
-          console.warn('⚠️ 距離無效:', distance);
-        }
-      };
-
-      /**
-       * 📊 處理距離輸入取消
-       */
-      const handleDistanceCancel = () => {
-        showDistanceModal.value = false;
-      };
-
-      // 📊 等時分析 Modal 處理函數 (Isochrone Analysis Modal Handler Functions)
-      /**
-       * 📊 顯示等時分析 Modal
-       * @param {number} lat - 緯度
-       * @param {number} lng - 經度
-       */
-      const openIsochroneModal = (lat, lng) => {
-        console.log('🔍 openIsochroneModal 被調用:', { lat, lng });
-        isochroneModalPosition.value = { lat, lng };
-        isochroneInput.value = '15'; // 預設為 15 分鐘
-        showIsochroneModal.value = true;
-        console.log('🔍 等時分析 Modal 狀態已設定:', {
-          showIsochroneModal: showIsochroneModal.value,
-          isochroneInput: isochroneInput.value,
-          isochroneModalPosition: isochroneModalPosition.value,
-        });
-      };
-
-      /**
-       * 📊 處理等時分析輸入確認
-       */
-      const handleIsochroneConfirm = () => {
-        console.log('🔍 handleIsochroneConfirm 被調用');
-        const timeMinutes = parseFloat(isochroneInput.value);
-        console.log('🔍 解析的車程時間:', timeMinutes);
-        console.log('🔍 當前座標:', isochroneModalPosition.value);
-
-        if (timeMinutes && timeMinutes > 0) {
-          try {
-            const result = dataStore.addIsochroneAnalysisPoint(
-              isochroneModalPosition.value.lat,
-              isochroneModalPosition.value.lng,
-              timeMinutes
-            );
-            console.log('🔍 addIsochroneAnalysisPoint 結果:', result);
-          } catch (error) {
-            console.error('❌ addIsochroneAnalysisPoint 錯誤:', error);
-          }
-
-          // 關閉 modal
-          showIsochroneModal.value = false;
-          // 通知地圖組件停止點擊模式
-          if (middlePanelRef.value && middlePanelRef.value.stopIsochroneClickMode) {
-            console.log('🔍 調用 middlePanelRef.stopIsochroneClickMode');
-            middlePanelRef.value.stopIsochroneClickMode();
-          } else if (mobileUpperViewRef.value && mobileUpperViewRef.value.stopIsochroneClickMode) {
-            console.log('🔍 調用 mobileUpperViewRef.stopIsochroneClickMode');
-            mobileUpperViewRef.value.stopIsochroneClickMode();
-          } else {
-            console.warn('⚠️ 無法找到 stopIsochroneClickMode 方法');
-          }
-        } else {
-          console.warn('⚠️ 車程時間無效:', timeMinutes);
-        }
-      };
-
-      /**
-       * 📊 處理等時分析輸入取消
-       */
-      const handleIsochroneCancel = () => {
-        showIsochroneModal.value = false;
       };
 
       // 📏 視窗大小變化處理 (Window Resize Handler)
@@ -765,22 +622,6 @@
         // 🎯 互動函數
         updateActiveMarkers, // 更新作用中標記
         handleFeatureSelected, // 處理特徵選中
-
-        // 📊 距離輸入 Modal 相關
-        showDistanceModal, // 是否顯示距離輸入 modal
-        distanceModalPosition, // 點擊位置的座標
-        distanceInput, // 距離輸入值
-        openDistanceModal, // 顯示距離輸入 modal
-        handleDistanceConfirm, // 處理距離輸入確認
-        handleDistanceCancel, // 處理距離輸入取消
-
-        // 📊 等時分析 Modal 相關
-        showIsochroneModal, // 是否顯示等時分析 modal
-        isochroneModalPosition, // 點擊位置的座標
-        isochroneInput, // 車程時間輸入值
-        openIsochroneModal, // 顯示等時分析 modal
-        handleIsochroneConfirm, // 處理等時分析輸入確認
-        handleIsochroneCancel, // 處理等時分析輸入取消
       };
     },
   };
@@ -799,138 +640,6 @@
       :showProgress="showLoadingProgress"
       :subText="loadingSubText"
     />
-
-    <!-- 📊 距離輸入 Modal -->
-    <div
-      v-if="showDistanceModal"
-      class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-      style="background-color: rgba(0, 0, 0, 0.7); z-index: 9999"
-    >
-      <!-- 📄 距離輸入內容卡片 -->
-      <div class="text-center my-bgcolor-white p-4 rounded shadow">
-        <!-- 📊 標題區域 -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="my-title-md-black mb-0">分析範圍</h5>
-          <button
-            type="button"
-            class="btn-close"
-            @click="handleDistanceCancel"
-            aria-label="Close"
-          ></button>
-        </div>
-
-        <!-- 📝 輸入區域 -->
-        <div class="d-flex align-items-center gap-2 my-4">
-          <span class="my-title-sm-gray text-nowrap">半徑</span>
-          <input
-            type="number"
-            class="form-control text-center my-font-size-md"
-            id="distanceInput"
-            v-model="distanceInput"
-            placeholder="例如：2.5"
-            min="0.1"
-            step="0.1"
-            @keyup.enter="handleDistanceConfirm"
-          />
-          <span class="my-title-sm-gray text-nowrap">公里</span>
-          <!-- 點擊位置 -->
-          <!--
-          <div class="form-text text-start mt-2">
-            點擊位置：{{
-              distanceModalPosition.lat ? distanceModalPosition.lat.toFixed(6) : '0.000000'
-            }}, {{ distanceModalPosition.lng ? distanceModalPosition.lng.toFixed(6) : '0.000000' }}
-          </div>
-          -->
-        </div>
-
-        <!-- 📝 按鈕區域 -->
-        <div class="d-flex gap-2 justify-content-end">
-          <button
-            type="button"
-            class="btn my-font-size-sm my-btn-white"
-            @click="handleDistanceCancel"
-          >
-            <i class="fas fa-times me-2"></i>
-            取消
-          </button>
-          <button
-            type="button"
-            class="btn my-font-size-sm my-btn-blue"
-            @click="handleDistanceConfirm"
-            :disabled="!distanceInput || distanceInput === ''"
-            :title="
-              '距離輸入: ' +
-              distanceInput +
-              ', 長度: ' +
-              distanceInput.length +
-              ', 數值: ' +
-              parseFloat(distanceInput)
-            "
-          >
-            <i class="fas fa-check me-2"></i>
-            確認
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 📊 等時分析 Modal -->
-    <div
-      v-if="showIsochroneModal"
-      class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
-      style="background-color: rgba(0, 0, 0, 0.7); z-index: 9999"
-    >
-      <!-- 📄 等時分析內容卡片 -->
-      <div class="text-center my-bgcolor-white p-4 rounded shadow">
-        <!-- 📊 標題區域 -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="my-title-md-black mb-0">車程時間</h5>
-          <button
-            type="button"
-            class="btn-close"
-            @click="handleIsochroneCancel"
-            aria-label="Close"
-          ></button>
-        </div>
-
-        <!-- 📝 輸入區域 -->
-        <div class="d-flex align-items-center gap-2 my-4">
-          <span class="my-title-sm-gray text-nowrap">時間</span>
-          <input
-            type="number"
-            class="form-control text-center my-font-size-md"
-            id="isochroneInput"
-            v-model="isochroneInput"
-            placeholder="例如：15"
-            min="1"
-            step="1"
-            @keyup.enter="handleIsochroneConfirm"
-          />
-          <span class="my-title-sm-gray text-nowrap">分鐘</span>
-        </div>
-
-        <!-- 📝 按鈕區域 -->
-        <div class="d-flex gap-2 justify-content-end">
-          <button
-            type="button"
-            class="btn my-font-size-sm my-btn-white"
-            @click="handleIsochroneCancel"
-          >
-            <i class="fas fa-times me-2"></i>
-            取消
-          </button>
-          <button
-            type="button"
-            class="btn my-font-size-sm my-btn-blue"
-            @click="handleIsochroneConfirm"
-            :disabled="!isochroneInput || isochroneInput === ''"
-          >
-            <i class="fas fa-check me-2"></i>
-            確認
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- 📱 主要內容區域 (Main Content Area) -->
     <!-- 使用計算高度為 footer 留出空間，避免擋住滾動條 -->
@@ -992,10 +701,7 @@
             @highlight-on-map="handleHighlight"
             @highlight-feature="handleHighlight"
             @feature-selected="handleFeatureSelected"
-            @open-distance-modal="openDistanceModal"
-            @open-isochrone-modal="openIsochroneModal"
           />
-
         </div>
 
         <!-- 📱 行動版/平板版佈局 (Mobile/Tablet Layout - below xl) -->
@@ -1022,8 +728,6 @@
               @update:currentCoords="currentCoords = $event"
               @update:activeMarkers="activeMarkers = $event"
               @feature-selected="handleFeatureSelected"
-              @open-distance-modal="openDistanceModal"
-              @open-isochrone-modal="openIsochroneModal"
             />
           </div>
 
