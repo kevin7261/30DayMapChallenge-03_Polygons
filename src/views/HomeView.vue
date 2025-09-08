@@ -5,7 +5,6 @@
   // 🧩 組件引入
   import LoadingOverlay from '../components/LoadingOverlay.vue';
   import LeftView from './LeftView.vue';
-  import RightView from './RightView.vue';
   import MiddleView from './MiddleView.vue';
   import UpperView from './UpperView.vue';
   import ResponsiveLowerView from './ResponsiveLowerView.vue';
@@ -20,7 +19,6 @@
     components: {
       LoadingOverlay, // 載入覆蓋層組件
       LeftView, // 左側控制面板組件
-      RightView, // 右側面板組件
       MiddleView, // 中間主要內容面板組件
       UpperView, // 上半部區域組件
       ResponsiveLowerView, // 下半部區域組件
@@ -51,8 +49,6 @@
       const activeUpperTab = ref('map');
       /** 📋 底部分頁狀態（表格/樣式） */
       const activeBottomTab = ref('table');
-      /** 📊 右側分頁狀態（屬性/分析） */
-      const activeRightTab = ref('properties');
       /** 📱 響應式下半部分頁狀態（行動版/平板版） */
       const activeLowerTab = ref('layers');
 
@@ -61,8 +57,6 @@
       const MIN_LEFT_PANEL_WIDTH_PERCENT = 5; // 左側面板最小寬度百分比
       /** 📏 左側面板寬度百分比 (0-100%) */
       const leftViewWidth = ref(20);
-      /** 📏 右側面板寬度百分比 (0-100%) */
-      const rightViewWidth = ref(20);
       /** 📏 瀏覽器視窗寬度 */
       const windowWidth = ref(window.innerWidth);
       /** 📏 瀏覽器視窗高度 */
@@ -73,10 +67,8 @@
       // 🧮 計算屬性 - 面板尺寸 (Computed Properties - Panel Dimensions)
       /** 📏 左側面板像素寬度 */
       const leftViewWidthPx = computed(() => `${leftViewWidth.value}%`);
-      /** 📏 右側面板像素寬度 */
-      const rightViewWidthPx = computed(() => `${rightViewWidth.value}%`);
       /** 📏 中間面板寬度百分比 */
-      const mainPanelWidth = computed(() => 100 - leftViewWidth.value - rightViewWidth.value);
+      const mainPanelWidth = computed(() => 100 - leftViewWidth.value);
       /** 📏 中間面板像素寬度 */
       const mainPanelWidthPx = computed(() => `${mainPanelWidth.value}%`);
 
@@ -179,14 +171,12 @@
         // 記錄初始位置和面板尺寸
         const startX = event.clientX;
         const startLeftWidth = leftViewWidth.value;
-        const startRightWidth = rightViewWidth.value;
 
         // 獲取窗口尺寸以計算百分比
         const currentWindowWidth = windowWidth.value;
 
         console.log(`🔧 開始調整 ${direction} 方向，初始值:`, {
           leftWidth: startLeftWidth,
-          rightWidth: startRightWidth,
         });
 
         /**
@@ -201,18 +191,12 @@
           if (direction === 'left') {
             // 調整左側面板寬度
             let newWidth = startLeftWidth + deltaXPercent;
-            // 限制寬度：最小值為 MIN_LEFT_PANEL_WIDTH_PERCENT，最大值確保主面板不為負
+            // 限制寬度：最小值為 MIN_LEFT_PANEL_WIDTH_PERCENT，最大值為 100%
             newWidth = Math.max(
               MIN_LEFT_PANEL_WIDTH_PERCENT,
-              Math.min(100 - rightViewWidth.value, newWidth)
+              Math.min(100, newWidth)
             );
             leftViewWidth.value = newWidth;
-          } else if (direction === 'right') {
-            // 調整右側面板寬度
-            let newWidth = startRightWidth - deltaXPercent;
-            // 限制寬度：最小值為 0，最大值確保主面板不為負
-            newWidth = Math.max(0, Math.min(100 - leftViewWidth.value, newWidth));
-            rightViewWidth.value = newWidth;
           }
         };
 
@@ -231,7 +215,6 @@
 
           console.log('✅ 拖曳調整完成，最終值:', {
             leftWidth: leftViewWidth.value,
-            rightWidth: rightViewWidth.value,
             mainWidth: mainPanelWidth.value,
           });
         };
@@ -246,16 +229,14 @@
        * 確保面板尺寸在合理範圍內 (0-100%)
        */
       const validatePanelSizes = () => {
-        // 確保各面板在合理範圍內
+        // 確保左側面板在合理範圍內
         leftViewWidth.value = Math.max(
           MIN_LEFT_PANEL_WIDTH_PERCENT,
           Math.min(100, leftViewWidth.value)
         );
-        rightViewWidth.value = Math.max(0, Math.min(100, rightViewWidth.value));
 
         // 四捨五入到一位小數
         leftViewWidth.value = Math.round(leftViewWidth.value * 10) / 10;
-        rightViewWidth.value = Math.round(rightViewWidth.value * 10) / 10;
       };
 
       // 📊 距離輸入 Modal 處理函數 (Distance Input Modal Handler Functions)
@@ -518,10 +499,7 @@
         // 檢查當前是桌面版還是響應式版本
         const isDesktop = window.innerWidth >= 1200; // xl breakpoint
 
-        if (isDesktop) {
-          // 桌面版：切換到右側屬性分頁
-          activeRightTab.value = 'properties';
-        } else {
+        if (!isDesktop) {
           // 響應式版本：切換到底部屬性分頁
           activeLowerTab.value = 'properties';
 
@@ -738,7 +716,6 @@
         // 📑 分頁狀態
         activeUpperTab, // 主要分頁狀態
         activeBottomTab, // 底部分頁狀態
-        activeRightTab, // 右側分頁狀態
         activeLowerTab, // 響應式下半部分頁狀態
 
         // ⏳ 載入狀態
@@ -761,9 +738,7 @@
 
         // 📏 面板尺寸（百分比系統）
         leftViewWidth, // 左側面板寬度百分比
-        rightViewWidth, // 右側面板寬度百分比
         leftViewWidthPx, // 左側面板像素寬度
-        rightViewWidthPx, // 右側面板像素寬度
         mainPanelWidth, // 中間面板寬度百分比
         mainPanelWidthPx, // 中間面板像素寬度
 
@@ -1021,31 +996,6 @@
             @open-isochrone-modal="openIsochroneModal"
           />
 
-          <!-- 🔧 右側拖曳調整器 (Right Panel Resizer) -->
-          <!-- 提供滑鼠拖曳功能，動態調整右側面板寬度 -->
-          <div
-            class="my-resizer my-resizer-vertical my-resizer-right"
-            :class="{ 'my-dragging': isSidePanelDragging }"
-            @mousedown="startResize('right', $event)"
-            title="拖曳調整右側面板寬度"
-          ></div>
-
-          <!-- 📈 右側控制面板容器 (Right Control Panel Container) -->
-          <!-- 包含物件屬性、分析清單等輔助功能，支援動態寬度調整 -->
-          <div
-            class="h-100 overflow-auto"
-            :style="{ width: rightViewWidthPx }"
-            v-if="rightViewWidth > 0"
-          >
-            <RightView
-              :activeRightTab="activeRightTab"
-              :activeMarkers="activeMarkers"
-              :rightViewWidth="rightViewWidth"
-              @update:activeRightTab="activeRightTab = $event"
-              @highlight-feature="handleHighlight"
-              :current-coords="currentCoords"
-            />
-          </div>
         </div>
 
         <!-- 📱 行動版/平板版佈局 (Mobile/Tablet Layout - below xl) -->
@@ -1095,10 +1045,8 @@
           >
             <ResponsiveLowerView
               :activeTab="activeLowerTab"
-              :activeRightTab="activeRightTab"
               :activeBottomTab="activeBottomTab"
               @update:activeTab="activeLowerTab = $event"
-              @update:activeRightTab="activeRightTab = $event"
               @update:activeBottomTab="activeBottomTab = $event"
               @highlight-on-map="handleHighlight"
               @highlight-feature="handleHighlight"

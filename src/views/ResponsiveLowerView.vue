@@ -23,7 +23,6 @@
      */
     props: {
       activeTab: { type: String, default: 'layers' },
-      activeRightTab: { type: String, default: 'properties' },
       activeBottomTab: { type: String, default: 'table' },
     },
 
@@ -33,7 +32,6 @@
      */
     emits: [
       'update:activeTab', // 更新作用中分頁
-      'update:activeRightTab', // 更新右側分頁
       'update:activeBottomTab', // 更新底部分頁
       'highlight-on-map', // 在地圖上高亮顯示
       'highlight-feature', // 高亮顯示特徵

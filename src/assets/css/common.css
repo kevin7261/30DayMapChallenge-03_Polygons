@@ -430,10 +430,6 @@ body {
 
 /* 面板樣式  */
 
-.my-right-panel {
-  background-color: var(--my-color-white); /* 面板背景色 */
-  /* border-left: 1px solid var(--my-color-gray-200); */ /* 左邊框 */
-}
 
 /* 🌟 左側面板右側陰影 (Left Panel Right Shadow) */
 .my-left-panel {
@@ -585,14 +581,6 @@ body {
   background-color: var(--my-color-blue); /* 懸停時保持主色 */
 }
 
-.my-resizer-right {
-  background-color: var(--my-color-gray-200); /* 右側面板 resizer - white */
-  border-left: 1px solid var(--my-color-gray-300); /* 左邊框 */
-}
-
-.my-resizer-right:hover {
-  background-color: var(--my-color-blue); /* 懸停時保持主色 */
-}
 
 .my-resizer-middle {
   background-color: var(--my-color-gray-200); /* 中間面板上下拉 resizer - gray-200 */

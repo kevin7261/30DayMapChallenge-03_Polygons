@@ -12,7 +12,6 @@
 
   // 🧩 組件引入
   import UpperView from './UpperView.vue';
-  import BottomView from './BottomView.vue';
 
   // --- 📥 組件屬性定義 (Component Props) ---
   /**
@@ -65,121 +64,26 @@
   /** 📊 主內容面板引用 (用於呼叫 UpperView 的方法如 highlightFeature) */
   const mainContentRef = ref(null);
 
-  // --- 🔧 內部垂直拖曳調整邏輯 (Internal Vertical Resizing Logic) ---
-
-  /** 📏 底部面板高度百分比 (預設 30%，可透過拖曳調整) */
-  const bottomViewHeightPercent = ref(30);
-
-  /** 🖱️ 是否正在進行垂直拖曳 (追蹤垂直拖曳狀態) */
-  const isVerticalDragging = ref(false);
+  // --- 🔧 內部拖曳調整邏輯 (Internal Dragging Logic) ---
 
   /**
    * 🖱️ 計算是否有任何拖曳正在進行 (影響滑鼠指標事件)
-   * 結合側邊面板拖曳和垂直拖曳狀態，用於禁用指標事件
+   * 使用側邊面板拖曳狀態，用於禁用指標事件
    */
   const isOverallDragging = computed(() => {
-    return props.isSidePanelDragging || isVerticalDragging.value;
-  });
-
-  /**
-   * 📏 中間區域總高度計算 (Computing Total Middle Section Height)
-   * 從父組件傳入的動態高度，確保不為負數
-   */
-  const middleSectionTotalHeight = computed(() => {
-    const totalHeight = props.dynamicMainAreaHeight;
-    console.log(`🔧 MiddleView: middleSectionTotalHeight (from prop): ${totalHeight}`);
-    return Math.max(totalHeight, 0); // 確保不為負數，避免佈局錯誤
-  });
-
-  /**
-   * 📏 底部面板實際像素高度計算 (Computing Actual Bottom View Pixel Height)
-   * 根據百分比和總高度計算實際像素值
-   */
-  const actualBottomViewPixelHeight = computed(() => {
-    const pixelHeight = (bottomViewHeightPercent.value / 100) * middleSectionTotalHeight.value;
-    console.log(
-      `🔧 MiddleView: actualBottomViewPixelHeight calculated: ${pixelHeight} (percent: ${bottomViewHeightPercent.value}%, totalMiddle: ${middleSectionTotalHeight.value})`
-    );
-    return pixelHeight;
+    return props.isSidePanelDragging;
   });
 
   /**
    * 📏 主內容區域高度計算 (Computing Main Content Area Height)
-   * 總高度減去底部面板高度，得到上部區域可用高度
+   * 直接使用從父組件傳入的動態高度
    */
   const contentHeight = computed(() => {
-    const mainContentH = middleSectionTotalHeight.value - actualBottomViewPixelHeight.value;
-    console.log(
-      `🔧 MiddleView: contentHeight (for MainContent) calculated: ${mainContentH}, totalMiddle: ${middleSectionTotalHeight.value}, bottomViewPx: ${actualBottomViewPixelHeight.value}`
-    );
-    return mainContentH;
+    const totalHeight = props.dynamicMainAreaHeight;
+    console.log(`🔧 MiddleView: contentHeight (from prop): ${totalHeight}`);
+    return Math.max(totalHeight, 0); // 確保不為負數，避免佈局錯誤
   });
 
-  /**
-   * 🖱️ 開始垂直拖曳調整 (Start Vertical Resize)
-   * 處理滑鼠按下事件，開始垂直面板大小調整
-   *
-   * @param {MouseEvent} event - 滑鼠按下事件
-   */
-  const startVerticalResize = (event) => {
-    // 阻止預設行為和事件冒泡，避免干擾其他元素
-    event.preventDefault();
-    event.stopPropagation();
-
-    // 設定拖曳狀態和視覺回饋
-    isVerticalDragging.value = true;
-    document.body.classList.add('my-no-select'); // 防止文字選取，提升拖曳體驗
-
-    // 記錄初始位置和狀態，用於計算拖曳變化量
-    const startY = event.clientY;
-    const startBottomPercent = bottomViewHeightPercent.value;
-    const currentMiddleSectionHeight = middleSectionTotalHeight.value;
-
-    /**
-     * 🖱️ 處理滑鼠移動事件 (Handle Mouse Move)
-     * 計算拖曳距離並更新面板高度比例
-     *
-     * @param {MouseEvent} moveEvent - 滑鼠移動事件
-     */
-    const handleMouseMove = (moveEvent) => {
-      moveEvent.preventDefault();
-      const deltaY = moveEvent.clientY - startY;
-
-      // 防止除零錯誤
-      if (currentMiddleSectionHeight === 0) return;
-
-      // 計算百分比變化 (Y座標變化轉換為高度百分比變化)
-      const deltaPercent = (deltaY / currentMiddleSectionHeight) * 100;
-
-      // 向上拖曳 (deltaY < 0) 增加底部面板高度百分比
-      // 向下拖曳 (deltaY > 0) 減少底部面板高度百分比
-      let newPercent = startBottomPercent - deltaPercent;
-
-      // 限制在合理範圍 (0-100%)，確保佈局穩定
-      newPercent = Math.max(0, Math.min(100, newPercent));
-
-      // 四捨五入到小數點後一位，避免精度問題
-      bottomViewHeightPercent.value = Math.round(newPercent * 10) / 10;
-    };
-
-    /**
-     * 🖱️ 處理滑鼠放開事件 (Handle Mouse Up)
-     * 清理拖曳狀態，移除事件監聽器
-     */
-    const handleMouseUp = () => {
-      // 清除拖曳狀態和視覺回饋
-      isVerticalDragging.value = false;
-      document.body.classList.remove('my-no-select');
-
-      // 移除臨時事件監聽器，避免記憶體洩漏
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-
-    // 註冊全域事件監聽器，確保拖曳行為在整個頁面範圍內有效
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
 
   /**
    * 👀 監聽 activeUpperTab 變化 (Watch activeUpperTab Changes)
@@ -189,7 +93,7 @@
     () => props.activeUpperTab,
     (newTab, oldTab) => {
       console.log(
-        `🔧 MiddleView Watcher: activeUpperTab changed from "${oldTab}" to "${newTab}". Current bottomViewHeightPercent: ${bottomViewHeightPercent.value}%`
+        `🔧 MiddleView Watcher: activeUpperTab changed from "${oldTab}" to "${newTab}"`
       );
     }
   );
@@ -294,10 +198,10 @@
 
 <template>
   <!-- 🎛️ 中間面板組件 (Middle Panel Component) -->
-  <!-- 負責管理上下兩個面板的佈局和垂直拖曳調整功能 -->
+  <!-- 負責管理主要內容區域的佈局 -->
   <!-- 這是一個佈局容器，使用 flexbox 垂直排列，填滿可用空間 -->
   <div class="d-flex flex-column overflow-hidden h-100">
-    <!-- 📊 上半部內容區域 (Upper Content Area) -->
+    <!-- 📊 主要內容區域 (Main Content Area) -->
     <!-- 包含地圖、儀表板等主要顯示內容 -->
     <!-- 動態高度根據 contentHeight 計算，拖曳時禁用指標事件避免干擾 -->
     <div
@@ -326,38 +230,6 @@
         @feature-selected="$emit('feature-selected', $event)"
         @open-distance-modal="(lat, lng) => $emit('open-distance-modal', lat, lng)"
         @open-isochrone-modal="(lat, lng) => $emit('open-isochrone-modal', lat, lng)"
-      />
-    </div>
-
-    <!-- 🔧 水平拖曳調整器 (Horizontal Resizer) -->
-    <!-- 用於調整上下面板的高度比例 -->
-    <!-- 監聽 mousedown 事件開始拖曳，動態顯示拖曳狀態的樣式 -->
-    <div
-      class="my-resizer my-resizer-horizontal my-resizer-middle"
-      :class="{ 'my-dragging': isVerticalDragging }"
-      @mousedown="startVerticalResize"
-      title="拖曳調整底部面板高度"
-    ></div>
-
-    <!-- 📋 下半部內容區域 (Bottom Content Area) -->
-    <!-- 包含資料表格、控制項等輔助顯示內容 -->
-    <!-- 動態高度根據 actualBottomViewPixelHeight 計算 -->
-    <div
-      class="overflow-hidden"
-      :style="{
-        pointerEvents: isOverallDragging ? 'none' : 'auto',
-        height: actualBottomViewPixelHeight + 'px',
-      }"
-    >
-      <!-- 📊 底部視圖組件 (Bottom View Component) -->
-      <!-- 傳遞表格資料、樣式設定、面板狀態等 props -->
-      <BottomView
-        :activeBottomTab="activeBottomTab"
-        :bottomViewHeight="actualBottomViewPixelHeight"
-        :isPanelDragging="isOverallDragging"
-        @update:activeBottomTab="$emit('update:activeBottomTab', $event)"
-        @highlight-on-map="$emit('highlight-on-map', $event)"
-        @reset-view="$emit('reset-view')"
       />
     </div>
   </div>
