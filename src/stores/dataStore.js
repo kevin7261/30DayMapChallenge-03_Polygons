@@ -5,7 +5,6 @@ import {
   //loadPublicElderlyWelfareInstitutionData,
   loadElderlyWelfareInstitutionData,
   loadResidentialLongTermCareData,
-  load66Data,
 } from '../utils/dataProcessor.js';
 
 // 主要數據存儲定義 (Main Data Store Definition)
@@ -87,24 +86,6 @@ export const useDataStore = defineStore(
             legendData: null,
             loader: loadResidentialLongTermCareData,
             fileName: '台北市政府衛生局/臺北市立案住宿式長照機構一覽表_coord.csv',
-            fieldName: null,
-          },
-          {
-            layerId: '住宿式喘息(GA05)及住宿式短照(SC05)服務單位',
-            layerName: '住宿式喘息(GA05)及住宿式短照(SC05)服務單位',
-            visible: false,
-            isLoading: false,
-            isLoaded: false,
-            type: 'point',
-            shape: 'circle',
-            colorName: 'red',
-            geoJsonData: null,
-            summaryData: null,
-            tableData: null,
-            legendData: null,
-            loader: load66Data,
-            fileName:
-              '台北市政府衛生局/臺北市政府衛生局長照2.0住宿式喘息(GA05)及住宿式短照(SC05)服務單位一覽表_66_coord.csv',
             fieldName: null,
           },
         ],

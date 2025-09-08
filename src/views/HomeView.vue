@@ -4,7 +4,6 @@
 
   // 🧩 組件引入
   import LoadingOverlay from '../components/LoadingOverlay.vue';
-  import LeftView from './LeftView.vue';
   import MiddleView from './MiddleView.vue';
   import UpperView from './UpperView.vue';
   import ResponsiveLowerView from './ResponsiveLowerView.vue';
@@ -18,7 +17,6 @@
      */
     components: {
       LoadingOverlay, // 載入覆蓋層組件
-      LeftView, // 左側控制面板組件
       MiddleView, // 中間主要內容面板組件
       UpperView, // 上半部區域組件
       ResponsiveLowerView, // 下半部區域組件
@@ -41,12 +39,8 @@
       const middlePanelRef = ref(null);
       /** 📱 響應式上半部面板組件引用 */
       const mobileUpperViewRef = ref(null);
-      /** 🦶 頁腳元素引用 */
-      const appFooterRef = ref(null);
 
       // 📑 分頁狀態 (Tab States)
-      /** 🗺️ 主要分頁狀態（地圖/儀表板） */
-      const activeUpperTab = ref('map');
       /** 📋 底部分頁狀態（表格/樣式） */
       const activeBottomTab = ref('table');
       /** 📱 響應式下半部分頁狀態（行動版/平板版） */
@@ -61,8 +55,6 @@
       const windowWidth = ref(window.innerWidth);
       /** 📏 瀏覽器視窗高度 */
       const windowHeight = ref(window.innerHeight);
-      /** 📏 頁腳高度 */
-      const footerHeight = ref(0);
 
       // 🧮 計算屬性 - 面板尺寸 (Computed Properties - Panel Dimensions)
       /** 📏 左側面板像素寬度 */
@@ -74,7 +66,7 @@
 
       /** 📏 中間面板計算高度 */
       const calculatedMiddleViewHeight = computed(() => {
-        return windowHeight.value - footerHeight.value;
+        return windowHeight.value;
       });
 
       // ⏳ 載入狀態 (Loading States)
@@ -265,13 +257,6 @@
         }
 
         nextTick(() => {
-          // 只在 xl breakpoint 以上才計算 footer 高度
-          if (appFooterRef.value && window.innerWidth >= 1200) {
-            footerHeight.value = appFooterRef.value.offsetHeight;
-          } else {
-            footerHeight.value = 0;
-          }
-
           // 檢查響應式底部面板高度是否仍然符合最小要求
           if (!currentIsDesktop) {
             const minHeight = calculateMinBottomHeight();
@@ -296,14 +281,6 @@
         window.addEventListener('resize', handleResize);
 
         // 初始化計算頁腳高度
-        nextTick(() => {
-          // 只在 xl breakpoint 以上才計算 footer 高度
-          if (appFooterRef.value && window.innerWidth >= 1200) {
-            footerHeight.value = appFooterRef.value.offsetHeight;
-          } else {
-            footerHeight.value = 0;
-          }
-        });
 
         // 設置螢幕尺寸觀察器
         if (window.ResizeObserver) {
@@ -374,11 +351,6 @@
        */
       const handleHighlight = (highlightData) => {
         console.log('🎯 HomeView 處理高亮顯示:', highlightData);
-
-        // 如果當前不在地圖視圖，先切換到地圖
-        if (activeUpperTab.value !== 'map') {
-          activeUpperTab.value = 'map';
-        }
 
         // 使用 nextTick 確保地圖組件已渲染完成
         nextTick(() => {
@@ -571,7 +543,6 @@
         middlePanelRef, // 中間面板引用
 
         // 📑 分頁狀態
-        activeUpperTab, // 主要分頁狀態
         activeBottomTab, // 底部分頁狀態
         activeLowerTab, // 響應式下半部分頁狀態
 
@@ -614,7 +585,6 @@
         validatePanelSizes, // 驗證面板尺寸
 
         // 🛠️ 工具函數
-        appFooterRef, // 頁腳引用
         mobileUpperViewRef, // 響應式上半部面板引用
         calculatedMiddleViewHeight, // 計算的中間面板高度
         handleHighlight, // 處理高亮顯示
@@ -642,7 +612,6 @@
     />
 
     <!-- 📱 主要內容區域 (Main Content Area) -->
-    <!-- 使用計算高度為 footer 留出空間，避免擋住滾動條 -->
     <div class="d-flex flex-column overflow-hidden">
       <!-- 🚀 路由視圖區域 (Router View Area) -->
       <!-- 顯示非首頁的路由組件內容 -->
@@ -657,32 +626,13 @@
         <div class="d-none d-xl-flex flex-row overflow-hidden h-100">
           <!-- 🎛️ 左側控制面板容器 (Left Control Panel Container) -->
           <!-- 包含圖層控制、資料載入等功能，支援動態寬度調整 -->
-          <div
-            class="h-100 overflow-y-auto overflow-x-hidden my-left-panel"
-            :style="{ width: leftViewWidthPx }"
-            v-if="leftViewWidth > 0"
-          >
-            <LeftView />
-          </div>
-
-          <!-- 🔧 左側拖曳調整器 (Left Panel Resizer) -->
-          <!-- 提供滑鼠拖曳功能，動態調整左側面板寬度 -->
-          <div
-            class="my-resizer my-resizer-vertical my-resizer-left"
-            :class="{ 'my-dragging': isSidePanelDragging }"
-            @mousedown="startResize('left', $event)"
-            title="拖曳調整左側面板寬度"
-          ></div>
-
-          <!-- 🌟 中間主要顯示區域 (Main Display Area) -->
+          <!-- 🌟 主要顯示區域 (Main Display Area) -->
           <!-- 包含地圖、儀表板、資料表格等核心功能組件 -->
           <MiddleView
             ref="middlePanelRef"
             class="d-flex flex-column overflow-hidden h-100 my-middle-panel"
-            style="z-index: 1"
-            :style="{ width: mainPanelWidthPx, 'min-width': '0px' }"
+            style="z-index: 1; width: 100%"
             :dynamicMainAreaHeight="calculatedMiddleViewHeight"
-            :activeUpperTab="activeUpperTab"
             :activeBottomTab="activeBottomTab"
             :mainPanelWidth="mainPanelWidth"
             :showTainanLayer="showTainanLayer"
@@ -692,7 +642,6 @@
             :activeMarkers="activeMarkers"
             :isLoadingData="isAnyLayerLoading"
             :isSidePanelDragging="isSidePanelDragging"
-            @update:activeUpperTab="activeUpperTab = $event"
             @update:activeBottomTab="activeBottomTab = $event"
             @update:zoomLevel="zoomLevel = $event"
             @update:currentCoords="currentCoords = $event"
@@ -715,7 +664,6 @@
             <UpperView
               ref="mobileUpperViewRef"
               :key="mobileMapKey"
-              :activeUpperTab="activeUpperTab"
               :mainPanelWidth="100"
               :contentHeight="(100 - mobileBottomViewHeight) * windowHeight * 0.01"
               :showTainanLayer="showTainanLayer"
@@ -723,7 +671,6 @@
               :zoomLevel="zoomLevel"
               :isPanelDragging="isVerticalDragging"
               :activeMarkers="activeMarkers"
-              @update:activeUpperTab="activeUpperTab = $event"
               @update:zoomLevel="zoomLevel = $event"
               @update:currentCoords="currentCoords = $event"
               @update:activeMarkers="activeMarkers = $event"
@@ -759,17 +706,6 @@
         </div>
       </div>
     </div>
-
-    <!-- 🦶 頁腳區域 (Footer Area) -->
-    <!-- 固定高度 footer，提供版權資訊和技術鳴謝 -->
-    <!-- 只在 xl breakpoint 以上顯示 -->
-    <footer
-      class="d-none d-xl-flex justify-content-between my-app-footer my-title-sm-white my-bgcolor-gray-800 p-2"
-      ref="appFooterRef"
-    >
-      <small>臺灣大學地理環境資源學系</small>
-      <small>2025</small>
-    </footer>
   </div>
 </template>
 

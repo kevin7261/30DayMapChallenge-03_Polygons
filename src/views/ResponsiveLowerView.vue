@@ -1,6 +1,5 @@
 <script>
   import { computed, ref, onMounted, onUnmounted } from 'vue';
-  import LayersTab from '../tabs/LayersTab.vue';
   import DataTableTab from '../tabs/DataTableTab.vue';
   import PropertiesTab from '../tabs/PropertiesTab.vue';
 
@@ -12,7 +11,6 @@
      * 註冊響應式下半部面板內使用的子組件
      */
     components: {
-      LayersTab, // 圖層列表分頁組件
       DataTableTab, // 資料表格分頁組件
       PropertiesTab, // 物件屬性分頁組件
     },
@@ -22,7 +20,7 @@
      * 接收來自父組件的配置和狀態數據
      */
     props: {
-      activeTab: { type: String, default: 'layers' },
+      activeTab: { type: String, default: 'table' },
       activeBottomTab: { type: String, default: 'table' },
     },
 
@@ -50,7 +48,6 @@
        * 根據需求顯示不同的分頁選項
        */
       const availableTabs = computed(() => [
-        { id: 'layers', name: '圖層', icon: 'fas fa-layer-group' },
         { id: 'table', name: '資料表', icon: 'fas fa-table' },
         { id: 'properties', name: '屬性', icon: 'fa-solid fa-location-dot' },
       ]);
@@ -78,8 +75,8 @@
 
         return {
           'min-height': `${baseHeight}px`,
-          'height': `${baseHeight + extraPadding}px`,
-          'padding': `8px 4px ${extraPadding}px 4px`,
+          height: `${baseHeight + extraPadding}px`,
+          padding: `8px 4px ${extraPadding}px 4px`,
         };
       });
 
@@ -149,11 +146,6 @@
         'padding-bottom': `70px`,
       }"
     >
-      <!-- 📋 圖層分頁內容 -->
-      <div v-show="activeTab === 'layers'" class="h-100">
-        <LayersTab />
-      </div>
-
       <!-- 📊 資料表格分頁內容 -->
       <div v-show="activeTab === 'table'" class="h-100">
         <DataTableTab @highlight-on-map="$emit('highlight-on-map', $event)" />

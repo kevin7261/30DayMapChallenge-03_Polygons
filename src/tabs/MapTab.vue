@@ -5,6 +5,7 @@
   import 'leaflet/dist/leaflet.css'; // 引入 Leaflet 預設樣式
   import { useDataStore } from '@/stores/dataStore.js'; // 引入資料存儲
   import { useDefineStore } from '@/stores/defineStore.js'; // 引入定義存儲
+  import { getIcon } from '../utils/utils.js'; // 引入圖標工具函數
 
   // 🔧 修復 Leaflet 預設圖標問題 (Fix Leaflet Default Icon Issues)
   import icon from 'leaflet/dist/images/marker-icon.png'; // 引入標準標記圖標
@@ -37,6 +38,19 @@
       // 📦 資料存儲實例 (Data Store Instance)
       const dataStore = useDataStore(); // 獲取 Pinia 資料存儲實例
       const defineStore = useDefineStore(); // 獲取定義存儲實例
+
+      // 📋 圖層面板相關變數 (Layers Panel Related Variables)
+      const layers = computed(() => dataStore.layers); // 圖層數據
+
+      /**
+       * 🔘 切換圖層可見性
+       * 呼叫 store 中的 action 來切換指定圖層的顯示/隱藏狀態
+       * @param {string} layerId - 要切換的圖層 ID
+       */
+      const toggleLayer = (layerId) => {
+        console.log('🔘 MapTab: 切換圖層', layerId);
+        dataStore.toggleLayerVisibility(layerId);
+      };
 
       // 🗺️ 地圖相關變數 (Map Related Variables)
       const mapContainer = ref(null); // 地圖容器 DOM 元素引用
@@ -754,52 +768,6 @@
         console.log(`🗺️ 圖層同步完成，共 ${visibleLayers.length} 個可見圖層`); // 輸出同步完成訊息
       };
 
-      // 🔍 顯示全部要素函數 (Show All Features Function) - 顯示圖面所有資料
-      const showAllFeatures = () => {
-        // 檢查地圖實例、準備狀態和圖層可見性
-        if (!mapInstance || !isMapReady.value || !isAnyLayerVisible.value) return;
-
-        // 創建邊界框物件用於計算所有要素的範圍
-        const bounds = new L.LatLngBounds(); // 初始化 Leaflet 邊界框
-        let hasValidBounds = false; // 標記是否有有效的邊界
-
-        // 遍歷所有圖層群組計算邊界
-        Object.values(layerGroups).forEach((layer) => {
-          if (layer && layer.getBounds) {
-            // 檢查圖層是否有 getBounds 方法
-            const layerBounds = layer.getBounds(); // 獲取圖層邊界
-            if (layerBounds.isValid()) {
-              // 檢查邊界是否有效
-              bounds.extend(layerBounds); // 擴展總邊界框
-              hasValidBounds = true; // 標記有有效邊界
-            }
-          }
-        });
-
-        // 如果有有效邊界，調整地圖視圖以包含所有要素
-        if (hasValidBounds) {
-          mapInstance.fitBounds(bounds, { padding: [50, 50] }); // 設定地圖視圖並添加內邊距
-        }
-      };
-
-      // 🌍 顯示全市函數 (Show Full City Function) - 回到預設地圖範圍
-      const showFullCity = () => {
-        // 檢查地圖實例和準備狀態
-        if (!mapInstance || !isMapReady.value) return;
-
-        // 使用固定的台北市預設範圍，不依賴當前存儲的值
-        const defaultCenter = [25.051474, 121.557989]; // 台北市中心
-        const defaultZoom = 11; // 適合台北市的縮放等級
-
-        console.log(`🌍 顯示全市: 中心點 ${defaultCenter}, 縮放等級 ${defaultZoom}`);
-
-        // 回到預設的地圖中心和縮放等級
-        mapInstance.setView(defaultCenter, defaultZoom);
-
-        // 同時更新 defineStore 中的值，保持一致性
-        defineStore.setMapView(defaultCenter, defaultZoom);
-      };
-
       // 🎯 高亮顯示特定要素函數 (Highlight Specific Feature Function)
       const highlightFeature = (highlightData) => {
         console.log('🎯 開始高亮顯示要素:', highlightData); // 輸出開始高亮的訊息
@@ -1247,8 +1215,6 @@
         selectedBasemap: computed(() => defineStore.selectedBasemap), // 選定的底圖類型響應式變數
         changeBasemap, // 切換底圖函數
         getBasemapLabel, // 獲取底圖標籤函數
-        showAllFeatures, // 顯示全部要素函數
-        showFullCity, // 顯示全市函數
         isAnyLayerVisible, // 檢查是否有可見圖層的計算屬性
         highlightFeature, // 高亮顯示特定要素函數
         invalidateSize, // 刷新地圖尺寸函數
@@ -1262,6 +1228,11 @@
         selectedAnalysisFeature, // 選中的分析要素
         deleteAnalysisPoint, // 刪除分析點函數
         hideContextMenu, // 隱藏右鍵菜單函數
+
+        // 圖層面板相關
+        layers, // 圖層數據
+        toggleLayer, // 切換圖層函數
+        getIcon, // 圖標工具函數
       };
     },
   };
@@ -1273,6 +1244,51 @@
     <!-- 🗺️ Leaflet 地圖容器 (Leaflet Map Container) -->
     <!-- 這是 Leaflet 地圖實際渲染的 DOM 元素 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
+
+    <!-- 📋 圖層面板 (Layers Panel) -->
+    <div
+      class="position-absolute top-0 start-0 m-3 my-bgcolor-gray-100 rounded shadow"
+      style="width: 300px; max-height: 80vh; z-index: 1000; overflow: hidden"
+    >
+      <!-- 面板標題 -->
+      <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+        <h6 class="mb-0 my-font-size-sm">圖層控制</h6>
+      </div>
+
+      <!-- 圖層列表 -->
+      <div class="overflow-auto" style="max-height: calc(80vh - 60px)">
+        <div v-for="group in layers" :key="group.groupName" class="p-3">
+          <div class="d-flex align-items-center pb-2">
+            <div class="my-title-xs-gray">{{ group.groupName }}</div>
+          </div>
+          <div v-for="layer in group.groupLayers" :key="layer.layerId" class="mb-2">
+            <div class="form-check d-flex align-items-center">
+              <input
+                class="form-check-input me-2"
+                type="checkbox"
+                :id="layer.layerId"
+                :checked="layer.visible"
+                @change="toggleLayer(layer.layerId)"
+              />
+              <label
+                class="form-check-label d-flex align-items-center flex-grow-1"
+                :for="layer.layerId"
+              >
+                <div
+                  class="me-2 rounded-circle"
+                  :style="{
+                    width: '12px',
+                    height: '12px',
+                    backgroundColor: `var(--my-color-${layer.colorName})`,
+                  }"
+                ></div>
+                <span class="my-content-sm-black">{{ layer.layerName }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 🖱️ 右鍵菜單 (Context Menu) -->
     <div
@@ -1330,25 +1346,6 @@
           </ul>
         </div>
       </div>
-
-      <!-- 顯示全部 -->
-      <button
-        class="btn rounded-pill border-0 my-btn-transparent my-font-size-xs text-nowrap my-cursor-pointer"
-        @click="showAllFeatures"
-        :disabled="!isAnyLayerVisible"
-        title="顯示圖面所有資料範圍"
-      >
-        顯示全部
-      </button>
-
-      <!-- 顯示全市 -->
-      <button
-        class="btn rounded-pill border-0 my-btn-transparent my-font-size-xs text-nowrap my-cursor-pointer"
-        @click="showFullCity"
-        title="回到預設地圖範圍"
-      >
-        顯示全市
-      </button>
     </div>
   </div>
 </template>
