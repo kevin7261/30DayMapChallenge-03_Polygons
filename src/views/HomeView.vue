@@ -17,7 +17,7 @@
   import MapTab from '../tabs/MapTab.vue';
   import { useDataStore } from '@/stores/dataStore.js';
   import { useDefineStore } from '@/stores/defineStore.js';
-  import { ref, onMounted, onUnmounted } from 'vue';
+  import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 
   export default {
     name: 'HomeView',
@@ -41,8 +41,9 @@
        */
       const navigateToCity = (cityId) => {
         // 更新當前城市名稱
-        const city = cities.find((c) => c.layerId === cityId);
+        const city = cities.value?.find((c) => c.layerId === cityId);
         if (city) {
+          console.log('🌍 切換到城市:', city.layerName);
           currentCity.value = city.layerName;
         }
         dataStore.navigateToCity(cityId);
@@ -56,7 +57,7 @@
       const setBasemap = (value) => defineStore.setSelectedBasemap(value);
 
       /**
-       * 🎨 切換到顏色主題
+       * 🎨 切換到顏色主題模式
        * 根據當前城市切換到對應的顏色主題底圖
        */
       const setColorTheme = () => {
@@ -89,11 +90,16 @@
       };
 
       // 📊 獲取城市列表和底圖列表
-      const cities = dataStore.layers[0].groupLayers;
+      const cities = computed(() => dataStore.layers[0].groupLayers);
       const basemaps = defineStore.basemaps;
 
       // 🌍 當前選中的城市（預設為北京）
       const currentCity = ref('北京');
+
+      // 監聽 currentCity 變化
+      watch(currentCity, (newCity) => {
+        console.log('🔄 currentCity 已更新為:', newCity);
+      });
 
       // 🎨 監聽底圖切換事件
       onMounted(() => {
@@ -118,7 +124,7 @@
         setColorTheme,
         cities,
         basemaps,
-        selectedBasemap: defineStore.selectedBasemap,
+        defineStore,
         currentCity,
       };
     },
@@ -143,7 +149,8 @@
               <button
                 v-for="city in cities"
                 :key="city.layerId"
-                class="btn btn-sm btn-outline-light"
+                class="btn btn-sm"
+                :class="currentCity === city.layerName ? 'btn-light' : 'btn-outline-light'"
                 @click="navigateToCity(city.layerId)"
               >
                 {{ city.layerName }}
@@ -158,19 +165,42 @@
         <div class="bg-dark bg-opacity-75 rounded-3 p-3">
           <h6 class="text-white mb-2">底圖選擇</h6>
           <div class="d-flex flex-column gap-1">
+            <!-- 地圖模式按鈕 -->
             <button
               class="btn btn-sm"
-              :class="selectedBasemap === 'carto_dark' ? 'btn-light' : 'btn-outline-light'"
+              :class="
+                defineStore.selectedBasemap === 'carto_dark' ? 'btn-light' : 'btn-outline-light'
+              "
               @click="setBasemap('carto_dark')"
             >
               地圖
             </button>
+            <!-- 顏色主題按鈕 -->
             <button
               class="btn btn-sm"
-              :class="selectedBasemap !== 'carto_dark' ? 'btn-light' : 'btn-outline-light'"
+              :class="
+                defineStore.selectedBasemap.endsWith('_theme') ? 'btn-light' : 'btn-outline-light'
+              "
               @click="setColorTheme"
             >
-              顏色
+              <span v-if="!defineStore.selectedBasemap.endsWith('_theme')">顏色</span>
+              <span v-else>
+                {{
+                  defineStore.selectedBasemap === 'red_theme'
+                    ? '紅色'
+                    : defineStore.selectedBasemap === 'blue_theme'
+                      ? '藍色'
+                      : defineStore.selectedBasemap === 'green_theme'
+                        ? '綠色'
+                        : defineStore.selectedBasemap === 'purple_theme'
+                          ? '紫色'
+                          : defineStore.selectedBasemap === 'orange_theme'
+                            ? '橙色'
+                            : defineStore.selectedBasemap === 'yellow_theme'
+                              ? '黃色'
+                              : '顏色'
+                }}
+              </span>
             </button>
           </div>
         </div>

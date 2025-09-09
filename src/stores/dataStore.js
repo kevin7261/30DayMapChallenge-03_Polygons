@@ -33,6 +33,7 @@ import L from 'leaflet'; // Leaflet 地圖庫
 import {
   loadCityGeoJson, // 城市 GeoJSON 數據載入器
 } from '../utils/dataProcessor.js';
+import { useDefineStore } from './defineStore.js'; // 定義存儲模組
 
 /**
  * 🏪 數據存儲商店定義 (Data Store Definition)
@@ -432,12 +433,13 @@ export const useDataStore = defineStore(
         return;
       }
 
-      // 只有在當前是顏色主題時才切換底圖
-      const currentBasemap = defineStore.selectedBasemap;
+      // 無論當前是什麼底圖模式，都檢查是否需要更新底圖
+      const defineStoreInstance = useDefineStore();
+      const currentBasemap = defineStoreInstance.selectedBasemap;
       const isColorTheme = currentBasemap && currentBasemap.endsWith('_theme');
 
       if (isColorTheme) {
-        // 根據城市顏色切換底圖主題
+        // 當前是顏色主題模式，根據城市顏色切換到對應的顏色主題
         const colorThemeMap = {
           red: 'red_theme',
           blue: 'blue_theme',
@@ -448,7 +450,8 @@ export const useDataStore = defineStore(
         };
 
         const themeBasemap = colorThemeMap[cityLayer.colorName];
-        if (themeBasemap) {
+        if (themeBasemap && themeBasemap !== currentBasemap) {
+          console.log('🎨 切換城市顏色主題:', cityLayer.layerName, themeBasemap);
           // 觸發底圖切換事件，讓外部組件處理
           window.dispatchEvent(
             new CustomEvent('changeBasemap', {

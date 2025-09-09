@@ -200,6 +200,8 @@
         // 設定容器背景色
         const mapContainerElement = mapContainer.value;
         if (mapContainerElement) {
+          console.log('🎨 設定底圖背景色:', defineStore.selectedBasemap);
+
           if (defineStore.selectedBasemap === 'blank') {
             mapContainerElement.style.backgroundColor = 'var(--my-color-white)';
           } else if (defineStore.selectedBasemap === 'black') {
@@ -219,6 +221,11 @@
           } else {
             mapContainerElement.style.backgroundColor = 'transparent';
           }
+
+          // 強制重新渲染
+          mapContainerElement.style.display = 'none';
+          mapContainerElement.offsetHeight; // 觸發重排
+          mapContainerElement.style.display = 'block';
         }
       };
 
