@@ -55,12 +55,45 @@
        */
       const setBasemap = (value) => defineStore.setSelectedBasemap(value);
 
+      /**
+       * 🎨 切換到顏色主題
+       * 根據當前城市切換到對應的顏色主題底圖
+       */
+      const setColorTheme = () => {
+        // 獲取當前城市
+        const currentCityLayer = cities.value?.find((city) => city.layerName === currentCity.value);
+        if (currentCityLayer) {
+          // 根據城市顏色切換底圖主題
+          const colorThemeMap = {
+            red: 'red_theme',
+            blue: 'blue_theme',
+            green: 'green_theme',
+            purple: 'purple_theme',
+            orange: 'orange_theme',
+            yellow: 'yellow_theme',
+          };
+
+          const themeBasemap = colorThemeMap[currentCityLayer.colorName];
+          if (themeBasemap) {
+            console.log('🎨 切換到城市主題底圖:', currentCityLayer.layerName, themeBasemap);
+            setBasemap(themeBasemap);
+          } else {
+            console.warn('⚠️ 未找到對應的主題底圖:', currentCityLayer.colorName);
+            // 如果沒有對應主題，切換到紅色主題
+            setBasemap('red_theme');
+          }
+        } else {
+          // 如果找不到當前城市，切換到紅色主題
+          setBasemap('red_theme');
+        }
+      };
+
       // 📊 獲取城市列表和底圖列表
       const cities = dataStore.layers[0].groupLayers;
       const basemaps = defineStore.basemaps;
 
-      // 🌍 當前選中的城市（預設為第一個城市）
-      const currentCity = ref(cities[0]?.layerName || '城市名稱');
+      // 🌍 當前選中的城市（預設為北京）
+      const currentCity = ref('北京');
 
       // 🎨 監聽底圖切換事件
       onMounted(() => {
@@ -82,6 +115,7 @@
         setMapInstance,
         navigateToCity,
         setBasemap,
+        setColorTheme,
         cities,
         basemaps,
         selectedBasemap: defineStore.selectedBasemap,
@@ -123,15 +157,22 @@
       <div class="position-absolute bottom-0 end-0 p-3" style="z-index: 1000">
         <div class="bg-dark bg-opacity-75 rounded-3 p-3">
           <h6 class="text-white mb-2">底圖選擇</h6>
-          <select
-            class="form-select form-select-sm"
-            :value="selectedBasemap"
-            @change="setBasemap($event.target.value)"
-          >
-            <option v-for="basemap in basemaps" :key="basemap.value" :value="basemap.value">
-              {{ basemap.label }}
-            </option>
-          </select>
+          <div class="d-flex flex-column gap-1">
+            <button
+              class="btn btn-sm btn-outline-light"
+              :class="{ 'btn-light': selectedBasemap === 'carto_dark' }"
+              @click="setBasemap('carto_dark')"
+            >
+              地圖
+            </button>
+            <button
+              class="btn btn-sm btn-outline-light"
+              :class="{ 'btn-light': selectedBasemap !== 'carto_dark' }"
+              @click="setColorTheme"
+            >
+              顏色
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -54,6 +54,42 @@
       // 📊 計算屬性：檢查是否有任何圖層可見
       const isAnyLayerVisible = computed(() => dataStore.getAllLayers().some((l) => l.geoJsonData));
 
+      // 🏙️ 當前城市信息
+      const currentCityInfo = computed(() => {
+        if (!props.currentCity) {
+          console.log('❌ currentCityInfo: 沒有當前城市');
+          return null;
+        }
+
+        // 從dataStore中獲取城市信息
+        const allLayers = dataStore.getAllLayers();
+        console.log(
+          '🔍 查找城市:',
+          props.currentCity,
+          '可用圖層:',
+          allLayers.map((l) => l.layerName)
+        );
+
+        const cityLayer = allLayers.find((layer) => layer.layerName === props.currentCity);
+        if (cityLayer) {
+          console.log(
+            '✅ 找到城市圖層:',
+            cityLayer.layerName,
+            '長度:',
+            cityLayer.length,
+            '角度:',
+            cityLayer.angle
+          );
+          return {
+            length: cityLayer.length,
+            angle: cityLayer.angle,
+          };
+        } else {
+          console.log('❌ 未找到城市圖層:', props.currentCity);
+          return null;
+        }
+      });
+
       /**
        * 🏗️ 創建地圖實例
        * 初始化 Leaflet 地圖並設定基本配置
@@ -73,6 +109,12 @@
             zoom: defineStore.mapView.zoom,
             zoomControl: false,
             attributionControl: false,
+            dragging: false, // 禁用拖拽
+            touchZoom: false, // 禁用觸控縮放
+            doubleClickZoom: false, // 禁用雙擊縮放
+            scrollWheelZoom: false, // 禁用滾輪縮放
+            boxZoom: false, // 禁用框選縮放
+            keyboard: false, // 禁用鍵盤控制
           });
 
           // 綁定地圖事件
@@ -429,6 +471,7 @@
         mapContainer,
         mapContainerId,
         isAnyLayerVisible,
+        currentCityInfo,
         highlightFeature,
         invalidateSize,
         defineStore,
@@ -448,13 +491,25 @@
       <!-- 貼文尺寸框 (4:5) -->
       <div class="ig-crop-frame ig-post-frame">
         <div class="ig-city-name">{{ currentCity }}</div>
-        <div class="ig-hashtag">#30DayMapChallenge</div>
+        <div class="ig-hashtag">
+          <div class="d-flex justify-content-center gap-3 mb-1">
+            <small class="text-white">{{ currentCityInfo?.length || 'N/A' }}</small>
+            <small class="text-white">{{ currentCityInfo?.angle || 'N/A' }}</small>
+          </div>
+          <div class="text-white fw-bold">#30DayMapChallenge</div>
+        </div>
       </div>
 
       <!-- 網格顯示框 (3:4) -->
       <div class="ig-crop-frame ig-grid-frame">
         <div class="ig-city-name">{{ currentCity }}</div>
-        <div class="ig-hashtag">#30DayMapChallenge</div>
+        <div class="ig-hashtag">
+          <div class="d-flex justify-content-center gap-3 mb-1">
+            <small class="text-white">{{ currentCityInfo?.length || 'N/A' }}</small>
+            <small class="text-white">{{ currentCityInfo?.angle || 'N/A' }}</small>
+          </div>
+          <div class="text-white fw-bold">#30DayMapChallenge</div>
+        </div>
       </div>
     </div>
   </div>
@@ -520,7 +575,7 @@
     top: 5px;
     left: 50%;
     transform: translateX(-50%);
-    color: white; /* 改為白色 */
+    color: white;
     font-weight: bold;
     font-size: 18px;
     pointer-events: none;
@@ -532,9 +587,6 @@
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    color: white; /* 改為白色 */
-    font-weight: 600;
-    font-size: 14px;
     pointer-events: none;
     z-index: 1003;
   }

@@ -80,7 +80,9 @@ export const useDataStore = defineStore(
             fileName: 'beijing.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [116.4074, 39.9042], // 北京中心座標
-            zoom: 10, // 最佳縮放級別
+            zoom: 11, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
           },
           {
             // 🏛️ 柏林圖層配置
@@ -92,7 +94,9 @@ export const useDataStore = defineStore(
             fileName: 'berlin.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [13.405, 52.52], // 柏林中心座標
-            zoom: 11, // 最佳縮放級別
+            zoom: 12, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
           },
           {
             // 🏛️ 巴黎圖層配置
@@ -105,6 +109,8 @@ export const useDataStore = defineStore(
             fieldName: null, // 主要字段名稱（可選）
             center: [2.3522, 48.8566], // 巴黎中心座標
             zoom: 12, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
           },
           {
             // 🏛️ 羅馬圖層配置
@@ -116,7 +122,9 @@ export const useDataStore = defineStore(
             fileName: 'rome.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [12.4964, 41.9028], // 羅馬中心座標
-            zoom: 12, // 最佳縮放級別
+            zoom: 14, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
           },
           {
             // 🏛️ 華盛頓特區圖層配置
@@ -128,7 +136,9 @@ export const useDataStore = defineStore(
             fileName: 'washingtondc.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [-77.0369, 38.9072], // 華盛頓特區中心座標
-            zoom: 11, // 最佳縮放級別
+            zoom: 12, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
           },
           {
             // 🏛️ 西安圖層配置
@@ -140,7 +150,9 @@ export const useDataStore = defineStore(
             fileName: 'xian.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [108.9402, 34.3416], // 西安中心座標
-            zoom: 10, // 最佳縮放級別
+            zoom: 12, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
           },
         ],
       },
@@ -213,6 +225,98 @@ export const useDataStore = defineStore(
     // 移除圖層可見性切換（城市圖層永久可見，且無需勾選切換）
 
     /**
+     * 📏 計算GeoJSON邊界長度
+     * @param {Object} geoJsonData - GeoJSON數據
+     * @returns {string} 格式化後的長度字符串
+     */
+    const calculateBoundaryLength = (geoJsonData) => {
+      if (!geoJsonData || !geoJsonData.features) {
+        console.log('❌ calculateBoundaryLength: 無效的GeoJSON數據');
+        return 'N/A';
+      }
+
+      let totalLength = 0;
+      console.log('📏 開始計算邊界長度，特徵數量:', geoJsonData.features.length);
+
+      geoJsonData.features.forEach((feature) => {
+        if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+          const coordinates =
+            feature.geometry.type === 'Polygon'
+              ? feature.geometry.coordinates
+              : feature.geometry.coordinates.flat();
+
+          coordinates.forEach((ring) => {
+            if (ring.length > 1) {
+              for (let i = 0; i < ring.length - 1; i++) {
+                const point1 = L.latLng(ring[i][1], ring[i][0]);
+                const point2 = L.latLng(ring[i + 1][1], ring[i + 1][0]);
+                totalLength += point1.distanceTo(point2);
+              }
+            }
+          });
+        }
+      });
+
+      // 轉換為公里並格式化
+      const km = totalLength / 1000;
+      const result = km > 1000 ? `${(km / 1000).toFixed(1)}k km` : `${km.toFixed(0)} km`;
+      console.log('📏 計算結果:', result, '總長度(米):', totalLength);
+      return result;
+    };
+
+    /**
+     * 📐 計算GeoJSON主要方向角度
+     * @param {Object} geoJsonData - GeoJSON數據
+     * @returns {string} 格式化後的角度字符串
+     */
+    const calculateMainAngle = (geoJsonData) => {
+      if (!geoJsonData || !geoJsonData.features) {
+        console.log('❌ calculateMainAngle: 無效的GeoJSON數據');
+        return 'N/A';
+      }
+
+      let allPoints = [];
+      console.log('📐 開始計算主要角度，特徵數量:', geoJsonData.features.length);
+
+      geoJsonData.features.forEach((feature) => {
+        if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+          const coordinates =
+            feature.geometry.type === 'Polygon'
+              ? feature.geometry.coordinates
+              : feature.geometry.coordinates.flat();
+
+          coordinates.forEach((ring) => {
+            ring.forEach((coord) => {
+              allPoints.push([coord[0], coord[1]]); // [lng, lat]
+            });
+          });
+        }
+      });
+
+      if (allPoints.length < 2) {
+        console.log('❌ calculateMainAngle: 點數量不足');
+        return 'N/A';
+      }
+
+      // 計算邊界框
+      const lngs = allPoints.map((p) => p[0]);
+      const lats = allPoints.map((p) => p[1]);
+      const minLng = Math.min(...lngs);
+      const maxLng = Math.max(...lngs);
+      const minLat = Math.min(...lats);
+      const maxLat = Math.max(...lats);
+
+      // 計算對角線角度
+      const deltaLng = maxLng - minLng;
+      const deltaLat = maxLat - minLat;
+      const angle = Math.atan2(deltaLat, deltaLng) * (180 / Math.PI);
+      const result = `${Math.round(angle)}°`;
+
+      console.log('📐 計算結果:', result, '角度:', angle, '點數量:', allPoints.length);
+      return result;
+    };
+
+    /**
      * 🚀 自動載入城市圖層 (Auto Load City Layers)
      *
      * 在應用程式初始化時自動載入所有城市圖層數據
@@ -228,10 +332,16 @@ export const useDataStore = defineStore(
             // 將載入的資料直接存儲在圖層物件中，但保留原有的 center 和 zoom 屬性
             layer.geoJsonData = result.geoJsonData;
 
+            // 計算長度和角度
+            layer.length = calculateBoundaryLength(result.geoJsonData);
+            layer.angle = calculateMainAngle(result.geoJsonData);
+
             console.log(
               `✅ 城市圖層 "${layer.layerName}" 載入完成 (${result.geoJsonData?.features?.length || 0} 筆資料)`
             );
             console.log(`🌍 城市中心座標:`, layer.center);
+            console.log(`📏 邊界長度:`, layer.length);
+            console.log(`📐 主要角度:`, layer.angle);
           } catch (error) {
             console.error(`Failed to load city layer "${layer.layerName}":`, error);
           }
@@ -306,25 +416,33 @@ export const useDataStore = defineStore(
         return;
       }
 
-      // 根據城市顏色切換底圖主題
-      const colorThemeMap = {
-        red: 'red_theme',
-        blue: 'blue_theme',
-        green: 'green_theme',
-        purple: 'purple_theme',
-        orange: 'orange_theme',
-        yellow: 'yellow_theme',
-      };
+      // 只有在當前是顏色主題時才切換底圖
+      const currentBasemap = defineStore.selectedBasemap;
+      const isColorTheme = currentBasemap && currentBasemap.endsWith('_theme');
 
-      const themeBasemap = colorThemeMap[cityLayer.colorName];
-      if (themeBasemap) {
-        console.log('🎨 切換到城市主題底圖:', cityLayer.layerName, themeBasemap);
-        // 觸發底圖切換事件，讓外部組件處理
-        window.dispatchEvent(
-          new CustomEvent('changeBasemap', {
-            detail: { basemap: themeBasemap },
-          })
-        );
+      if (isColorTheme) {
+        // 根據城市顏色切換底圖主題
+        const colorThemeMap = {
+          red: 'red_theme',
+          blue: 'blue_theme',
+          green: 'green_theme',
+          purple: 'purple_theme',
+          orange: 'orange_theme',
+          yellow: 'yellow_theme',
+        };
+
+        const themeBasemap = colorThemeMap[cityLayer.colorName];
+        if (themeBasemap) {
+          console.log('🎨 切換到城市主題底圖:', cityLayer.layerName, themeBasemap);
+          // 觸發底圖切換事件，讓外部組件處理
+          window.dispatchEvent(
+            new CustomEvent('changeBasemap', {
+              detail: { basemap: themeBasemap },
+            })
+          );
+        }
+      } else {
+        console.log('🗺️ 當前是地圖底圖，不切換顏色主題');
       }
 
       console.log('🌍 直接移動到:', cityLayer.layerName, targetCenter, '縮放級別:', optimalZoom);
