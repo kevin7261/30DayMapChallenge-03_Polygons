@@ -80,6 +80,7 @@ export const useDataStore = defineStore(
             fileName: 'beijing.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [116.4074, 39.9042], // 北京中心座標
+            zoom: 10, // 最佳縮放級別
           },
           {
             // 🏛️ 柏林圖層配置
@@ -91,6 +92,7 @@ export const useDataStore = defineStore(
             fileName: 'berlin.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [13.405, 52.52], // 柏林中心座標
+            zoom: 11, // 最佳縮放級別
           },
           {
             // 🏛️ 巴黎圖層配置
@@ -102,6 +104,7 @@ export const useDataStore = defineStore(
             fileName: 'paris.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [2.3522, 48.8566], // 巴黎中心座標
+            zoom: 12, // 最佳縮放級別
           },
           {
             // 🏛️ 羅馬圖層配置
@@ -113,6 +116,7 @@ export const useDataStore = defineStore(
             fileName: 'rome.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [12.4964, 41.9028], // 羅馬中心座標
+            zoom: 12, // 最佳縮放級別
           },
           {
             // 🏛️ 華盛頓特區圖層配置
@@ -124,6 +128,7 @@ export const useDataStore = defineStore(
             fileName: 'washingtondc.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [-77.0369, 38.9072], // 華盛頓特區中心座標
+            zoom: 11, // 最佳縮放級別
           },
           {
             // 🏛️ 西安圖層配置
@@ -135,6 +140,7 @@ export const useDataStore = defineStore(
             fileName: 'xian.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [108.9402, 34.3416], // 西安中心座標
+            zoom: 10, // 最佳縮放級別
           },
         ],
       },
@@ -255,22 +261,14 @@ export const useDataStore = defineStore(
 
     // 計算最佳縮放級別的函數
     const calculateOptimalZoom = (cityId) => {
-      // 根據城市ID返回預設的最佳縮放級別
-      const cityZoomLevels = {
-        北京: 10, // 大城市，需要較小的縮放級別
-        柏林: 11, // 中等城市
-        巴黎: 12, // 較小城市，需要較大的縮放級別
-        羅馬: 12, // 較小城市
-        華盛頓特區: 11, // 中等城市
-        西安: 10, // 大城市
-      };
-
-      return cityZoomLevels[cityId] || 11;
+      // 從圖層配置中獲取縮放級別
+      const cityLayer = findLayerById(cityId);
+      return cityLayer?.zoom || 11;
     };
 
     // 獲取城市預設縮放級別
     const getDefaultZoomForCity = (cityId) => {
-      return calculateOptimalZoom(cityId, null);
+      return calculateOptimalZoom(cityId);
     };
 
     const navigateToCity = (cityId) => {
@@ -311,7 +309,7 @@ export const useDataStore = defineStore(
         targetCenter = bounds.getCenter();
 
         // 根據城市計算最佳縮放級別
-        optimalZoom = calculateOptimalZoom(cityId, bounds);
+        optimalZoom = calculateOptimalZoom(cityId);
         console.log('🌍 使用GeoJSON邊界框中心:', targetCenter, '最佳縮放:', optimalZoom);
       } else if (cityLayer.center) {
         // 使用預設中心點

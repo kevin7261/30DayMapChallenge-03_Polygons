@@ -27,6 +27,7 @@
     props: {
       zoomLevel: { type: Number, default: 12 },
       isPanelDragging: { type: Boolean, default: false },
+      currentCity: { type: String, default: '城市名稱' },
     },
     emits: [
       'update:zoomLevel',
@@ -422,10 +423,16 @@
     <!-- 📱 IG 截圖框框 -->
     <div class="ig-crop-overlay">
       <!-- 貼文尺寸框 (4:5) -->
-      <div class="ig-crop-frame ig-post-frame"></div>
+      <div class="ig-crop-frame ig-post-frame">
+        <div class="ig-city-name">{{ currentCity }}</div>
+        <div class="ig-hashtag">#30DayMapChallenge</div>
+      </div>
 
       <!-- 網格顯示框 (3:4) -->
-      <div class="ig-crop-frame ig-grid-frame"></div>
+      <div class="ig-crop-frame ig-grid-frame">
+        <div class="ig-city-name">{{ currentCity }}</div>
+        <div class="ig-hashtag">#30DayMapChallenge</div>
+      </div>
     </div>
   </div>
 </template>
@@ -482,5 +489,30 @@
     z-index: 1002;
     border-color: #4ecdc4;
     background: transparent;
+  }
+
+  /* 📝 IG 截圖框框文字樣式 */
+  .ig-city-name {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff6b6b;
+    font-weight: bold;
+    font-size: 18px;
+    pointer-events: none;
+    z-index: 1003;
+  }
+
+  .ig-hashtag {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #4ecdc4;
+    font-weight: 600;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 1003;
   }
 </style>
