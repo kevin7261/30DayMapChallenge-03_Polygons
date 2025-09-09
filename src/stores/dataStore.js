@@ -74,7 +74,7 @@ export const useDataStore = defineStore(
             // 🏛️ 北京圖層配置
             layerId: '北京', // 圖層唯一標識符
             layerName: '北京', // 圖層顯示名稱
-            colorName: 'red', // 紅色主題
+            colorName: 'red', // 紅色主題 - 代表中國傳統色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'beijing.geojson', // 數據文件路徑
@@ -86,7 +86,7 @@ export const useDataStore = defineStore(
             // 🏛️ 柏林圖層配置
             layerId: '柏林', // 圖層唯一標識符
             layerName: '柏林', // 圖層顯示名稱
-            colorName: 'blue', // 藍色主題
+            colorName: 'blue', // 藍色主題 - 代表德國國旗色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'berlin.geojson', // 數據文件路徑
@@ -98,7 +98,7 @@ export const useDataStore = defineStore(
             // 🏛️ 巴黎圖層配置
             layerId: '巴黎', // 圖層唯一標識符
             layerName: '巴黎', // 圖層顯示名稱
-            colorName: 'green', // 綠色主題
+            colorName: 'purple', // 紫色主題 - 代表法國皇室色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'paris.geojson', // 數據文件路徑
@@ -110,7 +110,7 @@ export const useDataStore = defineStore(
             // 🏛️ 羅馬圖層配置
             layerId: '羅馬', // 圖層唯一標識符
             layerName: '羅馬', // 圖層顯示名稱
-            colorName: 'yellow', // 黃色主題
+            colorName: 'orange', // 橙色主題 - 代表義大利溫暖色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'rome.geojson', // 數據文件路徑
@@ -122,7 +122,7 @@ export const useDataStore = defineStore(
             // 🏛️ 華盛頓特區圖層配置
             layerId: '華盛頓特區', // 圖層唯一標識符
             layerName: '華盛頓特區', // 圖層顯示名稱
-            colorName: 'purple', // 紫色主題
+            colorName: 'green', // 綠色主題 - 代表美國自然色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'washingtondc.geojson', // 數據文件路徑
@@ -134,7 +134,7 @@ export const useDataStore = defineStore(
             // 🏛️ 西安圖層配置
             layerId: '西安', // 圖層唯一標識符
             layerName: '西安', // 圖層顯示名稱
-            colorName: 'orange', // 橙色主題
+            colorName: 'yellow', // 黃色主題 - 代表中國古代帝王色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'xian.geojson', // 數據文件路徑
@@ -259,20 +259,8 @@ export const useDataStore = defineStore(
       mapInstance.value = map;
     };
 
-    // 計算最佳縮放級別的函數
-    const calculateOptimalZoom = (cityId) => {
-      // 從圖層配置中獲取縮放級別
-      const cityLayer = findLayerById(cityId);
-      return cityLayer?.zoom || 11;
-    };
-
-    // 獲取城市預設縮放級別
-    const getDefaultZoomForCity = (cityId) => {
-      return calculateOptimalZoom(cityId);
-    };
-
     const navigateToCity = (cityId) => {
-      console.log('🌍 導航到城市:', cityId);
+      console.log('🌍 移動到城市:', cityId);
       const cityLayer = findLayerById(cityId);
       console.log('🌍 找到城市圖層:', cityLayer);
 
@@ -286,7 +274,7 @@ export const useDataStore = defineStore(
         // 如果地圖還沒準備好，等待一下再試
         setTimeout(() => {
           if (mapInstance.value) {
-            console.log('🌍 地圖已準備就緒，重新嘗試導航');
+            console.log('🌍 地圖已準備就緒，重新嘗試移動');
             navigateToCity(cityId);
           } else {
             console.error('❌ 地圖實例仍未準備就緒');
@@ -295,9 +283,9 @@ export const useDataStore = defineStore(
         return;
       }
 
-      // 計算GeoJSON物件的中心點和最佳縮放級別
+      // 計算城市位置和縮放級別
       let targetCenter = null;
-      let optimalZoom = 11; // 預設縮放級別
+      let optimalZoom = cityLayer.zoom || 11;
 
       if (
         cityLayer.geoJsonData &&
@@ -307,26 +295,44 @@ export const useDataStore = defineStore(
         // 使用GeoJSON數據計算邊界框中心
         const bounds = L.geoJSON(cityLayer.geoJsonData).getBounds();
         targetCenter = bounds.getCenter();
-
-        // 根據城市計算最佳縮放級別
-        optimalZoom = calculateOptimalZoom(cityId);
-        console.log('🌍 使用GeoJSON邊界框中心:', targetCenter, '最佳縮放:', optimalZoom);
+        console.log('🌍 使用GeoJSON邊界框中心:', targetCenter, '縮放級別:', optimalZoom);
       } else if (cityLayer.center) {
         // 使用預設中心點
         const [lng, lat] = cityLayer.center;
         targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng]
-        optimalZoom = getDefaultZoomForCity(cityId);
-        console.log('🌍 使用預設中心點:', targetCenter, '預設縮放:', optimalZoom);
+        console.log('🌍 使用預設中心點:', targetCenter, '縮放級別:', optimalZoom);
       } else {
         console.error('❌ 城市圖層沒有可用的中心座標:', cityId, cityLayer);
         return;
       }
 
-      console.log('🌍 開始導航到:', cityLayer.layerName, targetCenter, '縮放級別:', optimalZoom);
+      // 根據城市顏色切換底圖主題
+      const colorThemeMap = {
+        red: 'red_theme',
+        blue: 'blue_theme',
+        green: 'green_theme',
+        purple: 'purple_theme',
+        orange: 'orange_theme',
+        yellow: 'yellow_theme',
+      };
+
+      const themeBasemap = colorThemeMap[cityLayer.colorName];
+      if (themeBasemap) {
+        console.log('🎨 切換到城市主題底圖:', cityLayer.layerName, themeBasemap);
+        // 觸發底圖切換事件，讓外部組件處理
+        window.dispatchEvent(
+          new CustomEvent('changeBasemap', {
+            detail: { basemap: themeBasemap },
+          })
+        );
+      }
+
+      console.log('🌍 直接移動到:', cityLayer.layerName, targetCenter, '縮放級別:', optimalZoom);
       try {
-        mapInstance.value.flyTo(targetCenter, optimalZoom, { duration: 2 });
+        // 使用setView直接跳轉，沒有動畫
+        mapInstance.value.setView(targetCenter, optimalZoom);
       } catch (error) {
-        console.error('❌ 導航失敗:', error);
+        console.error('❌ 移動失敗:', error);
       }
     };
 

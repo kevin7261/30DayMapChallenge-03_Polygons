@@ -139,7 +139,15 @@
         }
 
         const config = defineStore.basemaps.find((b) => b.value === defineStore.selectedBasemap);
-        if (config && config.url) {
+
+        // 檢查是否為顏色主題地圖
+        const isColorTheme = defineStore.selectedBasemap.endsWith('_theme');
+
+        if (isColorTheme) {
+          // 顏色主題地圖：不添加底圖圖層，只設定背景色
+          // 不添加任何底圖圖層
+        } else if (config && config.url) {
+          // 一般底圖：添加底圖圖層
           currentTileLayer = L.tileLayer(config.url, {
             attribution: '© OpenStreetMap contributors',
             maxZoom: 18,
@@ -154,6 +162,18 @@
             mapContainerElement.style.backgroundColor = 'var(--my-color-white)';
           } else if (defineStore.selectedBasemap === 'black') {
             mapContainerElement.style.backgroundColor = 'var(--my-color-gray-800)';
+          } else if (defineStore.selectedBasemap === 'red_theme') {
+            mapContainerElement.style.backgroundColor = '#8B0000'; // 深紅色
+          } else if (defineStore.selectedBasemap === 'blue_theme') {
+            mapContainerElement.style.backgroundColor = '#000080'; // 深藍色
+          } else if (defineStore.selectedBasemap === 'green_theme') {
+            mapContainerElement.style.backgroundColor = '#006400'; // 深綠色
+          } else if (defineStore.selectedBasemap === 'purple_theme') {
+            mapContainerElement.style.backgroundColor = '#4B0082'; // 深紫色
+          } else if (defineStore.selectedBasemap === 'orange_theme') {
+            mapContainerElement.style.backgroundColor = '#FF8C00'; // 深橙色
+          } else if (defineStore.selectedBasemap === 'yellow_theme') {
+            mapContainerElement.style.backgroundColor = '#DAA520'; // 深金黃色
           } else {
             mapContainerElement.style.backgroundColor = 'transparent';
           }
@@ -194,12 +214,15 @@
           },
           // 樣式設定函數
           style: (feature) => {
+            // 檢查是否為顏色主題地圖
+            const isColorTheme = defineStore.selectedBasemap.endsWith('_theme');
+
             if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
               return {
                 fillColor: feature.properties.fillColor || `var(--my-color-${colorName})`,
                 weight: 1,
                 opacity: 1,
-                color: feature.properties.color || 'white',
+                color: isColorTheme ? 'white' : feature.properties.color || 'white',
                 fillOpacity: feature.properties.fillColor ? 0.6 : 0.3,
               };
             } else if (
@@ -207,8 +230,8 @@
               feature.geometry.type === 'MultiLineString'
             ) {
               return {
-                color: feature.properties.color || `var(--my-color-${colorName})`,
-                weight: 2,
+                color: 'white', // 所有時候都是白色
+                weight: 4, // 所有時候都是4px
                 opacity: 0.8,
                 lineCap: 'round',
                 lineJoin: 'round',
@@ -497,7 +520,7 @@
     top: 5px;
     left: 50%;
     transform: translateX(-50%);
-    color: #ff6b6b;
+    color: white; /* 改為白色 */
     font-weight: bold;
     font-size: 18px;
     pointer-events: none;
@@ -509,7 +532,7 @@
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    color: #4ecdc4;
+    color: white; /* 改為白色 */
     font-weight: 600;
     font-size: 14px;
     pointer-events: none;

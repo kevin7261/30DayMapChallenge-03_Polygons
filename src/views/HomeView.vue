@@ -17,7 +17,7 @@
   import MapTab from '../tabs/MapTab.vue';
   import { useDataStore } from '@/stores/dataStore.js';
   import { useDefineStore } from '@/stores/defineStore.js';
-  import { ref } from 'vue';
+  import { ref, onMounted, onUnmounted } from 'vue';
 
   export default {
     name: 'HomeView',
@@ -61,6 +61,22 @@
 
       // 🌍 當前選中的城市（預設為第一個城市）
       const currentCity = ref(cities[0]?.layerName || '城市名稱');
+
+      // 🎨 監聽底圖切換事件
+      onMounted(() => {
+        const handleBasemapChange = (event) => {
+          const { basemap } = event.detail;
+          console.log('🎨 收到底圖切換事件:', basemap);
+          setBasemap(basemap);
+        };
+
+        window.addEventListener('changeBasemap', handleBasemapChange);
+
+        // 清理事件監聽器
+        onUnmounted(() => {
+          window.removeEventListener('changeBasemap', handleBasemapChange);
+        });
+      });
 
       return {
         setMapInstance,
