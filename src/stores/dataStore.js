@@ -132,15 +132,15 @@ export const useDataStore = defineStore(
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
-            // 🏛️ 華盛頓特區圖層配置
-            layerId: '華盛頓特區', // 圖層唯一標識符
-            layerName: '華盛頓特區', // 圖層顯示名稱
+            // 🏛️ 華盛頓圖層配置
+            layerId: '華盛頓', // 圖層唯一標識符
+            layerName: '華盛頓', // 圖層顯示名稱
             colorName: 'green', // 綠色主題 - 代表美國自然色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'washingtondc.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
-            center: [-77.0369, 38.9072], // 華盛頓特區中心座標
+            center: [-77.0369, 38.9072], // 華盛頓中心座標
             zoom: 12, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
@@ -261,6 +261,24 @@ export const useDataStore = defineStore(
               }
             }
           });
+        } else if (
+          feature.geometry.type === 'LineString' ||
+          feature.geometry.type === 'MultiLineString'
+        ) {
+          const lineCoordsArray =
+            feature.geometry.type === 'LineString'
+              ? [feature.geometry.coordinates]
+              : feature.geometry.coordinates; // MultiLineString: Array of LineString coords
+
+          lineCoordsArray.forEach((lineCoords) => {
+            if (Array.isArray(lineCoords) && lineCoords.length > 1) {
+              for (let i = 0; i < lineCoords.length - 1; i++) {
+                const point1 = L.latLng(lineCoords[i][1], lineCoords[i][0]);
+                const point2 = L.latLng(lineCoords[i + 1][1], lineCoords[i + 1][0]);
+                totalLength += point1.distanceTo(point2);
+              }
+            }
+          });
         }
       });
 
@@ -294,6 +312,20 @@ export const useDataStore = defineStore(
 
           coordinates.forEach((ring) => {
             ring.forEach((coord) => {
+              allPoints.push([coord[0], coord[1]]); // [lng, lat]
+            });
+          });
+        } else if (
+          feature.geometry.type === 'LineString' ||
+          feature.geometry.type === 'MultiLineString'
+        ) {
+          const lineCoordsArray =
+            feature.geometry.type === 'LineString'
+              ? [feature.geometry.coordinates]
+              : feature.geometry.coordinates; // MultiLineString
+
+          lineCoordsArray.forEach((lineCoords) => {
+            lineCoords.forEach((coord) => {
               allPoints.push([coord[0], coord[1]]); // [lng, lat]
             });
           });
@@ -362,6 +394,20 @@ export const useDataStore = defineStore(
             console.log(`📐 主要角度:`, layer.angle);
           } catch (error) {
             console.error(`Failed to load city layer "${layer.layerName}":`, error);
+          }
+        } else {
+          // 已有資料：若尚未計算，或需要保險重算，計算長度與角度並補齊中心
+          try {
+            if (!layer.length || !layer.angle) {
+              layer.length = calculateBoundaryLength(layer.geoJsonData);
+              layer.angle = calculateMainAngle(layer.geoJsonData);
+            }
+            if (!layer.boundsCenter) {
+              const bounds = L.geoJSON(layer.geoJsonData).getBounds();
+              layer.boundsCenter = bounds.getCenter();
+            }
+          } catch (error) {
+            console.error(`Failed to recalc metrics for "${layer.layerName}":`, error);
           }
         }
       }

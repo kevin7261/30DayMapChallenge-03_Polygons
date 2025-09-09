@@ -500,8 +500,12 @@
         <div class="ig-city-name">{{ currentCity }}</div>
         <div class="ig-hashtag">
           <div class="d-flex justify-content-center gap-3 mb-1">
-            <small class="text-white">{{ currentCityInfo?.length || 'N/A' }}</small>
-            <small class="text-white">{{ currentCityInfo?.angle || 'N/A' }}</small>
+            <small class="text-white">{{
+              (currentCityInfo && currentCityInfo.length) || 'N/A'
+            }}</small>
+            <small class="text-white">{{
+              (currentCityInfo && currentCityInfo.angle) || 'N/A'
+            }}</small>
           </div>
           <div class="text-white fw-bold">#30DayMapChallenge</div>
         </div>
@@ -512,8 +516,12 @@
         <div class="ig-city-name">{{ currentCity }}</div>
         <div class="ig-hashtag">
           <div class="d-flex justify-content-center gap-3 mb-1">
-            <small class="text-white">{{ currentCityInfo?.length || 'N/A' }}</small>
-            <small class="text-white">{{ currentCityInfo?.angle || 'N/A' }}</small>
+            <small class="text-white">{{
+              (currentCityInfo && currentCityInfo.length) || 'N/A'
+            }}</small>
+            <small class="text-white">{{
+              (currentCityInfo && currentCityInfo.angle) || 'N/A'
+            }}</small>
           </div>
           <div class="text-white fw-bold">#30DayMapChallenge</div>
         </div>
