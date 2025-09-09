@@ -83,6 +83,7 @@ export const useDataStore = defineStore(
             zoom: 11, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
             // 🏛️ 柏林圖層配置
@@ -97,6 +98,7 @@ export const useDataStore = defineStore(
             zoom: 12, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
             // 🏛️ 巴黎圖層配置
@@ -111,6 +113,7 @@ export const useDataStore = defineStore(
             zoom: 12, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
             // 🏛️ 羅馬圖層配置
@@ -125,6 +128,7 @@ export const useDataStore = defineStore(
             zoom: 14, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
             // 🏛️ 華盛頓特區圖層配置
@@ -139,6 +143,7 @@ export const useDataStore = defineStore(
             zoom: 12, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
             // 🏛️ 西安圖層配置
@@ -153,6 +158,7 @@ export const useDataStore = defineStore(
             zoom: 12, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
         ],
       },
@@ -336,6 +342,17 @@ export const useDataStore = defineStore(
             layer.length = calculateBoundaryLength(result.geoJsonData);
             layer.angle = calculateMainAngle(result.geoJsonData);
 
+            // 預先計算並緩存邊界框中心點（性能優化）
+            if (
+              result.geoJsonData &&
+              result.geoJsonData.features &&
+              result.geoJsonData.features.length > 0
+            ) {
+              const bounds = L.geoJSON(result.geoJsonData).getBounds();
+              layer.boundsCenter = bounds.getCenter();
+              console.log(`🎯 緩存邊界框中心點:`, layer.boundsCenter);
+            }
+
             console.log(
               `✅ 城市圖層 "${layer.layerName}" 載入完成 (${result.geoJsonData?.features?.length || 0} 筆資料)`
             );
@@ -370,9 +387,7 @@ export const useDataStore = defineStore(
     };
 
     const navigateToCity = (cityId) => {
-      console.log('🌍 移動到城市:', cityId);
       const cityLayer = findLayerById(cityId);
-      console.log('🌍 找到城市圖層:', cityLayer);
 
       if (!cityLayer) {
         console.error('❌ 找不到城市圖層:', cityId);
@@ -393,24 +408,25 @@ export const useDataStore = defineStore(
         return;
       }
 
-      // 計算城市位置和縮放級別
+      // 計算城市位置和縮放級別（性能優化：優先使用緩存的邊界框中心）
       let targetCenter = null;
       let optimalZoom = cityLayer.zoom || 11;
 
-      if (
+      if (cityLayer.boundsCenter) {
+        // 使用緩存的邊界框中心點（最快）
+        targetCenter = cityLayer.boundsCenter;
+      } else if (
         cityLayer.geoJsonData &&
         cityLayer.geoJsonData.features &&
         cityLayer.geoJsonData.features.length > 0
       ) {
-        // 使用GeoJSON數據計算邊界框中心
+        // 即時計算邊界框中心（較慢，但作為備用）
         const bounds = L.geoJSON(cityLayer.geoJsonData).getBounds();
         targetCenter = bounds.getCenter();
-        console.log('🌍 使用GeoJSON邊界框中心:', targetCenter, '縮放級別:', optimalZoom);
       } else if (cityLayer.center) {
-        // 使用預設中心點
+        // 使用預設中心點（最慢，但最可靠）
         const [lng, lat] = cityLayer.center;
         targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng]
-        console.log('🌍 使用預設中心點:', targetCenter, '縮放級別:', optimalZoom);
       } else {
         console.error('❌ 城市圖層沒有可用的中心座標:', cityId, cityLayer);
         return;
@@ -433,7 +449,6 @@ export const useDataStore = defineStore(
 
         const themeBasemap = colorThemeMap[cityLayer.colorName];
         if (themeBasemap) {
-          console.log('🎨 切換到城市主題底圖:', cityLayer.layerName, themeBasemap);
           // 觸發底圖切換事件，讓外部組件處理
           window.dispatchEvent(
             new CustomEvent('changeBasemap', {
@@ -441,11 +456,7 @@ export const useDataStore = defineStore(
             })
           );
         }
-      } else {
-        console.log('🗺️ 當前是地圖底圖，不切換顏色主題');
       }
-
-      console.log('🌍 直接移動到:', cityLayer.layerName, targetCenter, '縮放級別:', optimalZoom);
       try {
         // 使用setView直接跳轉，沒有動畫
         mapInstance.value.setView(targetCenter, optimalZoom);

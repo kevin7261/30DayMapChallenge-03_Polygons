@@ -159,15 +159,15 @@
           <h6 class="text-white mb-2">底圖選擇</h6>
           <div class="d-flex flex-column gap-1">
             <button
-              class="btn btn-sm btn-outline-light"
-              :class="{ 'btn-light': selectedBasemap === 'carto_dark' }"
+              class="btn btn-sm"
+              :class="selectedBasemap === 'carto_dark' ? 'btn-light' : 'btn-outline-light'"
               @click="setBasemap('carto_dark')"
             >
               地圖
             </button>
             <button
-              class="btn btn-sm btn-outline-light"
-              :class="{ 'btn-light': selectedBasemap !== 'carto_dark' }"
+              class="btn btn-sm"
+              :class="selectedBasemap !== 'carto_dark' ? 'btn-light' : 'btn-outline-light'"
               @click="setColorTheme"
             >
               顏色

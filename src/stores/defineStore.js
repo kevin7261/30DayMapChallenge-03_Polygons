@@ -18,7 +18,7 @@ import { defineStore } from 'pinia';
 export const useDefineStore = defineStore('define', {
   state: () => ({
     // 🗺️ 當前選中的底圖類型
-    selectedBasemap: 'red_theme',
+    selectedBasemap: 'carto_dark',
 
     // 🗺️ 地圖視圖狀態
     mapView: {

@@ -543,7 +543,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 3px solid #ff6b6b;
     background: transparent;
     display: flex;
     flex-direction: column;
@@ -557,6 +556,7 @@
     max-width: calc(80vh - 32px);
     max-height: calc(100vh - 32px);
     z-index: 1001;
+    border: 3px solid white;
   }
 
   .ig-grid-frame {
@@ -565,7 +565,7 @@
     max-width: calc(75vh - 32px);
     max-height: calc(100vh - 32px);
     z-index: 1002;
-    border-color: #4ecdc4;
+    border: 3px solid white; /* 白色邊框 */
     background: transparent;
   }
 
