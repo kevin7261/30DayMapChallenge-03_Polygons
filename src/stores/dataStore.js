@@ -30,9 +30,7 @@ import { ref, computed } from 'vue'; // Vue 3 響應式 API
 
 // 📊 數據處理器引入 (Data Processor Imports)
 import {
-  //loadPublicElderlyWelfareInstitutionData, // 公辦老人福利機構數據載入器（已註解）
-  loadElderlyWelfareInstitutionData, // 老人福利機構數據載入器
-  loadResidentialLongTermCareData, // 住宿式長照機構數據載入器
+  loadCityGeoJson, // 城市 GeoJSON 數據載入器
 } from '../utils/dataProcessor.js';
 
 /**
@@ -73,91 +71,116 @@ export const useDataStore = defineStore(
      */
     const layers = ref([
       {
-        // 🏥 機構式長照機構 - 老人福利機構組
-        // 包含安養機構、養護機構、長期照顧機構等老人福利相關設施
-        groupName: '機構式長照機構 - 老人福利機構',
+        // 🌍 世界城市地圖集合
+        // 包含各大洲代表性城市的地理邊界數據
+        groupName: '世界城市',
         groupLayers: [
           {
-            // 🏠 安養機構圖層配置
-            // 提供長期照護服務的安養型機構，主要服務對象為需要長期照護的長者
-            layerId: '安養機構', // 圖層唯一標識符
-            layerName: '安養機構', // 圖層顯示名稱
+            // 🏛️ 北京圖層配置
+            layerId: '北京', // 圖層唯一標識符
+            layerName: '北京', // 圖層顯示名稱
             visible: false, // 初始狀態為隱藏
             isLoading: false, // 初始載入狀態為未載入
             isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'point', // 點類型圖層
-            shape: 'circle', // 圓形標記
-            colorName: 'green', // 綠色主題（對應 CSS 變數 --my-color-green）
+            type: 'line', // 線條類型圖層
+            shape: 'line', // 線條標記
+            colorName: 'red', // 紅色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             summaryData: null, // 統計摘要數據（載入後填充）
             tableData: null, // 表格顯示數據（載入後填充）
             legendData: null, // 圖例配置數據（載入後填充）
-            loader: loadElderlyWelfareInstitutionData, // 數據載入函數
-            fileName: '台北市政府社會局/臺北市老人福利機構名冊1140201_coord_安養.csv', // 數據文件路徑
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'beijing.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
           },
           {
-            // 🏥 養護機構圖層配置
-            // 提供養護服務的機構，主要服務對象為需要日常照護的長者
-            layerId: '養護機構', // 圖層唯一標識符
-            layerName: '養護機構', // 圖層顯示名稱
+            // 🏛️ 柏林圖層配置
+            layerId: '柏林', // 圖層唯一標識符
+            layerName: '柏林', // 圖層顯示名稱
             visible: false, // 初始狀態為隱藏
             isLoading: false, // 初始載入狀態為未載入
             isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'point', // 點類型圖層
-            shape: 'circle', // 圓形標記
-            colorName: 'green', // 綠色主題（對應 CSS 變數 --my-color-green）
+            type: 'line', // 線條類型圖層
+            shape: 'line', // 線條標記
+            colorName: 'blue', // 藍色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             summaryData: null, // 統計摘要數據（載入後填充）
             tableData: null, // 表格顯示數據（載入後填充）
             legendData: null, // 圖例配置數據（載入後填充）
-            loader: loadElderlyWelfareInstitutionData, // 數據載入函數
-            fileName: '台北市政府社會局/臺北市老人福利機構名冊1140201_coord_養護.csv', // 數據文件路徑
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'berlin.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
           },
           {
-            // 🏥 長期照顧機構圖層配置
-            // 提供長期照顧服務的機構，整合各類長照服務資源
-            layerId: '長期照顧機構', // 圖層唯一標識符
-            layerName: '長期照顧機構', // 圖層顯示名稱
+            // 🏛️ 巴黎圖層配置
+            layerId: '巴黎', // 圖層唯一標識符
+            layerName: '巴黎', // 圖層顯示名稱
             visible: false, // 初始狀態為隱藏
             isLoading: false, // 初始載入狀態為未載入
             isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'point', // 點類型圖層
-            shape: 'circle', // 圓形標記
-            colorName: 'green', // 綠色主題（對應 CSS 變數 --my-color-green）
+            type: 'line', // 線條類型圖層
+            shape: 'line', // 線條標記
+            colorName: 'green', // 綠色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             summaryData: null, // 統計摘要數據（載入後填充）
             tableData: null, // 表格顯示數據（載入後填充）
             legendData: null, // 圖例配置數據（載入後填充）
-            loader: loadElderlyWelfareInstitutionData, // 數據載入函數
-            fileName: '台北市政府社會局/臺北市老人福利機構名冊1140201_coord_長照.csv', // 數據文件路徑
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'paris.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
           },
-        ],
-      },
-      {
-        // 🏢 機構式長照機構 - 法人長照機構組
-        // 包含由法人經營的住宿式長照機構等專業長照服務設施
-        groupName: '機構式長照機構 - 法人長照機構',
-        groupLayers: [
           {
-            // 🏥 住宿式長照機構圖層配置
-            // 提供住宿式長期照顧服務的法人機構，提供24小時專業照護服務
-            layerId: '住宿式長照機構', // 圖層唯一標識符
-            layerName: '住宿式長照機構', // 圖層顯示名稱
+            // 🏛️ 羅馬圖層配置
+            layerId: '羅馬', // 圖層唯一標識符
+            layerName: '羅馬', // 圖層顯示名稱
             visible: false, // 初始狀態為隱藏
             isLoading: false, // 初始載入狀態為未載入
             isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'point', // 點類型圖層
-            shape: 'circle', // 圓形標記
-            colorName: 'red', // 紅色主題（對應 CSS 變數 --my-color-red）
+            type: 'line', // 線條類型圖層
+            shape: 'line', // 線條標記
+            colorName: 'yellow', // 黃色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             summaryData: null, // 統計摘要數據（載入後填充）
             tableData: null, // 表格顯示數據（載入後填充）
             legendData: null, // 圖例配置數據（載入後填充）
-            loader: loadResidentialLongTermCareData, // 數據載入函數
-            fileName: '台北市政府衛生局/臺北市立案住宿式長照機構一覽表_coord.csv', // 數據文件路徑
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'rome.geojson', // 數據文件路徑
+            fieldName: null, // 主要字段名稱（可選）
+          },
+          {
+            // 🏛️ 華盛頓特區圖層配置
+            layerId: '華盛頓特區', // 圖層唯一標識符
+            layerName: '華盛頓特區', // 圖層顯示名稱
+            visible: false, // 初始狀態為隱藏
+            isLoading: false, // 初始載入狀態為未載入
+            isLoaded: false, // 初始數據載入狀態為未載入
+            type: 'line', // 線條類型圖層
+            shape: 'line', // 線條標記
+            colorName: 'purple', // 紫色主題
+            geoJsonData: null, // GeoJSON 地理數據（載入後填充）
+            summaryData: null, // 統計摘要數據（載入後填充）
+            tableData: null, // 表格顯示數據（載入後填充）
+            legendData: null, // 圖例配置數據（載入後填充）
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'washingtondc.geojson', // 數據文件路徑
+            fieldName: null, // 主要字段名稱（可選）
+          },
+          {
+            // 🏛️ 西安圖層配置
+            layerId: '西安', // 圖層唯一標識符
+            layerName: '西安', // 圖層顯示名稱
+            visible: false, // 初始狀態為隱藏
+            isLoading: false, // 初始載入狀態為未載入
+            isLoaded: false, // 初始數據載入狀態為未載入
+            type: 'line', // 線條類型圖層
+            shape: 'line', // 線條標記
+            colorName: 'orange', // 橙色主題
+            geoJsonData: null, // GeoJSON 地理數據（載入後填充）
+            summaryData: null, // 統計摘要數據（載入後填充）
+            tableData: null, // 表格顯示數據（載入後填充）
+            legendData: null, // 圖例配置數據（載入後填充）
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'xian.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
           },
         ],
