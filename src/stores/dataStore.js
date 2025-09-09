@@ -27,6 +27,7 @@
 // 🔧 核心依賴引入 (Core Dependencies Import)
 import { defineStore } from 'pinia'; // Pinia 狀態管理庫
 import { ref, computed } from 'vue'; // Vue 3 響應式 API
+import L from 'leaflet'; // Leaflet 地圖庫
 
 // 📊 數據處理器引入 (Data Processor Imports)
 import {
@@ -79,7 +80,6 @@ export const useDataStore = defineStore(
             fileName: 'beijing.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [116.4074, 39.9042], // 北京中心座標
-            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 柏林圖層配置
@@ -91,7 +91,6 @@ export const useDataStore = defineStore(
             fileName: 'berlin.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [13.405, 52.52], // 柏林中心座標
-            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 巴黎圖層配置
@@ -103,7 +102,6 @@ export const useDataStore = defineStore(
             fileName: 'paris.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [2.3522, 48.8566], // 巴黎中心座標
-            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 羅馬圖層配置
@@ -115,7 +113,6 @@ export const useDataStore = defineStore(
             fileName: 'rome.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [12.4964, 41.9028], // 羅馬中心座標
-            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 華盛頓特區圖層配置
@@ -127,7 +124,6 @@ export const useDataStore = defineStore(
             fileName: 'washingtondc.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [-77.0369, 38.9072], // 華盛頓特區中心座標
-            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 西安圖層配置
@@ -139,7 +135,6 @@ export const useDataStore = defineStore(
             fileName: 'xian.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [108.9402, 34.3416], // 西安中心座標
-            zoom: 10, // 縮放級別
           },
         ],
       },
@@ -258,6 +253,26 @@ export const useDataStore = defineStore(
       mapInstance.value = map;
     };
 
+    // 計算最佳縮放級別的函數
+    const calculateOptimalZoom = (cityId) => {
+      // 根據城市ID返回預設的最佳縮放級別
+      const cityZoomLevels = {
+        北京: 10, // 大城市，需要較小的縮放級別
+        柏林: 11, // 中等城市
+        巴黎: 12, // 較小城市，需要較大的縮放級別
+        羅馬: 12, // 較小城市
+        華盛頓特區: 11, // 中等城市
+        西安: 10, // 大城市
+      };
+
+      return cityZoomLevels[cityId] || 11;
+    };
+
+    // 獲取城市預設縮放級別
+    const getDefaultZoomForCity = (cityId) => {
+      return calculateOptimalZoom(cityId, null);
+    };
+
     const navigateToCity = (cityId) => {
       console.log('🌍 導航到城市:', cityId);
       const cityLayer = findLayerById(cityId);
@@ -265,11 +280,6 @@ export const useDataStore = defineStore(
 
       if (!cityLayer) {
         console.error('❌ 找不到城市圖層:', cityId);
-        return;
-      }
-
-      if (!cityLayer.center) {
-        console.error('❌ 城市圖層沒有中心座標:', cityId, cityLayer);
         return;
       }
 
@@ -287,11 +297,36 @@ export const useDataStore = defineStore(
         return;
       }
 
-      console.log('🌍 開始導航到:', cityLayer.layerName, cityLayer.center);
+      // 計算GeoJSON物件的中心點和最佳縮放級別
+      let targetCenter = null;
+      let optimalZoom = 11; // 預設縮放級別
+
+      if (
+        cityLayer.geoJsonData &&
+        cityLayer.geoJsonData.features &&
+        cityLayer.geoJsonData.features.length > 0
+      ) {
+        // 使用GeoJSON數據計算邊界框中心
+        const bounds = L.geoJSON(cityLayer.geoJsonData).getBounds();
+        targetCenter = bounds.getCenter();
+
+        // 根據城市計算最佳縮放級別
+        optimalZoom = calculateOptimalZoom(cityId, bounds);
+        console.log('🌍 使用GeoJSON邊界框中心:', targetCenter, '最佳縮放:', optimalZoom);
+      } else if (cityLayer.center) {
+        // 使用預設中心點
+        const [lng, lat] = cityLayer.center;
+        targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng]
+        optimalZoom = getDefaultZoomForCity(cityId);
+        console.log('🌍 使用預設中心點:', targetCenter, '預設縮放:', optimalZoom);
+      } else {
+        console.error('❌ 城市圖層沒有可用的中心座標:', cityId, cityLayer);
+        return;
+      }
+
+      console.log('🌍 開始導航到:', cityLayer.layerName, targetCenter, '縮放級別:', optimalZoom);
       try {
-        const [lng, lat] = cityLayer.center; // 資料為 [lng, lat]
-        const target = [lat, lng]; // Leaflet 需要 [lat, lng]
-        mapInstance.value.flyTo(target, cityLayer.zoom || 10, { duration: 2 });
+        mapInstance.value.flyTo(targetCenter, optimalZoom, { duration: 2 });
       } catch (error) {
         console.error('❌ 導航失敗:', error);
       }

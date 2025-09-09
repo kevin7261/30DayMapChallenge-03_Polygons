@@ -76,7 +76,7 @@
         <div class="bg-dark bg-opacity-75 rounded-3 p-3">
           <!-- 🌍 城市導航區域 -->
           <div class="mb-3">
-            <h6 class="text-white mb-2">城市導航</h6>
+            <h6 class="text-white mb-2">Point</h6>
             <div class="d-flex flex-column gap-1">
               <button
                 v-for="city in cities"

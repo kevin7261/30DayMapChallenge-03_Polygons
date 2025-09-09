@@ -25,7 +25,7 @@
   export default {
     name: 'MapTab',
     props: {
-      zoomLevel: { type: Number, default: 11 },
+      zoomLevel: { type: Number, default: 12 },
       isPanelDragging: { type: Boolean, default: false },
     },
     emits: [
@@ -221,8 +221,8 @@
               <div class="p-2">
                 <div class="fw-bold mb-2">${layerName}</div>
                 <div>${feature.properties.name || '未命名'}</div>
-              </div>
-            `);
+                 </div>
+               `);
 
             // 綁定點擊事件
             layer.on('click', () => {
@@ -418,6 +418,15 @@
   <div id="map-container" class="h-100 w-100 position-relative">
     <!-- 🗺️ Leaflet 地圖容器 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
+
+    <!-- 📱 IG 截圖框框 -->
+    <div class="ig-crop-overlay">
+      <!-- 貼文尺寸框 (4:5) -->
+      <div class="ig-crop-frame ig-post-frame"></div>
+
+      <!-- 網格顯示框 (3:4) -->
+      <div class="ig-crop-frame ig-grid-frame"></div>
+    </div>
   </div>
 </template>
 
@@ -432,5 +441,46 @@
   [id^='leaflet-map'] {
     width: 100% !important;
     height: 100% !important;
+  }
+
+  /* 📱 IG 截圖框框樣式 */
+  .ig-crop-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+  }
+
+  .ig-crop-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid #ff6b6b;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ig-post-frame {
+    width: calc(80vw - 32px);
+    height: calc(100vw - 32px); /* 4:5 比例，上下左右各留16px */
+    max-width: calc(80vh - 32px);
+    max-height: calc(100vh - 32px);
+    z-index: 1001;
+  }
+
+  .ig-grid-frame {
+    width: calc(75vw - 32px);
+    height: calc(100vw - 32px); /* 3:4 比例，上下左右各留16px */
+    max-width: calc(75vh - 32px);
+    max-height: calc(100vh - 32px);
+    z-index: 1002;
+    border-color: #4ecdc4;
+    background: transparent;
   }
 </style>
