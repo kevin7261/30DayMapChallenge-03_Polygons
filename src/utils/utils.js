@@ -1,6 +1,37 @@
 /**
- * 圖標映射表 - 支援中文/英文/FontAwesome 類名
- * 用於統一管理系統中使用的所有圖標
+ * 🔧 通用工具函數模組 (General Utility Functions Module)
+ *
+ * 本模組提供應用程式中常用的工具函數和配置，包括圖標映射、顏色配置、
+ * 格式化函數等通用功能。採用模組化設計，便於維護和擴展。
+ *
+ * 🎯 主要功能：
+ * 1. 🎨 圖標映射管理 - 統一管理系統中使用的所有圖標
+ * 2. 🌈 顏色配置系統 - 提供標準化的顏色配置
+ * 3. 🔧 工具函數 - 提供常用的輔助函數
+ * 4. 📊 格式化函數 - 數據格式化和顯示相關函數
+ *
+ * 🏗️ 架構設計：
+ * - 模組化導出，按功能分類
+ * - 支援多語言（中文/英文）
+ * - 與 Font Awesome 圖標庫整合
+ * - 響應式顏色系統
+ *
+ * 📁 相關文件：
+ * - ../assets/css/variables.css - CSS 變數定義
+ * - ../tabs/MapTab.vue - 主要使用者
+ * - ../components/ - 各種組件
+ */
+
+/**
+ * 🎨 圖標映射表 (Icon Mapping Table)
+ *
+ * 統一管理系統中使用的所有圖標，支援中文/英文/FontAwesome 類名。
+ * 採用物件結構，便於查找和使用，確保圖標的一致性。
+ *
+ * 結構說明：
+ * - zh: 中文名稱
+ * - en: 英文名稱
+ * - icon: Font Awesome 圖標類名
  */
 export const ICONS = {
   // 基本操作圖標
@@ -111,24 +142,49 @@ export const ICONS = {
 // =================================================================================
 
 /**
- * 根據鍵名獲取圖標資訊
+ * 🎨 根據鍵名獲取圖標資訊 (Get Icon Information by Key)
  *
- * @param {string} iconKey - 圖標鍵名
- * @param {string} lang - 語言 ('zh' | 'en')
- * @returns {object} 包含文字和圖標類名的物件
+ * 根據提供的圖標鍵名和語言參數，返回對應的圖標資訊物件。
+ * 支援中文和英文兩種語言，如果指定的語言不存在則回退到中文。
+ *
+ * @param {string} iconKey - 圖標鍵名，對應 ICONS 物件中的鍵
+ * @param {string} [lang='zh'] - 語言代碼，支援 'zh'（中文）或 'en'（英文）
+ * @returns {Object} 包含文字和圖標類名的物件
+ * @returns {string} returns.text - 對應語言的文字描述
+ * @returns {string} returns.icon - Font Awesome 圖標類名
+ *
+ * @example
+ * // 獲取中文圖標資訊
+ * const icon = getIcon('add', 'zh');
+ * console.log(icon.text); // '新增'
+ * console.log(icon.icon); // 'fas fa-plus'
+ *
+ * // 獲取英文圖標資訊
+ * const iconEn = getIcon('add', 'en');
+ * console.log(iconEn.text); // 'Add'
+ * console.log(iconEn.icon); // 'fas fa-plus'
+ *
+ * // 處理不存在的圖標鍵
+ * const unknownIcon = getIcon('unknown');
+ * console.log(unknownIcon.text); // 'unknown'
+ * console.log(unknownIcon.icon); // 'fas fa-question-circle'
  */
 export function getIcon(iconKey, lang = 'zh') {
+  // 從圖標映射表中查找對應的圖標配置
   const iconInfo = ICONS[iconKey];
+
+  // 如果找不到對應的圖標配置，返回預設值並輸出警告
   if (!iconInfo) {
     console.warn(`找不到圖標定義: ${iconKey}`);
     return {
-      text: iconKey,
-      icon: 'fas fa-question-circle',
+      text: iconKey, // 使用原始鍵名作為文字
+      icon: 'fas fa-question-circle', // 使用問號圖標作為預設
     };
   }
 
+  // 返回包含文字和圖標類名的物件
   return {
-    text: iconInfo[lang] || iconInfo.zh,
-    icon: iconInfo.icon,
+    text: iconInfo[lang] || iconInfo.zh, // 優先使用指定語言，回退到中文
+    icon: iconInfo.icon, // Font Awesome 圖標類名
   };
 }

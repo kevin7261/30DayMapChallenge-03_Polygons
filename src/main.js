@@ -1,21 +1,38 @@
 /**
  * 🚀 應用程式主入口文件 (Main Application Entry Point)
  *
- * 功能說明：
- * 1. 🎨 引入 Bootstrap 和自定義主題樣式系統
- * 2. 🧩 初始化 Vue 3 應用程式和全域組件
- * 3. 🗺️ 設定 Vue Router 路由導航系統
- * 4. 📦 配置 Pinia 狀態管理系統
- * 5. 🌍 掛載應用程式到 DOM 容器中
- * 6. 🔧 整合第三方庫（Leaflet、Font Awesome、Bootstrap）
+ * 本文件是整個 Vue.js 應用程式的啟動入口，負責初始化所有核心系統和第三方依賴。
+ * 採用模組化設計，確保各系統間的依賴關係清晰明確。
  *
- * 技術棧：
- * - Vue 3 (Composition API)
- * - Vue Router 4
- * - Pinia (狀態管理)
- * - Bootstrap 5 (UI 框架)
- * - Leaflet (地圖庫)
- * - Font Awesome (圖示庫)
+ * 📋 主要功能模組：
+ * 1. 🎨 樣式系統初始化 - Bootstrap 5 + 自定義主題 + 第三方 UI 庫樣式
+ * 2. 🧩 Vue 3 應用程式核心 - 使用 Composition API 的現代化 Vue 架構
+ * 3. 🗺️ 路由系統配置 - Vue Router 4 單頁應用程式導航管理
+ * 4. 📦 狀態管理系統 - Pinia 全域狀態管理和數據持久化
+ * 5. 🌍 DOM 掛載與渲染 - 將應用程式掛載到 HTML 容器中
+ * 6. 🔧 第三方庫整合 - Leaflet 地圖、Font Awesome 圖示、Bootstrap 組件
+ *
+ * 🏗️ 技術架構：
+ * - Vue 3.3+ (Composition API + <script setup> 語法)
+ * - Vue Router 4 (聲明式路由配置)
+ * - Pinia 2+ (輕量級狀態管理，替代 Vuex)
+ * - Bootstrap 5.3+ (響應式 UI 框架)
+ * - Leaflet 1.9+ (開源地圖庫)
+ * - Font Awesome 6+ (向量圖示庫)
+ *
+ * 🔄 初始化流程：
+ * 1. 載入所有必要的樣式和 JavaScript 依賴
+ * 2. 創建 Vue 應用程式實例
+ * 3. 配置並註冊路由系統
+ * 4. 配置並註冊狀態管理系統
+ * 5. 將應用程式掛載到 DOM 元素
+ * 6. 輸出初始化完成日誌
+ *
+ * 📁 相關文件：
+ * - ./App.vue - 根組件
+ * - ./router/index.js - 路由配置
+ * - ./stores/ - Pinia 狀態管理模組
+ * - ./assets/css/ - 自定義樣式文件
  */
 
 // 🔧 Vue 核心模組引入 (Vue Core Module Imports)

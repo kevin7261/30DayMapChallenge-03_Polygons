@@ -1,4 +1,32 @@
 <script>
+  /**
+   * 🗺️ MapTab.vue - 地圖功能主組件 (Map Functionality Main Component)
+   *
+   * 本組件是整個應用程式的核心地圖功能模組，負責提供完整的地圖展示和互動功能。
+   * 採用 Vue 3 Composition API 設計，整合 Leaflet 地圖庫實現豐富的地圖功能。
+   *
+   * 🎯 主要功能：
+   * 1. 🗺️ 地圖展示 - 基於 Leaflet 的互動式地圖展示
+   * 2. 📊 圖層管理 - 動態載入和控制多種圖層的顯示
+   * 3. 🎛️ 圖層控制面板 - 提供直觀的圖層開關控制介面
+   * 4. 🔍 空間查詢 - 點擊地圖要素查看詳細資訊
+   * 5. 📱 響應式設計 - 適配各種設備尺寸的地圖展示
+   * 6. ⚡ 性能優化 - 動態載入和快取機制
+   *
+   * 🏗️ 技術架構：
+   * - Vue 3 Composition API + <script setup> 語法
+   * - Leaflet 1.9+ 地圖庫
+   * - Pinia 狀態管理
+   * - Bootstrap 5 響應式佈局
+   * - 模組化組件設計
+   *
+   * 📁 相關文件：
+   * - ../stores/dataStore.js - 圖層數據管理
+   * - ../stores/defineStore.js - 系統配置管理
+   * - ../utils/utils.js - 工具函數
+   * - ../utils/dataProcessor.js - 數據處理邏輯
+   */
+
   // 🔧 Vue Composition API 引入 (Vue Composition API Imports)
   import { ref, onMounted, onUnmounted, watch, nextTick, computed } from 'vue'; // 引入 Vue 3 響應式 API
   import L from 'leaflet'; // 引入 Leaflet 地圖庫
