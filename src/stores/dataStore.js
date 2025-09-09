@@ -55,19 +55,13 @@ export const useDataStore = defineStore(
      * - groupLayers: 該組下的所有圖層列表
      *   - layerId: 圖層唯一標識符
      *   - layerName: 圖層顯示名稱
-     *   - visible: 圖層是否可見
-     *   - isLoading: 圖層是否正在載入
-     *   - isLoaded: 圖層是否已載入完成
-     *   - type: 圖層類型（point/polygon/line）
-     *   - shape: 點圖層的形狀（circle/square等）
      *   - colorName: 圖層顏色名稱（對應 CSS 變數）
      *   - geoJsonData: GeoJSON 格式的地理數據
-     *   - summaryData: 圖層統計摘要數據
-     *   - tableData: 表格顯示用的數據
-     *   - legendData: 圖例配置數據
      *   - loader: 數據載入函數
      *   - fileName: 數據文件路徑
      *   - fieldName: 主要字段名稱
+     *   - center: 城市中心座標
+     *   - zoom: 縮放級別
      */
     const layers = ref([
       {
@@ -79,109 +73,73 @@ export const useDataStore = defineStore(
             // 🏛️ 北京圖層配置
             layerId: '北京', // 圖層唯一標識符
             layerName: '北京', // 圖層顯示名稱
-            visible: false, // 初始狀態為隱藏
-            isLoading: false, // 初始載入狀態為未載入
-            isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'line', // 線條類型圖層
-            shape: 'line', // 線條標記
             colorName: 'red', // 紅色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            summaryData: null, // 統計摘要數據（載入後填充）
-            tableData: null, // 表格顯示數據（載入後填充）
-            legendData: null, // 圖例配置數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'beijing.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
+            center: [116.4074, 39.9042], // 北京中心座標
+            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 柏林圖層配置
             layerId: '柏林', // 圖層唯一標識符
             layerName: '柏林', // 圖層顯示名稱
-            visible: false, // 初始狀態為隱藏
-            isLoading: false, // 初始載入狀態為未載入
-            isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'line', // 線條類型圖層
-            shape: 'line', // 線條標記
             colorName: 'blue', // 藍色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            summaryData: null, // 統計摘要數據（載入後填充）
-            tableData: null, // 表格顯示數據（載入後填充）
-            legendData: null, // 圖例配置數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'berlin.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
+            center: [13.405, 52.52], // 柏林中心座標
+            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 巴黎圖層配置
             layerId: '巴黎', // 圖層唯一標識符
             layerName: '巴黎', // 圖層顯示名稱
-            visible: false, // 初始狀態為隱藏
-            isLoading: false, // 初始載入狀態為未載入
-            isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'line', // 線條類型圖層
-            shape: 'line', // 線條標記
             colorName: 'green', // 綠色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            summaryData: null, // 統計摘要數據（載入後填充）
-            tableData: null, // 表格顯示數據（載入後填充）
-            legendData: null, // 圖例配置數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'paris.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
+            center: [2.3522, 48.8566], // 巴黎中心座標
+            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 羅馬圖層配置
             layerId: '羅馬', // 圖層唯一標識符
             layerName: '羅馬', // 圖層顯示名稱
-            visible: false, // 初始狀態為隱藏
-            isLoading: false, // 初始載入狀態為未載入
-            isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'line', // 線條類型圖層
-            shape: 'line', // 線條標記
             colorName: 'yellow', // 黃色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            summaryData: null, // 統計摘要數據（載入後填充）
-            tableData: null, // 表格顯示數據（載入後填充）
-            legendData: null, // 圖例配置數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'rome.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
+            center: [12.4964, 41.9028], // 羅馬中心座標
+            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 華盛頓特區圖層配置
             layerId: '華盛頓特區', // 圖層唯一標識符
             layerName: '華盛頓特區', // 圖層顯示名稱
-            visible: false, // 初始狀態為隱藏
-            isLoading: false, // 初始載入狀態為未載入
-            isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'line', // 線條類型圖層
-            shape: 'line', // 線條標記
             colorName: 'purple', // 紫色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            summaryData: null, // 統計摘要數據（載入後填充）
-            tableData: null, // 表格顯示數據（載入後填充）
-            legendData: null, // 圖例配置數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'washingtondc.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
+            center: [-77.0369, 38.9072], // 華盛頓特區中心座標
+            zoom: 10, // 縮放級別
           },
           {
             // 🏛️ 西安圖層配置
             layerId: '西安', // 圖層唯一標識符
             layerName: '西安', // 圖層顯示名稱
-            visible: false, // 初始狀態為隱藏
-            isLoading: false, // 初始載入狀態為未載入
-            isLoaded: false, // 初始數據載入狀態為未載入
-            type: 'line', // 線條類型圖層
-            shape: 'line', // 線條標記
             colorName: 'orange', // 橙色主題
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            summaryData: null, // 統計摘要數據（載入後填充）
-            tableData: null, // 表格顯示數據（載入後填充）
-            legendData: null, // 圖例配置數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'xian.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
+            center: [108.9402, 34.3416], // 西安中心座標
+            zoom: 10, // 縮放級別
           },
         ],
       },
@@ -251,51 +209,31 @@ export const useDataStore = defineStore(
      * // 切換安養機構圖層的顯示狀態
      * await toggleLayerVisibility('安養機構');
      */
-    const toggleLayerVisibility = async (layerId) => {
-      console.log('🔧 DataStore: toggleLayerVisibility 被調用', layerId);
+    // 移除圖層可見性切換（城市圖層永久可見，且無需勾選切換）
 
-      // 查找指定的圖層
-      const layer = findLayerById(layerId);
-      if (!layer) {
-        console.error(`Layer with id "${layerId}" not found.`);
-        return; // 如果圖層不存在，直接返回
-      }
+    /**
+     * 🚀 自動載入城市圖層 (Auto Load City Layers)
+     *
+     * 在應用程式初始化時自動載入所有城市圖層數據
+     */
+    const loadCityLayers = async () => {
+      const cityLayers = layers.value[0].groupLayers; // 獲取城市圖層組
 
-      console.log('🔧 DataStore: 找到圖層', layer.layerName, '當前狀態:', layer.visible);
+      for (const layer of cityLayers) {
+        if (!layer.geoJsonData) {
+          try {
+            const result = await layer.loader(layer);
 
-      // 切換圖層的可見性狀態
-      layer.visible = !layer.visible;
-      console.log('🔧 DataStore: 新狀態:', layer.visible);
+            // 將載入的資料直接存儲在圖層物件中，但保留原有的 center 和 zoom 屬性
+            layer.geoJsonData = result.geoJsonData;
 
-      // 如果圖層被開啟且尚未載入，則載入資料（分析圖層除外）
-      if (
-        layer.visible &&
-        !layer.isLoaded &&
-        !layer.isLoading &&
-        !layer.isAnalysisLayer &&
-        !layer.isIsochroneAnalysisLayer
-      ) {
-        try {
-          layer.isLoading = true;
-          const result = await layer.loader(layer);
-
-          // 將載入的資料直接存儲在圖層物件中
-          layer.geoJsonData = result.geoJsonData;
-          layer.tableData = result.tableData;
-          layer.summaryData = result.summaryData;
-          layer.legendData = result.legendData || null;
-          layer.isLoaded = true;
-
-          // 🔄 強制觸發響應式更新
-          console.log(
-            `✅ 圖層 "${layer.layerName}" 載入完成 (${result.geoJsonData?.features?.length || 0} 筆資料)`
-          );
-          console.log(`📊 圖層摘要資料:`, layer.summaryData);
-        } catch (error) {
-          console.error(`Failed to load data for layer "${layer.layerName}":`, error);
-          layer.visible = false; // 載入失敗時恢復可見性狀態
-        } finally {
-          layer.isLoading = false;
+            console.log(
+              `✅ 城市圖層 "${layer.layerName}" 載入完成 (${result.geoJsonData?.features?.length || 0} 筆資料)`
+            );
+            console.log(`🌍 城市中心座標:`, layer.center);
+          } catch (error) {
+            console.error(`Failed to load city layer "${layer.layerName}":`, error);
+          }
         }
       }
     };
@@ -312,16 +250,66 @@ export const useDataStore = defineStore(
       selectedFeature.value = null;
     };
 
+    // ------------------------------------------------------------
+    // 地圖導航功能
+    const mapInstance = ref(null);
+
+    const setMapInstance = (map) => {
+      mapInstance.value = map;
+    };
+
+    const navigateToCity = (cityId) => {
+      console.log('🌍 導航到城市:', cityId);
+      const cityLayer = findLayerById(cityId);
+      console.log('🌍 找到城市圖層:', cityLayer);
+
+      if (!cityLayer) {
+        console.error('❌ 找不到城市圖層:', cityId);
+        return;
+      }
+
+      if (!cityLayer.center) {
+        console.error('❌ 城市圖層沒有中心座標:', cityId, cityLayer);
+        return;
+      }
+
+      if (!mapInstance.value) {
+        console.error('❌ 地圖實例未準備就緒，等待地圖初始化...');
+        // 如果地圖還沒準備好，等待一下再試
+        setTimeout(() => {
+          if (mapInstance.value) {
+            console.log('🌍 地圖已準備就緒，重新嘗試導航');
+            navigateToCity(cityId);
+          } else {
+            console.error('❌ 地圖實例仍未準備就緒');
+          }
+        }, 1000);
+        return;
+      }
+
+      console.log('🌍 開始導航到:', cityLayer.layerName, cityLayer.center);
+      try {
+        const [lng, lat] = cityLayer.center; // 資料為 [lng, lat]
+        const target = [lat, lng]; // Leaflet 需要 [lat, lng]
+        mapInstance.value.flyTo(target, cityLayer.zoom || 10, { duration: 2 });
+      } catch (error) {
+        console.error('❌ 導航失敗:', error);
+      }
+    };
+
     return {
       layers,
       findLayerById, // 根據 ID 尋找圖層
       getAllLayers, // 獲取所有圖層的扁平陣列
-      toggleLayerVisibility,
+      loadCityLayers, // 自動載入城市圖層
       selectedFeature,
       setSelectedFeature,
       clearSelectedFeature,
-      visibleLayers: computed(() => getAllLayers().filter((layer) => layer.visible)),
-      loadingLayers: computed(() => getAllLayers().filter((layer) => layer.isLoading)),
+      mapInstance,
+      setMapInstance,
+      navigateToCity,
+      // 所有圖層都是可見的，所以直接返回所有圖層
+      visibleLayers: computed(() => getAllLayers()),
     };
   },
   {
