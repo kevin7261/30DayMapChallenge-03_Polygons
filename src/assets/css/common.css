@@ -27,7 +27,7 @@ body {
   font-family: var(--my-font-family-primary); /* 使用主要字體 */
   font-size: var(--my-font-size-md); /* 基礎字體大小 */
   font-weight: var(--my-font-weight-md);
-  letter-spacing: var(--my-letter-spacing-md);
+  letter-spacing: var(--my-letter-spacing);
   color: var(--my-color-gray-900); /* 主要文字顏色 */
   background-color: var(--my-color-white); /* 主要背景顏色 */
 }
@@ -40,23 +40,11 @@ body {
 
 /* 字體大小 */
 
-.my-font-size-xs {
-  font-size: var(--my-font-size-xs);
-}
 .my-font-size-sm {
   font-size: var(--my-font-size-sm);
 }
-.my-font-size-md {
-  font-size: var(--my-font-size-md);
-}
 .my-font-size-lg {
   font-size: var(--my-font-size-lg);
-}
-.my-font-size-xl {
-  font-size: var(--my-font-size-xl);
-}
-.my-font-size-2xl {
-  font-size: var(--my-font-size-2xl);
 }
 
 /* 圖層顏色類別 */
@@ -269,28 +257,8 @@ body {
 
 /* 文字顏色 */
 
-.my-title-xl-white {
-  font-size: var(--my-font-size-xl);
-  color: var(--my-color-white);
-}
-
-.my-title-xl-black {
-  font-size: var(--my-font-size-xl);
-  color: var(--my-color-black);
-}
-
-.my-title-xl-gray {
-  font-size: var(--my-font-size-xl);
-  color: var(--my-color-gray-600);
-}
-
 .my-title-lg-gray {
   font-size: var(--my-font-size-lg);
-  color: var(--my-color-gray-600);
-}
-
-.my-title-md-gray {
-  font-size: var(--my-font-size-md);
   color: var(--my-color-gray-600);
 }
 
@@ -312,37 +280,9 @@ body {
   font-weight: var(--my-font-weight-lg);
 }
 
-.my-title-xs-white {
-  font-size: var(--my-font-size-xs);
-  color: var(--my-color-white);
-  font-weight: var(--my-font-weight-lg);
-}
-
-.my-title-xs-black {
-  font-size: var(--my-font-size-xs);
-  color: var(--my-color-black);
-  font-weight: var(--my-font-weight-lg);
-}
-
-.my-title-xs-gray {
-  font-size: var(--my-font-size-xs);
-  color: var(--my-color-gray-600);
-  font-weight: var(--my-font-weight-lg);
-}
-
 .my-content-sm-black {
   font-size: var(--my-font-size-sm);
   color: var(--my-color-black);
-}
-
-.my-content-xs-black {
-  font-size: var(--my-font-size-xs);
-  color: var(--my-color-black);
-}
-
-.my-content-xs-gray {
-  font-size: var(--my-font-size-xs);
-  color: var(--my-color-gray-600);
 }
 
 /* 按鈕模式 */
@@ -638,7 +578,7 @@ body {
 .my-city-btn {
   color: white !important;
   font-weight: 500 !important;
-  letter-spacing: var(--my-letter-spacing-md) !important;
+  letter-spacing: var(--my-letter-spacing) !important;
 }
 
 /* 城市按鈕懸停效果 */
