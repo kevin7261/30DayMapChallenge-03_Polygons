@@ -532,14 +532,14 @@
           style="pointer-events: none; z-index: 1003"
         >
           <div class="d-flex justify-content-center gap-3 mb-1">
-            <small class="my-title-sm-white">{{
+            <small class="my-font-sm-white">{{
               (currentCityInfo && currentCityInfo.length) || ''
             }}</small>
-            <small class="my-title-sm-white">{{
+            <small class="my-font-sm-white">{{
               (currentCityInfo && currentCityInfo.angle) || ''
             }}</small>
           </div>
-          <div class="my-title-sm-white">#30DayMapChallenge</div>
+          <div class="my-font-sm-white">#30DayMapChallenge</div>
         </div>
       </div>
     </div>
