@@ -25,17 +25,9 @@
   export default {
     name: 'MapTab',
     props: {
-      zoomLevel: { type: Number, default: 12 },
-      isPanelDragging: { type: Boolean, default: false },
       currentCity: { type: String, default: '城市名稱' },
     },
-    emits: [
-      'update:zoomLevel',
-      'update:currentCoords',
-      'update:activeMarkers',
-      'feature-selected',
-      'map-ready',
-    ],
+    emits: ['map-ready'],
     setup(props, { emit }) {
       // 📦 存儲實例
       const dataStore = useDataStore();

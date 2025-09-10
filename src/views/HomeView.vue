@@ -17,7 +17,7 @@
   import MapTab from '../tabs/MapTab.vue';
   import { useDataStore } from '@/stores/dataStore.js';
   import { useDefineStore } from '@/stores/defineStore.js';
-  import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+  import { ref, onMounted, computed } from 'vue';
 
   export default {
     name: 'HomeView',
@@ -57,94 +57,54 @@
       const setBasemap = (value) => defineStore.setSelectedBasemap(value);
 
       /**
-       * 🎨 切換到顏色主題模式
-       * 根據當前城市切換到對應的顏色主題底圖
-       */
-      const setColorTheme = () => {
-        // 獲取當前城市
-        const currentCityLayer = cities.value?.find((city) => city.layerName === currentCity.value);
-        if (currentCityLayer) {
-          // 根據城市顏色切換底圖主題
-          const colorThemeMap = {
-            'city-beijing': 'city-beijing_theme', // 北京 - 專用粉紅色主題
-            'city-xian': 'city-xian_theme', // 西安 - 專用金黃色主題
-            'city-paris': 'city-paris_theme', // 巴黎 - 專用紫色主題
-            'city-berlin': 'city-berlin_theme', // 柏林 - 專用藍色主題
-            'city-rome': 'city-rome_theme', // 羅馬 - 專用青綠色主題
-            'city-washington': 'city-washington_theme', // 華盛頓 - 專用深藍色主題
-          };
-
-          const themeBasemap = colorThemeMap[currentCityLayer.colorName];
-          if (themeBasemap) {
-            console.log('🎨 切換到城市主題底圖:', currentCityLayer.layerName, themeBasemap);
-            setBasemap(themeBasemap);
-          } else {
-            console.warn('⚠️ 未找到對應的主題底圖:', currentCityLayer.colorName);
-            // 如果沒有對應主題，切換到紅色主題
-            setBasemap('red_theme');
-          }
-        } else {
-          // 如果找不到當前城市，切換到紅色主題
-          setBasemap('red_theme');
-        }
-      };
-
-      /**
        * 🔄 切換底圖模式
        * 在地圖模式和顏色模式之間切換
        */
       const toggleBasemap = () => {
         if (defineStore.selectedBasemap === 'carto_dark') {
           // 當前是地圖模式，切換到顏色模式
-          setColorTheme();
+          const currentCityLayer = cities.value?.find(
+            (city) => city.layerName === currentCity.value
+          );
+          if (currentCityLayer) {
+            const colorThemeMap = {
+              'city-beijing': 'city-beijing_theme',
+              'city-xian': 'city-xian_theme',
+              'city-paris': 'city-paris_theme',
+              'city-berlin': 'city-berlin_theme',
+              'city-rome': 'city-rome_theme',
+              'city-washington': 'city-washington_theme',
+            };
+            const themeBasemap = colorThemeMap[currentCityLayer.colorName] || 'red_theme';
+            setBasemap(themeBasemap);
+          } else {
+            setBasemap('red_theme');
+          }
         } else {
           // 當前是顏色模式，切換到地圖模式
           setBasemap('carto_dark');
         }
       };
 
-      // 📊 獲取城市列表和底圖列表
+      // 📊 獲取城市列表
       const cities = computed(() => dataStore.layers[0].groupLayers);
-      const basemaps = defineStore.basemaps;
 
-      // 🌍 當前選中的城市（預設為北京）
+      // 🌍 當前選中的城市（預設為西安）
       const currentCity = ref("XI'AN");
 
-      // 監聽 currentCity 變化
-      watch(currentCity, (newCity) => {
-        console.log('🔄 currentCity 已更新為:', newCity);
-      });
-
-      // 🎨 監聽底圖切換事件
+      // 🚀 初始化應用程式
       onMounted(() => {
         // 載入城市數據並導航到西安
         dataStore.loadCityLayers().then(() => {
-          // 載入完成後導航到西安
           navigateToCity('Xian');
-        });
-
-        const handleBasemapChange = (event) => {
-          const { basemap } = event.detail;
-          console.log('🎨 收到底圖切換事件:', basemap);
-          setBasemap(basemap);
-        };
-
-        window.addEventListener('changeBasemap', handleBasemapChange);
-
-        // 清理事件監聽器
-        onUnmounted(() => {
-          window.removeEventListener('changeBasemap', handleBasemapChange);
         });
       });
 
       return {
         setMapInstance,
         navigateToCity,
-        setBasemap,
-        setColorTheme,
         toggleBasemap,
         cities,
-        basemaps,
         defineStore,
         currentCity,
       };

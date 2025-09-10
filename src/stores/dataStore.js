@@ -1,39 +1,16 @@
 /**
  * 📦 數據存儲模組 (Data Store Module)
  *
- * 本模組使用 Pinia 狀態管理系統，負責管理整個應用程式的圖層數據和相關狀態。
- * 採用 Vue 3 Composition API 設計，提供響應式的數據管理和操作方法。
- *
- * 🎯 主要職責：
- * 1. 🗺️ 圖層數據管理 - 定義和管理所有地圖圖層的配置和狀態
- * 2. 📊 數據載入控制 - 控制圖層數據的載入、顯示和隱藏
- * 3. 🔄 狀態同步 - 確保圖層狀態與 UI 組件間的同步
- * 4. 🎨 視覺化配置 - 管理圖層的顏色、樣式和顯示屬性
- * 5. 📋 數據結構定義 - 定義統一的圖層數據結構和接口
- *
- * 🏗️ 架構設計：
- * - 使用 Pinia 的 defineStore 創建響應式狀態管理
- * - 採用 Composition API 的 ref 和 computed 進行狀態管理
- * - 模組化設計，將數據處理邏輯分離到 utils/dataProcessor.js
- * - 提供統一的 API 接口供組件調用
- *
- * 📁 相關文件：
- * - ../utils/dataProcessor.js - 數據處理和載入邏輯
- * - ../tabs/MapTab.vue - 地圖組件，主要消費者
- * - ../tabs/DataTableTab.vue - 數據表格組件
- * - ../tabs/PropertiesTab.vue - 屬性面板組件
+ * 管理城市圖層數據和地圖導航功能
+ * 使用 Pinia 狀態管理系統和 Vue 3 Composition API
  */
 
-// 🔧 核心依賴引入 (Core Dependencies Import)
-import { defineStore } from 'pinia'; // Pinia 狀態管理庫
-import { ref, computed } from 'vue'; // Vue 3 響應式 API
-import L from 'leaflet'; // Leaflet 地圖庫
-
-// 📊 數據處理器引入 (Data Processor Imports)
-import {
-  loadCityGeoJson, // 城市 GeoJSON 數據載入器
-} from '../utils/dataProcessor.js';
-import { useDefineStore } from './defineStore.js'; // 定義存儲模組
+// 核心依賴
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import L from 'leaflet';
+import { loadCityGeoJson } from '../utils/dataProcessor.js';
+import { useDefineStore } from './defineStore.js';
 
 /**
  * 🏪 數據存儲商店定義 (Data Store Definition)
