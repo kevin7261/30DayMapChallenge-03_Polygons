@@ -94,7 +94,7 @@
       const basemaps = defineStore.basemaps;
 
       // 🌍 當前選中的城市（預設為北京）
-      const currentCity = ref('Xian');
+      const currentCity = ref('XIAN');
 
       // 監聽 currentCity 變化
       watch(currentCity, (newCity) => {

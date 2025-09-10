@@ -74,7 +74,7 @@ export const useDataStore = defineStore(
           {
             // 🏛️ 西安圖層配置
             layerId: 'Xian', // 圖層唯一標識符
-            layerName: 'Xian', // 圖層顯示名稱
+            layerName: "XI'AN", // 圖層顯示名稱
             colorName: 'city-xian', // 金黃色主題 - 代表中國古代帝王色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
@@ -89,7 +89,7 @@ export const useDataStore = defineStore(
           {
             // 🏛️ 北京圖層配置
             layerId: 'Beijing', // 圖層唯一標識符
-            layerName: 'Beijing', // 圖層顯示名稱
+            layerName: 'BEIJING', // 圖層顯示名稱
             colorName: 'city-beijing', // 深藍色主題 - 代表中國傳統色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
@@ -104,7 +104,7 @@ export const useDataStore = defineStore(
           {
             // 🏛️ 羅馬圖層配置
             layerId: 'Rome', // 圖層唯一標識符
-            layerName: 'Rome', // 圖層顯示名稱
+            layerName: 'ROME', // 圖層顯示名稱
             colorName: 'city-rome', // 粉紅色主題 - 代表義大利浪漫色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
@@ -119,7 +119,7 @@ export const useDataStore = defineStore(
           {
             // 🏛️ 巴黎圖層配置
             layerId: 'Paris', // 圖層唯一標識符
-            layerName: 'Paris', // 圖層顯示名稱
+            layerName: 'PARIS', // 圖層顯示名稱
             colorName: 'city-paris', // 淡紫色主題 - 代表法國優雅色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
@@ -134,7 +134,7 @@ export const useDataStore = defineStore(
           {
             // 🏛️ 華盛頓圖層配置
             layerId: 'Washington', // 圖層唯一標識符
-            layerName: 'Washington', // 圖層顯示名稱
+            layerName: 'WASHINGTON', // 圖層顯示名稱
             colorName: 'city-washington', // 青綠色主題 - 代表美國自然色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
@@ -149,7 +149,7 @@ export const useDataStore = defineStore(
           {
             // 🏛️ 柏林圖層配置
             layerId: 'Berlin', // 圖層唯一標識符
-            layerName: 'Berlin', // 圖層顯示名稱
+            layerName: 'BERLIN', // 圖層顯示名稱
             colorName: 'city-berlin', // 淺藍色主題 - 代表德國現代色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
