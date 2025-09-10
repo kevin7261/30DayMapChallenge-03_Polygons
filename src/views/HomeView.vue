@@ -149,68 +149,45 @@
       <div class="position-absolute top-0 start-0 p-3" style="z-index: 1000">
         <div class="bg-dark bg-opacity-75 rounded-3 p-3">
           <!-- 🌍 城市導航區域 -->
-          <div>
-            <h6 class="text-white mb-2">Point</h6>
+          <div class="mb-3">
             <div class="d-flex flex-column gap-1">
               <button
                 v-for="city in cities"
                 :key="city.layerId"
-                class="btn btn-sm city-btn"
-                :class="[
-                  `city-btn-${city.colorName.replace('city-', '')}`,
-                  currentCity === city.layerName ? 'active' : '',
-                ]"
+                class="btn my-city-btn"
+                :class="[currentCity === city.layerName ? 'active' : '']"
                 @click="navigateToCity(city.layerId)"
               >
                 {{ city.layerName }}
               </button>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- 🎛️ 右下角底圖選擇 -->
-      <div class="position-absolute bottom-0 end-0 p-3" style="z-index: 1000">
-        <div class="bg-dark bg-opacity-75 rounded-3 p-3">
-          <h6 class="text-white mb-2">底圖選擇</h6>
-          <div class="d-flex flex-column gap-1">
-            <!-- 地圖模式按鈕 -->
-            <button
-              class="btn btn-sm"
-              :class="
-                defineStore.selectedBasemap === 'carto_dark' ? 'btn-light' : 'btn-outline-light'
-              "
-              @click="setBasemap('carto_dark')"
-            >
-              地圖
-            </button>
-            <!-- 顏色主題按鈕 -->
-            <button
-              class="btn btn-sm"
-              :class="
-                defineStore.selectedBasemap.endsWith('_theme') ? 'btn-light' : 'btn-outline-light'
-              "
-              @click="setColorTheme"
-            >
-              <span v-if="!defineStore.selectedBasemap.endsWith('_theme')">顏色</span>
-              <span v-else>
-                {{
-                  defineStore.selectedBasemap === 'red_theme'
-                    ? '紅色'
-                    : defineStore.selectedBasemap === 'blue_theme'
-                      ? '藍色'
-                      : defineStore.selectedBasemap === 'green_theme'
-                        ? '綠色'
-                        : defineStore.selectedBasemap === 'purple_theme'
-                          ? '紫色'
-                          : defineStore.selectedBasemap === 'orange_theme'
-                            ? '橙色'
-                            : defineStore.selectedBasemap === 'yellow_theme'
-                              ? '黃色'
-                              : '顏色'
-                }}
-              </span>
-            </button>
+          <!-- 🗺️ 底圖選擇區域 -->
+          <div>
+            <h6 class="text-white mb-2">底圖選擇</h6>
+            <div class="d-flex flex-column gap-1">
+              <!-- 地圖模式按鈕 -->
+              <button
+                class="btn btn-sm"
+                :class="
+                  defineStore.selectedBasemap === 'carto_dark' ? 'btn-light' : 'btn-outline-light'
+                "
+                @click="setBasemap('carto_dark')"
+              >
+                地圖
+              </button>
+              <!-- 顏色主題按鈕 -->
+              <button
+                class="btn btn-sm"
+                :class="
+                  defineStore.selectedBasemap.endsWith('_theme') ? 'btn-light' : 'btn-outline-light'
+                "
+                @click="setColorTheme"
+              >
+                顏色
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -197,51 +197,62 @@
           mapInstance.addLayer(currentTileLayer);
         }
 
-        // 設定容器背景色
+        // 設定容器背景色（同時套用在地圖容器與其父容器）
         const mapContainerElement = mapContainer.value;
+        const mapRootElement = mapContainerElement ? mapContainerElement.parentElement : null; // #map-container
         if (mapContainerElement) {
           console.log('🎨 設定底圖背景色:', defineStore.selectedBasemap);
 
-          // 移除所有背景顏色類別
-          mapContainerElement.classList.remove(
-            'map-bg-blank',
-            'map-bg-black',
-            'map-bg-red-theme',
-            'map-bg-blue-theme',
-            'map-bg-green-theme',
-            'map-bg-purple-theme',
-            'map-bg-lightblue-theme',
-            'map-bg-yellow-theme',
-            'map-bg-city-beijing-theme',
-            'map-bg-city-xian-theme',
-            'map-bg-city-paris-theme',
-            'map-bg-city-berlin-theme',
-            'map-bg-city-rome-theme',
-            'map-bg-city-washington-theme',
-            'map-bg-transparent'
-          );
+          const allBgClasses = [
+            'my-map-bg-blank',
+            'my-map-bg-black',
+            'my-map-bg-red-theme',
+            'my-map-bg-blue-theme',
+            'my-map-bg-green-theme',
+            'my-map-bg-purple-theme',
+            'my-map-bg-lightblue-theme',
+            'my-map-bg-yellow-theme',
+            'my-map-bg-city-beijing-theme',
+            'my-map-bg-city-xian-theme',
+            'my-map-bg-city-paris-theme',
+            'my-map-bg-city-berlin-theme',
+            'my-map-bg-city-rome-theme',
+            'my-map-bg-city-washington-theme',
+            'my-map-bg-transparent',
+          ];
+
+          // 移除所有背景顏色類別（內外容器都處理）
+          [mapContainerElement, mapRootElement].forEach((el) => {
+            if (!el) return;
+            el.classList.remove(...allBgClasses);
+          });
 
           // 根據底圖類型添加對應的 CSS 類別
           const basemapClassMap = {
-            blank: 'map-bg-blank',
-            black: 'map-bg-black',
-            red_theme: 'map-bg-red-theme',
-            blue_theme: 'map-bg-blue-theme',
-            green_theme: 'map-bg-green-theme',
-            purple_theme: 'map-bg-purple-theme',
-            orange_theme: 'map-bg-lightblue-theme',
-            yellow_theme: 'map-bg-yellow-theme',
+            blank: 'my-map-bg-blank',
+            black: 'my-map-bg-black',
+            red_theme: 'my-map-bg-red-theme',
+            blue_theme: 'my-map-bg-blue-theme',
+            green_theme: 'my-map-bg-green-theme',
+            purple_theme: 'my-map-bg-purple-theme',
+            orange_theme: 'my-map-bg-lightblue-theme',
+            yellow_theme: 'my-map-bg-yellow-theme',
             // 城市專用顏色主題
-            'city-beijing_theme': 'map-bg-city-beijing-theme',
-            'city-xian_theme': 'map-bg-city-xian-theme',
-            'city-paris_theme': 'map-bg-city-paris-theme',
-            'city-berlin_theme': 'map-bg-city-berlin-theme',
-            'city-rome_theme': 'map-bg-city-rome-theme',
-            'city-washington_theme': 'map-bg-city-washington-theme',
+            'city-beijing_theme': 'my-map-bg-city-beijing-theme',
+            'city-xian_theme': 'my-map-bg-city-xian-theme',
+            'city-paris_theme': 'my-map-bg-city-paris-theme',
+            'city-berlin_theme': 'my-map-bg-city-berlin-theme',
+            'city-rome_theme': 'my-map-bg-city-rome-theme',
+            'city-washington_theme': 'my-map-bg-city-washington-theme',
           };
 
-          const bgClass = basemapClassMap[defineStore.selectedBasemap] || 'map-bg-transparent';
-          mapContainerElement.classList.add(bgClass);
+          const bgClass = basemapClassMap[defineStore.selectedBasemap] || 'my-map-bg-transparent';
+
+          // 內外容器都加入背景類別，確保顏色可見
+          [mapContainerElement, mapRootElement].forEach((el) => {
+            if (!el) return;
+            el.classList.add(bgClass);
+          });
         }
       };
 
@@ -494,76 +505,47 @@
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
 
     <!-- 📱 IG 截圖框框 -->
-    <div class="ig-crop-overlay">
+    <div
+      class="position-absolute top-50 start-50 translate-middle"
+      style="z-index: 1000; pointer-events: none"
+    >
       <!-- 貼文尺寸框 (4:5) -->
-      <div class="ig-crop-frame ig-post-frame">
-        <div class="ig-city-name">{{ currentCity }}</div>
-        <div class="ig-hashtag">
+      <div
+        class="position-absolute top-50 start-50 translate-middle bg-transparent d-flex flex-column align-items-center justify-content-center"
+        style="
+          width: calc(80vw - 32px);
+          height: calc(100vw - 32px);
+          max-width: calc(80vh - 32px);
+          max-height: calc(100vh - 32px);
+          z-index: 1001;
+          border: 1px solid var(--my-color-gray-200);
+        "
+      >
+        <div
+          class="position-absolute top-0 start-50 translate-middle-x text-white"
+          style="z-index: 1003; font-size: 18px"
+        >
+          {{ currentCity }}
+        </div>
+        <div
+          class="position-absolute bottom-0 start-50 translate-middle-x"
+          style="pointer-events: none; z-index: 1003"
+        >
           <div class="d-flex justify-content-center gap-3 mb-1">
-            <small class="text-white">{{
-              (currentCityInfo && currentCityInfo.length) || 'N/A'
+            <small class="my-title-sm-white">{{
+              (currentCityInfo && currentCityInfo.length) || ''
             }}</small>
-            <small class="text-white">{{
-              (currentCityInfo && currentCityInfo.angle) || 'N/A'
+            <small class="my-title-sm-white">{{
+              (currentCityInfo && currentCityInfo.angle) || ''
             }}</small>
           </div>
-          <div class="text-white fw-bold">#30DayMapChallenge</div>
+          <div class="my-title-sm-white">#30DayMapChallenge</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-  /* 📱 IG 截圖框框樣式 */
-  .ig-crop-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    pointer-events: none;
-  }
-
-  .ig-crop-frame {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .ig-post-frame {
-    width: calc(80vw - 32px);
-    height: calc(100vw - 32px); /* 4:5 比例，上下左右各留16px */
-    max-width: calc(80vh - 32px);
-    max-height: calc(100vh - 32px);
-    z-index: 1001;
-    border: 3px solid white;
-  }
-
-  /* 📝 IG 截圖框框文字樣式 */
-  .ig-city-name {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 18px;
-    pointer-events: none;
-    z-index: 1003;
-  }
-
-  .ig-hashtag {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    pointer-events: none;
-    z-index: 1003;
-  }
+<style>
+  @import '../assets/css/common.css';
 </style>

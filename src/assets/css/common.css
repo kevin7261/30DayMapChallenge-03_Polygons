@@ -5,10 +5,13 @@
 @import "./variables.css"; /* 基礎變數定義 */
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
-@import /* =============================================================================
+/* =============================================================================
    🔧 基礎重置和全局設定 (Base Reset & Global Settings)
-   ============================================================================= */ *,
-  *: : before, *: : after {
+   ============================================================================= */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -33,8 +36,6 @@ body {
 
 #app {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 /* 字體大小 */
@@ -267,6 +268,11 @@ body {
 }
 
 /* 文字顏色 */
+
+.my-title-xl-white {
+  font-size: var(--my-font-size-xl);
+  color: var(--my-color-white);
+}
 
 .my-title-xl-black {
   font-size: var(--my-font-size-xl);
@@ -559,101 +565,68 @@ body {
 }
 
 /* =============================================================================
-   🖱️ 防止選取樣式 (No-Select Styles)
-   ============================================================================= */
-
-.my-no-select {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-body.my-no-select {
-  cursor: inherit !important; /* 保持游標樣式 */
-}
-
-body.my-no-select * {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important; /* 防止所有元素被選取 */
-}
-
-/* 霧化樣式 */
-.my-blur {
-  backdrop-filter: blur(4px) saturate(160%);
-  -webkit-backdrop-filter: blur(4px) saturate(160%);
-  background-color: rgba(255, 255, 255, 0.4); /* 50% 透明度的白色 */
-}
-
-.my-cursor-pointer {
-  cursor: pointer;
-}
-
-/* =============================================================================
    🗺️ 底圖背景顏色類別 (Basemap Background Color Classes)
    ============================================================================= */
 
 /* 地圖容器背景顏色 */
-.map-bg-blank {
+.my-map-bg-blank {
   background-color: var(--my-color-white) !important;
 }
 
-.map-bg-black {
+.my-map-bg-black {
   background-color: var(--my-color-gray-800) !important;
 }
 
-.map-bg-red-theme {
+.my-map-bg-red-theme {
   background-color: #e17094 !important; /* 粉紅色 */
 }
 
-.map-bg-blue-theme {
+.my-map-bg-blue-theme {
   background-color: #004a9f !important; /* 深藍色 */
 }
 
-.map-bg-green-theme {
+.my-map-bg-green-theme {
   background-color: #51b5ae !important; /* 青綠色 */
 }
 
-.map-bg-purple-theme {
+.my-map-bg-purple-theme {
   background-color: #c4c8e5 !important; /* 淡紫色 */
 }
 
-.map-bg-lightblue-theme {
+.my-map-bg-lightblue-theme {
   background-color: #00aee1 !important; /* 淺藍色 */
 }
 
-.map-bg-yellow-theme {
+.my-map-bg-yellow-theme {
   background-color: #e7d378 !important; /* 金黃色 */
 }
 
-.map-bg-transparent {
+.my-map-bg-transparent {
   background-color: transparent !important;
 }
 
 /* 城市專用顏色主題 */
-.map-bg-city-beijing-theme {
+.my-map-bg-city-beijing-theme {
   background-color: var(--my-color-city-beijing) !important; /* 北京粉紅色 */
 }
 
-.map-bg-city-xian-theme {
+.my-map-bg-city-xian-theme {
   background-color: var(--my-color-city-xian) !important; /* 西安金黃色 */
 }
 
-.map-bg-city-paris-theme {
+.my-map-bg-city-paris-theme {
   background-color: var(--my-color-city-paris) !important; /* 巴黎紫色 */
 }
 
-.map-bg-city-berlin-theme {
+.my-map-bg-city-berlin-theme {
   background-color: var(--my-color-city-berlin) !important; /* 柏林藍色 */
 }
 
-.map-bg-city-rome-theme {
+.my-map-bg-city-rome-theme {
   background-color: var(--my-color-city-rome) !important; /* 羅馬青綠色 */
 }
 
-.map-bg-city-washington-theme {
+.my-map-bg-city-washington-theme {
   background-color: var(--my-color-city-washington) !important; /* 華盛頓深藍色 */
 }
 
@@ -662,63 +635,18 @@ body.my-no-select * {
    ============================================================================= */
 
 /* 城市按鈕基礎樣式 */
-.city-btn {
-  background-color: transparent !important;
-  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+.my-city-btn {
   color: white !important;
   font-weight: 500 !important;
-  position: relative !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
+  letter-spacing: var(--my-letter-spacing-md) !important;
 }
 
 /* 城市按鈕懸停效果 */
-.city-btn:hover {
-  border-color: rgba(255, 255, 255, 0.6) !important;
+.my-city-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* 城市按鈕活躍狀態 */
-.city-btn.active {
-  border-color: rgba(255, 255, 255, 0.8) !important;
+.my-city-btn.active {
   background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* 城市顏色圓點樣式 */
-.city-btn::before {
-  content: "" !important;
-  width: 12px !important;
-  height: 12px !important;
-  border-radius: 50% !important;
-  flex-shrink: 0 !important;
-}
-
-/* 北京按鈕 - 粉紅色圓點 */
-.city-btn-beijing::before {
-  background-color: var(--my-color-city-beijing) !important;
-}
-
-/* 西安按鈕 - 金黃色圓點 */
-.city-btn-xian::before {
-  background-color: var(--my-color-city-xian) !important;
-}
-
-/* 巴黎按鈕 - 淡紫色圓點 */
-.city-btn-paris::before {
-  background-color: var(--my-color-city-paris) !important;
-}
-
-/* 柏林按鈕 - 藍色圓點 */
-.city-btn-berlin::before {
-  background-color: var(--my-color-city-berlin) !important;
-}
-
-/* 羅馬按鈕 - 青綠色圓點 */
-.city-btn-rome::before {
-  background-color: var(--my-color-city-rome) !important;
-}
-
-/* 華盛頓按鈕 - 深藍色圓點 */
-.city-btn-washington::before {
-  background-color: var(--my-color-city-washington) !important;
 }

@@ -461,23 +461,19 @@ export const useDataStore = defineStore(
       if (isColorTheme) {
         // 根據城市顏色切換到對應的顏色主題
         const colorThemeMap = {
-          'city-beijing': 'city-beijing_theme', // 北京 - 專用粉紅色主題
-          'city-xian': 'city-xian_theme', // 西安 - 專用金黃色主題
-          'city-paris': 'city-paris_theme', // 巴黎 - 專用紫色主題
-          'city-berlin': 'city-berlin_theme', // 柏林 - 專用藍色主題
-          'city-rome': 'city-rome_theme', // 羅馬 - 專用青綠色主題
-          'city-washington': 'city-washington_theme', // 華盛頓 - 專用深藍色主題
+          'city-beijing': 'city-beijing_theme',
+          'city-xian': 'city-xian_theme',
+          'city-paris': 'city-paris_theme',
+          'city-berlin': 'city-berlin_theme',
+          'city-rome': 'city-rome_theme',
+          'city-washington': 'city-washington_theme',
         };
 
         const themeBasemap = colorThemeMap[cityLayer.colorName];
         if (themeBasemap && themeBasemap !== currentBasemap) {
           console.log('🎨 切換城市顏色主題:', cityLayer.layerName, '→', themeBasemap);
-          // 觸發底圖切換事件，讓外部組件處理
-          window.dispatchEvent(
-            new CustomEvent('changeBasemap', {
-              detail: { basemap: themeBasemap },
-            })
-          );
+          // 直接更新全域設定的底圖，觸發監聽器更新背景
+          defineStoreInstance.selectedBasemap = themeBasemap;
         }
       }
 
