@@ -281,10 +281,10 @@
           style: () => {
             return {
               color: 'white', // 所有時候都是白色
-              weight: 4, // 所有時候都是4px
+              weight: 8, // 線寬改為8px
               opacity: 0.8,
-              lineCap: 'round',
-              lineJoin: 'round',
+              lineCap: 'square', // 直角線端
+              lineJoin: 'miter', // 直角連接
             };
           },
           // 每個要素的處理函數

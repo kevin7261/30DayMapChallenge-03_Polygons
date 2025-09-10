@@ -688,3 +688,87 @@ body.my-no-select * {
 .map-bg-city-washington-theme {
   background-color: var(--my-color-city-washington) !important; /* 華盛頓深藍色 */
 }
+
+/* =============================================================================
+   🏙️ 城市按鈕顏色樣式 (City Button Color Styles)
+   ============================================================================= */
+
+/* 城市按鈕基礎樣式 */
+.city-btn {
+  background-color: transparent !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* 城市按鈕懸停效果 */
+.city-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 城市按鈕活躍狀態 */
+.city-btn.active {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 城市顏色圓點樣式 */
+.city-btn::before {
+  content: "" !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 城市按鈕懸停時圓點效果 */
+.city-btn:hover::before {
+  transform: scale(1.2) !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 城市按鈕活躍時圓點效果 */
+.city-btn.active::before {
+  transform: scale(1.3) !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 北京按鈕 - 粉紅色圓點 */
+.city-btn-beijing::before {
+  background-color: var(--my-color-city-beijing) !important;
+}
+
+/* 西安按鈕 - 金黃色圓點 */
+.city-btn-xian::before {
+  background-color: var(--my-color-city-xian) !important;
+}
+
+/* 巴黎按鈕 - 淡紫色圓點 */
+.city-btn-paris::before {
+  background-color: var(--my-color-city-paris) !important;
+}
+
+/* 柏林按鈕 - 藍色圓點 */
+.city-btn-berlin::before {
+  background-color: var(--my-color-city-berlin) !important;
+}
+
+/* 羅馬按鈕 - 青綠色圓點 */
+.city-btn-rome::before {
+  background-color: var(--my-color-city-rome) !important;
+}
+
+/* 華盛頓按鈕 - 深藍色圓點 */
+.city-btn-washington::before {
+  background-color: var(--my-color-city-washington) !important;
+}

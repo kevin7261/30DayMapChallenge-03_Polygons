@@ -93,10 +93,10 @@
   --my-color-brown-hover: #5d4037;
 
   /* 城市標準顏色 - 6種配色方案 */
-  --my-color-city-xian: #827f6f; /* C12 M16 Y60 K0 - R231 G211 B120 */
+  --my-color-city-xian: #ccbe92; /* C12 M16 Y60 K0 - R231 G211 B120 */
   --my-color-city-beijing: #e74175; /* C7 M68 Y17 K0 - R225 G112 B148 */
   --my-color-city-rome: #359b94; /* C65 M6 Y36 K0 - R81 G181 B174 */
-  --my-color-city-paris: #976d95; /* C26 M20 Y0 K0 - R196 G200 B229 */
-  --my-color-city-washington: #2968af; /* C95 M73 Y0 K0 - R0 G74 B159 */
-  --my-color-city-berlin: #007fa6; /* C77 M4 Y6 K0 - R0 G174 B225 */
+  --my-color-city-paris: #bd92bb; /* C26 M20 Y0 K0 - R196 G200 B229 */
+  --my-color-city-washington: #15549b; /* C95 M73 Y0 K0 - R0 G74 B159 */
+  --my-color-city-berlin: #3daacb; /* C77 M4 Y6 K0 - R0 G174 B225 */
 }

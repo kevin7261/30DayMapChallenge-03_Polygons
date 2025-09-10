@@ -18,12 +18,12 @@ import { defineStore } from 'pinia';
 export const useDefineStore = defineStore('define', {
   state: () => ({
     // 🗺️ 當前選中的底圖類型
-    selectedBasemap: 'carto_dark',
+    selectedBasemap: 'city-xian_theme',
 
     // 🗺️ 地圖視圖狀態
     mapView: {
-      center: [39.9042, 116.4074], // 地圖中心點 [緯度, 經度] - 北京市中心
-      zoom: 11, // 縮放等級（調整到15級，顯示詳細的內容）
+      center: [34.3416, 108.9402], // 地圖中心點 [緯度, 經度] - 西安市中心
+      zoom: 12, // 縮放等級（調整到12級，顯示詳細的內容）
     },
     // 🗺️ 底圖配置列表
     basemaps: [

@@ -94,7 +94,7 @@
       const basemaps = defineStore.basemaps;
 
       // 🌍 當前選中的城市（預設為北京）
-      const currentCity = ref('北京');
+      const currentCity = ref('Xian');
 
       // 監聽 currentCity 變化
       watch(currentCity, (newCity) => {
@@ -149,8 +149,11 @@
               <button
                 v-for="city in cities"
                 :key="city.layerId"
-                class="btn btn-sm"
-                :class="currentCity === city.layerName ? 'btn-light' : 'btn-outline-light'"
+                class="btn btn-sm city-btn"
+                :class="[
+                  `city-btn-${city.colorName.replace('city-', '')}`,
+                  currentCity === city.layerName ? 'active' : '',
+                ]"
                 @click="navigateToCity(city.layerId)"
               >
                 {{ city.layerName }}
