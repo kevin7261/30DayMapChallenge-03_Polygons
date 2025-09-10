@@ -66,12 +66,12 @@
         if (currentCityLayer) {
           // 根據城市顏色切換底圖主題
           const colorThemeMap = {
-            red: 'red_theme',
-            blue: 'blue_theme',
-            green: 'green_theme',
-            purple: 'purple_theme',
-            orange: 'orange_theme',
-            yellow: 'yellow_theme',
+            'city-blue': 'blue_theme',
+            'city-lightblue': 'blue_theme',
+            'city-pink': 'red_theme',
+            'city-yellow': 'yellow_theme',
+            'city-purple': 'purple_theme',
+            'city-teal': 'green_theme',
           };
 
           const themeBasemap = colorThemeMap[currentCityLayer.colorName];

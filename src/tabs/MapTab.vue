@@ -210,7 +210,7 @@
             'map-bg-blue-theme',
             'map-bg-green-theme',
             'map-bg-purple-theme',
-            'map-bg-orange-theme',
+            'map-bg-lightblue-theme',
             'map-bg-yellow-theme',
             'map-bg-transparent'
           );
@@ -223,7 +223,7 @@
             blue_theme: 'map-bg-blue-theme',
             green_theme: 'map-bg-green-theme',
             purple_theme: 'map-bg-purple-theme',
-            orange_theme: 'map-bg-orange-theme',
+            orange_theme: 'map-bg-lightblue-theme',
             yellow_theme: 'map-bg-yellow-theme',
           };
 

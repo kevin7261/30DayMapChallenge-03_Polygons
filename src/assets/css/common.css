@@ -637,27 +637,27 @@ body.my-no-select * {
 }
 
 .map-bg-red-theme {
-  background-color: #8b0000 !important; /* 深紅色 */
+  background-color: #e17094 !important; /* 粉紅色 */
 }
 
 .map-bg-blue-theme {
-  background-color: #000080 !important; /* 深藍色 */
+  background-color: #004a9f !important; /* 深藍色 */
 }
 
 .map-bg-green-theme {
-  background-color: #006400 !important; /* 深綠色 */
+  background-color: #51b5ae !important; /* 青綠色 */
 }
 
 .map-bg-purple-theme {
-  background-color: #4b0082 !important; /* 深紫色 */
+  background-color: #c4c8e5 !important; /* 淡紫色 */
 }
 
-.map-bg-orange-theme {
-  background-color: #ff8c00 !important; /* 深橙色 */
+.map-bg-lightblue-theme {
+  background-color: #00aee1 !important; /* 淺藍色 */
 }
 
 .map-bg-yellow-theme {
-  background-color: #daa520 !important; /* 深金黃色 */
+  background-color: #e7d378 !important; /* 金黃色 */
 }
 
 .map-bg-transparent {

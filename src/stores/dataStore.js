@@ -75,7 +75,7 @@ export const useDataStore = defineStore(
             // 🏛️ 北京圖層配置
             layerId: '北京', // 圖層唯一標識符
             layerName: '北京', // 圖層顯示名稱
-            colorName: 'red', // 紅色主題 - 代表中國傳統色彩
+            colorName: 'city-blue', // 深藍色主題 - 代表中國傳統色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'beijing.geojson', // 數據文件路徑
@@ -90,7 +90,7 @@ export const useDataStore = defineStore(
             // 🏛️ 西安圖層配置
             layerId: '西安', // 圖層唯一標識符
             layerName: '西安', // 圖層顯示名稱
-            colorName: 'yellow', // 黃色主題 - 代表中國古代帝王色彩
+            colorName: 'city-yellow', // 金黃色主題 - 代表中國古代帝王色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'xian.geojson', // 數據文件路徑
@@ -105,7 +105,7 @@ export const useDataStore = defineStore(
             // 🏛️ 巴黎圖層配置
             layerId: '巴黎', // 圖層唯一標識符
             layerName: '巴黎', // 圖層顯示名稱
-            colorName: 'purple', // 紫色主題 - 代表法國皇室色彩
+            colorName: 'city-purple', // 淡紫色主題 - 代表法國優雅色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'paris.geojson', // 數據文件路徑
@@ -120,7 +120,7 @@ export const useDataStore = defineStore(
             // 🏛️ 柏林圖層配置
             layerId: '柏林', // 圖層唯一標識符
             layerName: '柏林', // 圖層顯示名稱
-            colorName: 'blue', // 藍色主題 - 代表德國國旗色彩
+            colorName: 'city-lightblue', // 淺藍色主題 - 代表德國現代色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'berlin.geojson', // 數據文件路徑
@@ -135,7 +135,7 @@ export const useDataStore = defineStore(
             // 🏛️ 羅馬圖層配置
             layerId: '羅馬', // 圖層唯一標識符
             layerName: '羅馬', // 圖層顯示名稱
-            colorName: 'orange', // 橙色主題 - 代表義大利溫暖色彩
+            colorName: 'city-pink', // 粉紅色主題 - 代表義大利浪漫色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'rome.geojson', // 數據文件路徑
@@ -150,7 +150,7 @@ export const useDataStore = defineStore(
             // 🏛️ 華盛頓圖層配置
             layerId: '華盛頓', // 圖層唯一標識符
             layerName: '華盛頓', // 圖層顯示名稱
-            colorName: 'green', // 綠色主題 - 代表美國自然色彩
+            colorName: 'city-teal', // 青綠色主題 - 代表美國自然色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
             fileName: 'washingtondc.geojson', // 數據文件路徑
@@ -461,12 +461,12 @@ export const useDataStore = defineStore(
       if (isColorTheme) {
         // 根據城市顏色切換到對應的顏色主題
         const colorThemeMap = {
-          red: 'red_theme',
-          blue: 'blue_theme',
-          green: 'green_theme',
-          purple: 'purple_theme',
-          orange: 'orange_theme',
-          yellow: 'yellow_theme',
+          'city-blue': 'blue_theme',
+          'city-lightblue': 'blue_theme',
+          'city-pink': 'red_theme',
+          'city-yellow': 'yellow_theme',
+          'city-purple': 'purple_theme',
+          'city-teal': 'green_theme',
         };
 
         const themeBasemap = colorThemeMap[cityLayer.colorName];
