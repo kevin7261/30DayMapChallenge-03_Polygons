@@ -3,15 +3,12 @@
    ============================================================================= */
 
 @import "./variables.css"; /* 基礎變數定義 */
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
-/* =============================================================================
+@import /* =============================================================================
    🔧 基礎重置和全局設定 (Base Reset & Global Settings)
-   ============================================================================= */
-
-*,
-*::before,
-*::after {
+   ============================================================================= */ *,
+  *: : before, *: : after {
   box-sizing: border-box;
 }
 
@@ -426,35 +423,6 @@ body {
 .my-btn-orange:disabled {
   color: var(--my-color-gray-600);
   background-color: var(--my-color-gray-200);
-}
-
-/* 面板樣式  */
-
-/* 🌟 左側面板右側陰影 (Left Panel Right Shadow) */
-.my-left-panel {
-  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15); /* 增強右側陰影效果 */
-  position: relative;
-  z-index: 1500; /* 提高層級，確保陰影顯示在地圖等所有元素上方 */
-}
-
-/* 🌟 左側面板陰影偽元素 (Left Panel Shadow Pseudo Element) */
-.my-left-panel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: -8px; /* 陰影延伸到右側 */
-  width: 8px;
-  height: 100%;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.1), transparent);
-  pointer-events: none; /* 不影響滑鼠事件 */
-  z-index: 1501; /* 比面板本身更高的層級 */
-}
-
-/* 🌟 中間面板左側內陰影 (Middle Panel Left Inner Shadow) */
-.my-middle-panel {
-  box-shadow: inset 4px 0 8px rgba(0, 0, 0, 0.1); /* 左側內陰影效果 */
-  position: relative;
-  z-index: 1; /* 確保在左側面板陰影下方 */
 }
 
 /* =============================================================================

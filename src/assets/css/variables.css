@@ -1,6 +1,6 @@
 :root {
   /* 字體設定 */
-  --my-font-family-primary: "Noto Sans TC", sans-serif;
+  --my-font-family-primary: "Roboto", sans-serif;
 
   /* 字體大小層級 */
   --my-font-size-xs: 0.75rem; /* 12px */
