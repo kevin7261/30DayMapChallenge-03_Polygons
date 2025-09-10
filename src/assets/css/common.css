@@ -85,6 +85,13 @@ body {
   color: var(--my-color-black);
 }
 
+.my-bgcolor-white {
+  background-color: var(--my-color-white);
+}
+.my-bgcolor-black {
+  background-color: var(--my-color-black);
+}
+
 /* 文字間距 */
 
 .my-letter-spacing-lg {
@@ -95,6 +102,12 @@ body {
 
 .my-font-sm-white {
   font-size: var(--my-font-size-sm);
+  color: var(--my-color-white);
+  font-weight: var(--my-font-weight-lg);
+}
+
+.my-font-lg-white {
+  font-size: var(--my-font-size-lg);
   color: var(--my-color-white);
   font-weight: var(--my-font-weight-lg);
 }
@@ -184,17 +197,16 @@ body {
 
 /* 城市按鈕基礎樣式 */
 .my-city-btn {
-  color: white !important;
-  font-weight: 500 !important;
+  color: var(--my-color-white) !important;
   letter-spacing: var(--my-letter-spacing) !important;
 }
 
 /* 城市按鈕懸停效果 */
 .my-city-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 /* 城市按鈕活躍狀態 */
 .my-city-btn.active {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
 }

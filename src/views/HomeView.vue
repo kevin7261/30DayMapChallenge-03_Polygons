@@ -154,7 +154,7 @@
               <button
                 v-for="city in cities"
                 :key="city.layerId"
-                class="btn my-city-btn"
+                class="btn border-0 my-city-btn my-font-sm-white px-4 py-3"
                 :class="[currentCity === city.layerName ? 'active' : '']"
                 @click="navigateToCity(city.layerId)"
               >
@@ -165,7 +165,6 @@
 
           <!-- 🗺️ 底圖選擇區域 -->
           <div>
-            <h6 class="text-white mb-2">底圖選擇</h6>
             <div class="d-flex flex-column gap-1">
               <!-- 地圖模式按鈕 -->
               <button

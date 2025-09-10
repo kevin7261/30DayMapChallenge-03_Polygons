@@ -72,18 +72,8 @@
 
         const cityLayer = allLayers.find((layer) => layer.layerName === props.currentCity);
         if (cityLayer) {
-          console.log(
-            '✅ 找到城市圖層:',
-            cityLayer.layerName,
-            '長度:',
-            cityLayer.length,
-            '角度:',
-            cityLayer.angle
-          );
-          return {
-            length: cityLayer.length,
-            angle: cityLayer.angle,
-          };
+          console.log('✅ 找到城市圖層:', cityLayer.layerName);
+          return {};
         } else {
           console.log('❌ 未找到城市圖層:', props.currentCity);
           return null;
@@ -521,25 +511,16 @@
           border: 1px solid var(--my-color-gray-200);
         "
       >
-        <div
-          class="position-absolute top-0 start-50 translate-middle-x text-white"
-          style="z-index: 1003; font-size: 18px"
-        >
+        <div class="position-absolute top-0 start-50 translate-middle-x my-font-lg-white pt-3">
           {{ currentCity }}
         </div>
-        <div
-          class="position-absolute bottom-0 start-50 translate-middle-x"
-          style="pointer-events: none; z-index: 1003"
-        >
-          <div class="d-flex justify-content-center gap-3 mb-1">
-            <small class="my-font-sm-white">{{
-              (currentCityInfo && currentCityInfo.length) || ''
-            }}</small>
-            <small class="my-font-sm-white">{{
-              (currentCityInfo && currentCityInfo.angle) || ''
-            }}</small>
+        <div class="position-absolute bottom-0 start-50 translate-middle-x">
+          <div class="d-flex align-items-center justify-content-center">
+            <span class="my-font-lg-white">01</span>
+            <span class="my-bgcolor-white mx-3" style="width: 2px; height: 28px"></span>
+            <span class="my-font-lg-white">Lines</span>
           </div>
-          <div class="my-font-sm-white">#30DayMapChallenge</div>
+          <div class="my-font-sm-white pb-3">#30DayMapChallenge</div>
         </div>
       </div>
     </div>

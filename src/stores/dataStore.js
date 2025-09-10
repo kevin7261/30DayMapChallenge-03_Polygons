@@ -82,8 +82,6 @@ export const useDataStore = defineStore(
             fieldName: null, // 主要字段名稱（可選）
             center: [108.9402, 34.3416], // 西安中心座標
             zoom: 12, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
@@ -97,8 +95,6 @@ export const useDataStore = defineStore(
             fieldName: null, // 主要字段名稱（可選）
             center: [116.4074, 39.9042], // 北京中心座標
             zoom: 11, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
@@ -112,8 +108,6 @@ export const useDataStore = defineStore(
             fieldName: null, // 主要字段名稱（可選）
             center: [12.4964, 41.9028], // 羅馬中心座標
             zoom: 14, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
@@ -127,8 +121,6 @@ export const useDataStore = defineStore(
             fieldName: null, // 主要字段名稱（可選）
             center: [2.3522, 48.8566], // 巴黎中心座標
             zoom: 12, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
@@ -142,8 +134,6 @@ export const useDataStore = defineStore(
             fieldName: null, // 主要字段名稱（可選）
             center: [-77.0369, 38.9072], // 華盛頓中心座標
             zoom: 12, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
@@ -157,8 +147,6 @@ export const useDataStore = defineStore(
             fieldName: null, // 主要字段名稱（可選）
             center: [13.405, 52.52], // 柏林中心座標
             zoom: 12, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
         ],
@@ -232,92 +220,6 @@ export const useDataStore = defineStore(
     // 移除圖層可見性切換（城市圖層永久可見，且無需勾選切換）
 
     /**
-     * 📏 計算GeoJSON線段總長度
-     *
-     * 計算所有 LineString 特徵的總長度
-     *
-     * @param {Object} geoJsonData - GeoJSON數據物件
-     * @returns {string} 格式化後的長度字符串 (如: "123 km" 或 "1.2k km")
-     */
-    const calculateBoundaryLength = (geoJsonData) => {
-      // 驗證輸入數據
-      if (!geoJsonData?.features?.length) {
-        console.log('❌ calculateBoundaryLength: 無效的GeoJSON數據');
-        return 'N/A';
-      }
-
-      let totalLength = 0; // 總長度（米）
-      console.log('📏 開始計算線段長度，特徵數量:', geoJsonData.features.length);
-
-      // 遍歷所有特徵，直接處理 LineString
-      geoJsonData.features.forEach((feature) => {
-        const coords = feature.geometry.coordinates;
-        // 計算線段上相鄰點之間的距離
-        for (let i = 0; i < coords.length - 1; i++) {
-          const point1 = L.latLng(coords[i][1], coords[i][0]); // [lng, lat] -> [lat, lng]
-          const point2 = L.latLng(coords[i + 1][1], coords[i + 1][0]);
-          totalLength += point1.distanceTo(point2);
-        }
-      });
-
-      // 轉換為公里並格式化顯示
-      const km = totalLength / 1000;
-      const result = km > 1000 ? `${(km / 1000).toFixed(1)}k km` : `${km.toFixed(0)} km`;
-      console.log('📏 計算結果:', result, '總長度(米):', totalLength);
-      return result;
-    };
-
-    /**
-     * 📐 計算GeoJSON主要方向角度
-     *
-     * 透過計算所有點的邊界框對角線角度來確定主要方向
-     *
-     * @param {Object} geoJsonData - GeoJSON數據物件
-     * @returns {string} 格式化後的角度字符串 (如: "45°")
-     */
-    const calculateMainAngle = (geoJsonData) => {
-      // 驗證輸入數據
-      if (!geoJsonData?.features?.length) {
-        console.log('❌ calculateMainAngle: 無效的GeoJSON數據');
-        return 'N/A';
-      }
-
-      let allPoints = []; // 收集所有座標點
-      console.log('📐 開始計算主要角度，特徵數量:', geoJsonData.features.length);
-
-      // 遍歷所有特徵，直接處理 LineString
-      geoJsonData.features.forEach((feature) => {
-        // 收集線段上的所有點
-        feature.geometry.coordinates.forEach((coord) => {
-          allPoints.push([coord[0], coord[1]]); // [lng, lat]
-        });
-      });
-
-      // 檢查是否有足夠的點來計算角度
-      if (allPoints.length < 2) {
-        console.log('❌ calculateMainAngle: 點數量不足');
-        return 'N/A';
-      }
-
-      // 計算邊界框（Bounding Box）
-      const lngs = allPoints.map((p) => p[0]); // 經度陣列
-      const lats = allPoints.map((p) => p[1]); // 緯度陣列
-      const minLng = Math.min(...lngs);
-      const maxLng = Math.max(...lngs);
-      const minLat = Math.min(...lats);
-      const maxLat = Math.max(...lats);
-
-      // 計算邊界框對角線的角度（相對於正東方向）
-      const deltaLng = maxLng - minLng; // 經度差
-      const deltaLat = maxLat - minLat; // 緯度差
-      const angle = Math.atan2(deltaLat, deltaLng) * (180 / Math.PI); // 轉換為度數
-      const result = `${Math.round(angle)}°`;
-
-      console.log('📐 計算結果:', result, '角度:', angle, '點數量:', allPoints.length);
-      return result;
-    };
-
-    /**
      * 🚀 載入城市圖層數據
      *
      * 載入所有城市圖層的GeoJSON數據，並計算長度、角度和邊界框中心點
@@ -340,10 +242,6 @@ export const useDataStore = defineStore(
             // 儲存載入的數據
             layer.geoJsonData = result.geoJsonData;
 
-            // 計算並儲存指標
-            layer.length = calculateBoundaryLength(result.geoJsonData);
-            layer.angle = calculateMainAngle(result.geoJsonData);
-
             // 計算並緩存邊界框中心點（用於地圖導航）
             if (result.geoJsonData?.features?.length > 0) {
               const bounds = L.geoJSON(result.geoJsonData).getBounds();
@@ -353,19 +251,9 @@ export const useDataStore = defineStore(
 
             console.log(`✅ 城市圖層 "${layer.layerName}" 載入完成`);
             console.log(`   📊 特徵數量: ${result.geoJsonData?.features?.length || 0}`);
-            console.log(`   📏 邊界長度: ${layer.length}`);
-            console.log(`   📐 主要角度: ${layer.angle}`);
           } else {
             // 數據已載入：檢查並補齊缺失的指標
             console.log(`🔄 檢查城市圖層指標: ${layer.layerName}`);
-
-            // 重新計算長度和角度（如果缺失）
-            if (!layer.length || !layer.angle) {
-              layer.length = calculateBoundaryLength(layer.geoJsonData);
-              layer.angle = calculateMainAngle(layer.geoJsonData);
-              console.log(`   📏 重新計算長度: ${layer.length}`);
-              console.log(`   📐 重新計算角度: ${layer.angle}`);
-            }
 
             // 重新計算邊界框中心點（如果缺失）
             if (!layer.boundsCenter) {
