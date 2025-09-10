@@ -23,7 +23,7 @@ export const useDefineStore = defineStore('define', {
     // 🗺️ 地圖視圖狀態
     mapView: {
       center: [34.3416, 108.9402], // 地圖中心點 [緯度, 經度] - 西安市中心
-      zoom: 12, // 縮放等級（調整到12級，顯示詳細的內容）
+      zoom: 11, // 縮放等級（調整到11級，顯示詳細的內容）
     },
     // 🗺️ 底圖配置列表
     basemaps: [

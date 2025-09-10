@@ -103,6 +103,12 @@
 
       // 🎨 監聽底圖切換事件
       onMounted(() => {
+        // 載入城市數據並導航到西安
+        dataStore.loadCityLayers().then(() => {
+          // 載入完成後導航到西安
+          navigateToCity('Xian');
+        });
+
         const handleBasemapChange = (event) => {
           const { basemap } = event.detail;
           console.log('🎨 收到底圖切換事件:', basemap);

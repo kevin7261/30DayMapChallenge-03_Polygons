@@ -447,7 +447,7 @@ export const useDataStore = defineStore(
         // 使用預設中心點（最慢但最可靠）
         const [lng, lat] = cityLayer.center;
         targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng] 格式
-        console.log('📍 使用預設中心點');
+        console.log('📍 使用預設中心點:', targetCenter);
       } else {
         console.error('❌ 城市圖層沒有可用的中心座標:', cityId);
         return;
@@ -483,7 +483,7 @@ export const useDataStore = defineStore(
 
       // 執行地圖導航
       try {
-        mapInstance.value.setView(targetCenter, optimalZoom);
+        mapInstance.value.setView(targetCenter, optimalZoom, { animate: false });
         console.log(`🌍 成功導航到城市: ${cityLayer.layerName}`);
       } catch (error) {
         console.error('❌ 地圖導航失敗:', error);
