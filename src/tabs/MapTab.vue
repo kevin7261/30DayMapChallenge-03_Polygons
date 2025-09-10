@@ -212,6 +212,12 @@
             'map-bg-purple-theme',
             'map-bg-lightblue-theme',
             'map-bg-yellow-theme',
+            'map-bg-city-beijing-theme',
+            'map-bg-city-xian-theme',
+            'map-bg-city-paris-theme',
+            'map-bg-city-berlin-theme',
+            'map-bg-city-rome-theme',
+            'map-bg-city-washington-theme',
             'map-bg-transparent'
           );
 
@@ -225,6 +231,13 @@
             purple_theme: 'map-bg-purple-theme',
             orange_theme: 'map-bg-lightblue-theme',
             yellow_theme: 'map-bg-yellow-theme',
+            // 城市專用顏色主題
+            'city-beijing_theme': 'map-bg-city-beijing-theme',
+            'city-xian_theme': 'map-bg-city-xian-theme',
+            'city-paris_theme': 'map-bg-city-paris-theme',
+            'city-berlin_theme': 'map-bg-city-berlin-theme',
+            'city-rome_theme': 'map-bg-city-rome-theme',
+            'city-washington_theme': 'map-bg-city-washington-theme',
           };
 
           const bgClass = basemapClassMap[defineStore.selectedBasemap] || 'map-bg-transparent';

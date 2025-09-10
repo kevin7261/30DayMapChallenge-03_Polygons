@@ -663,3 +663,28 @@ body.my-no-select * {
 .map-bg-transparent {
   background-color: transparent !important;
 }
+
+/* 城市專用顏色主題 */
+.map-bg-city-beijing-theme {
+  background-color: var(--my-color-city-beijing) !important; /* 北京粉紅色 */
+}
+
+.map-bg-city-xian-theme {
+  background-color: var(--my-color-city-xian) !important; /* 西安金黃色 */
+}
+
+.map-bg-city-paris-theme {
+  background-color: var(--my-color-city-paris) !important; /* 巴黎紫色 */
+}
+
+.map-bg-city-berlin-theme {
+  background-color: var(--my-color-city-berlin) !important; /* 柏林藍色 */
+}
+
+.map-bg-city-rome-theme {
+  background-color: var(--my-color-city-rome) !important; /* 羅馬青綠色 */
+}
+
+.map-bg-city-washington-theme {
+  background-color: var(--my-color-city-washington) !important; /* 華盛頓深藍色 */
+}

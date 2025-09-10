@@ -66,12 +66,12 @@
         if (currentCityLayer) {
           // 根據城市顏色切換底圖主題
           const colorThemeMap = {
-            'city-blue': 'blue_theme',
-            'city-lightblue': 'blue_theme',
-            'city-pink': 'red_theme',
-            'city-yellow': 'yellow_theme',
-            'city-purple': 'purple_theme',
-            'city-teal': 'green_theme',
+            'city-beijing': 'city-beijing_theme', // 北京 - 專用粉紅色主題
+            'city-xian': 'city-xian_theme', // 西安 - 專用金黃色主題
+            'city-paris': 'city-paris_theme', // 巴黎 - 專用紫色主題
+            'city-berlin': 'city-berlin_theme', // 柏林 - 專用藍色主題
+            'city-rome': 'city-rome_theme', // 羅馬 - 專用青綠色主題
+            'city-washington': 'city-washington_theme', // 華盛頓 - 專用深藍色主題
           };
 
           const themeBasemap = colorThemeMap[currentCityLayer.colorName];
