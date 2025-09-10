@@ -202,30 +202,33 @@
         if (mapContainerElement) {
           console.log('🎨 設定底圖背景色:', defineStore.selectedBasemap);
 
-          if (defineStore.selectedBasemap === 'blank') {
-            mapContainerElement.style.backgroundColor = 'var(--my-color-white)';
-          } else if (defineStore.selectedBasemap === 'black') {
-            mapContainerElement.style.backgroundColor = 'var(--my-color-gray-800)';
-          } else if (defineStore.selectedBasemap === 'red_theme') {
-            mapContainerElement.style.backgroundColor = '#8B0000'; // 深紅色
-          } else if (defineStore.selectedBasemap === 'blue_theme') {
-            mapContainerElement.style.backgroundColor = '#000080'; // 深藍色
-          } else if (defineStore.selectedBasemap === 'green_theme') {
-            mapContainerElement.style.backgroundColor = '#006400'; // 深綠色
-          } else if (defineStore.selectedBasemap === 'purple_theme') {
-            mapContainerElement.style.backgroundColor = '#4B0082'; // 深紫色
-          } else if (defineStore.selectedBasemap === 'orange_theme') {
-            mapContainerElement.style.backgroundColor = '#FF8C00'; // 深橙色
-          } else if (defineStore.selectedBasemap === 'yellow_theme') {
-            mapContainerElement.style.backgroundColor = '#DAA520'; // 深金黃色
-          } else {
-            mapContainerElement.style.backgroundColor = 'transparent';
-          }
+          // 移除所有背景顏色類別
+          mapContainerElement.classList.remove(
+            'map-bg-blank',
+            'map-bg-black',
+            'map-bg-red-theme',
+            'map-bg-blue-theme',
+            'map-bg-green-theme',
+            'map-bg-purple-theme',
+            'map-bg-orange-theme',
+            'map-bg-yellow-theme',
+            'map-bg-transparent'
+          );
 
-          // 強制重新渲染
-          mapContainerElement.style.display = 'none';
-          mapContainerElement.offsetHeight; // 觸發重排
-          mapContainerElement.style.display = 'block';
+          // 根據底圖類型添加對應的 CSS 類別
+          const basemapClassMap = {
+            blank: 'map-bg-blank',
+            black: 'map-bg-black',
+            red_theme: 'map-bg-red-theme',
+            blue_theme: 'map-bg-blue-theme',
+            green_theme: 'map-bg-green-theme',
+            purple_theme: 'map-bg-purple-theme',
+            orange_theme: 'map-bg-orange-theme',
+            yellow_theme: 'map-bg-yellow-theme',
+          };
+
+          const bgClass = basemapClassMap[defineStore.selectedBasemap] || 'map-bg-transparent';
+          mapContainerElement.classList.add(bgClass);
         }
       };
 
@@ -261,38 +264,22 @@
             }
             return L.marker(latlng);
           },
-          // 樣式設定函數
-          style: (feature) => {
-            // 檢查是否為顏色主題地圖
-            const isColorTheme = defineStore.selectedBasemap.endsWith('_theme');
-
-            if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
-              return {
-                fillColor: feature.properties.fillColor || `var(--my-color-${colorName})`,
-                weight: 1,
-                opacity: 1,
-                color: isColorTheme ? 'white' : feature.properties.color || 'white',
-                fillOpacity: feature.properties.fillColor ? 0.6 : 0.3,
-              };
-            } else if (
-              feature.geometry.type === 'LineString' ||
-              feature.geometry.type === 'MultiLineString'
-            ) {
-              return {
-                color: 'white', // 所有時候都是白色
-                weight: 4, // 所有時候都是4px
-                opacity: 0.8,
-                lineCap: 'round',
-                lineJoin: 'round',
-              };
-            }
+          // 樣式設定函數 - 只處理 LineString
+          style: () => {
+            return {
+              color: 'white', // 所有時候都是白色
+              weight: 4, // 所有時候都是4px
+              opacity: 0.8,
+              lineCap: 'round',
+              lineJoin: 'round',
+            };
           },
           // 每個要素的處理函數
           onEachFeature: (feature, layer) => {
             // 綁定彈窗
             layer.bindPopup(`
               <div class="p-2">
-                <div class="fw-bold mb-2">${layerName}</div>
+                <div class="mb-2">${layerName}</div>
                 <div>${feature.properties.name || '未命名'}</div>
                  </div>
                `);
@@ -489,7 +476,7 @@
 
 <template>
   <!-- 🗺️ 地圖主容器 -->
-  <div id="map-container" class="h-100 w-100 position-relative">
+  <div id="map-container" class="h-100 w-100 position-relative bg-transparent z-0">
     <!-- 🗺️ Leaflet 地圖容器 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
 
@@ -510,39 +497,11 @@
           <div class="text-white fw-bold">#30DayMapChallenge</div>
         </div>
       </div>
-
-      <!-- 網格顯示框 (3:4) -->
-      <div class="ig-crop-frame ig-grid-frame">
-        <div class="ig-city-name">{{ currentCity }}</div>
-        <div class="ig-hashtag">
-          <div class="d-flex justify-content-center gap-3 mb-1">
-            <small class="text-white">{{
-              (currentCityInfo && currentCityInfo.length) || 'N/A'
-            }}</small>
-            <small class="text-white">{{
-              (currentCityInfo && currentCityInfo.angle) || 'N/A'
-            }}</small>
-          </div>
-          <div class="text-white fw-bold">#30DayMapChallenge</div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-  /* 🗺️ 地圖容器樣式 */
-  #map-container {
-    background-color: transparent;
-    z-index: 0;
-  }
-
-  /* 🗺️ Leaflet 地圖容器樣式 */
-  [id^='leaflet-map'] {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
   /* 📱 IG 截圖框框樣式 */
   .ig-crop-overlay {
     position: absolute;
@@ -574,16 +533,6 @@
     border: 3px solid white;
   }
 
-  .ig-grid-frame {
-    width: calc(75vw - 32px);
-    height: calc(100vw - 32px); /* 3:4 比例，上下左右各留16px */
-    max-width: calc(75vh - 32px);
-    max-height: calc(100vh - 32px);
-    z-index: 1002;
-    border: 3px solid white; /* 白色邊框 */
-    background: transparent;
-  }
-
   /* 📝 IG 截圖框框文字樣式 */
   .ig-city-name {
     position: absolute;
@@ -591,7 +540,6 @@
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-weight: bold;
     font-size: 18px;
     pointer-events: none;
     z-index: 1003;

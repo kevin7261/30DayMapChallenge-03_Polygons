@@ -624,3 +624,44 @@ body.my-no-select * {
 .my-cursor-pointer {
   cursor: pointer;
 }
+
+/* =============================================================================
+   🗺️ 底圖背景顏色類別 (Basemap Background Color Classes)
+   ============================================================================= */
+
+/* 地圖容器背景顏色 */
+.map-bg-blank {
+  background-color: var(--my-color-white) !important;
+}
+
+.map-bg-black {
+  background-color: var(--my-color-gray-800) !important;
+}
+
+.map-bg-red-theme {
+  background-color: #8B0000 !important; /* 深紅色 */
+}
+
+.map-bg-blue-theme {
+  background-color: #000080 !important; /* 深藍色 */
+}
+
+.map-bg-green-theme {
+  background-color: #006400 !important; /* 深綠色 */
+}
+
+.map-bg-purple-theme {
+  background-color: #4B0082 !important; /* 深紫色 */
+}
+
+.map-bg-orange-theme {
+  background-color: #FF8C00 !important; /* 深橙色 */
+}
+
+.map-bg-yellow-theme {
+  background-color: #DAA520 !important; /* 深金黃色 */
+}
+
+.map-bg-transparent {
+  background-color: transparent !important;
+}
