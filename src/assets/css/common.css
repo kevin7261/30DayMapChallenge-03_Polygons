@@ -430,7 +430,6 @@ body {
 
 /* 面板樣式  */
 
-
 /* 🌟 左側面板右側陰影 (Left Panel Right Shadow) */
 .my-left-panel {
   box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15); /* 增強右側陰影效果 */
@@ -581,7 +580,6 @@ body {
   background-color: var(--my-color-blue); /* 懸停時保持主色 */
 }
 
-
 .my-resizer-middle {
   background-color: var(--my-color-gray-200); /* 中間面板上下拉 resizer - gray-200 */
   position: relative; /* 為偽元素提供定位上下文 */
@@ -639,7 +637,7 @@ body.my-no-select * {
 }
 
 .map-bg-red-theme {
-  background-color: #8B0000 !important; /* 深紅色 */
+  background-color: #8b0000 !important; /* 深紅色 */
 }
 
 .map-bg-blue-theme {
@@ -651,15 +649,15 @@ body.my-no-select * {
 }
 
 .map-bg-purple-theme {
-  background-color: #4B0082 !important; /* 深紫色 */
+  background-color: #4b0082 !important; /* 深紫色 */
 }
 
 .map-bg-orange-theme {
-  background-color: #FF8C00 !important; /* 深橙色 */
+  background-color: #ff8c00 !important; /* 深橙色 */
 }
 
 .map-bg-yellow-theme {
-  background-color: #DAA520 !important; /* 深金黃色 */
+  background-color: #daa520 !important; /* 深金黃色 */
 }
 
 .map-bg-transparent {
