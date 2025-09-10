@@ -72,21 +72,6 @@ export const useDataStore = defineStore(
         groupName: '世界城市',
         groupLayers: [
           {
-            // 🏛️ 北京圖層配置
-            layerId: '北京', // 圖層唯一標識符
-            layerName: '北京', // 圖層顯示名稱
-            colorName: 'city-beijing', // 深藍色主題 - 代表中國傳統色彩
-            geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            loader: loadCityGeoJson, // 數據載入函數
-            fileName: 'beijing.geojson', // 數據文件路徑
-            fieldName: null, // 主要字段名稱（可選）
-            center: [116.4074, 39.9042], // 北京中心座標
-            zoom: 11, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
-            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
-          },
-          {
             // 🏛️ 西安圖層配置
             layerId: '西安', // 圖層唯一標識符
             layerName: '西安', // 圖層顯示名稱
@@ -102,31 +87,16 @@ export const useDataStore = defineStore(
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
-            // 🏛️ 巴黎圖層配置
-            layerId: '巴黎', // 圖層唯一標識符
-            layerName: '巴黎', // 圖層顯示名稱
-            colorName: 'city-paris', // 淡紫色主題 - 代表法國優雅色彩
+            // 🏛️ 北京圖層配置
+            layerId: '北京', // 圖層唯一標識符
+            layerName: '北京', // 圖層顯示名稱
+            colorName: 'city-beijing', // 深藍色主題 - 代表中國傳統色彩
             geoJsonData: null, // GeoJSON 地理數據（載入後填充）
             loader: loadCityGeoJson, // 數據載入函數
-            fileName: 'paris.geojson', // 數據文件路徑
+            fileName: 'beijing.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
-            center: [2.3522, 48.8566], // 巴黎中心座標
-            zoom: 12, // 最佳縮放級別
-            length: null, // 城市邊界長度（動態計算）
-            angle: null, // 主要方向角度（動態計算）
-            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
-          },
-          {
-            // 🏛️ 柏林圖層配置
-            layerId: '柏林', // 圖層唯一標識符
-            layerName: '柏林', // 圖層顯示名稱
-            colorName: 'city-berlin', // 淺藍色主題 - 代表德國現代色彩
-            geoJsonData: null, // GeoJSON 地理數據（載入後填充）
-            loader: loadCityGeoJson, // 數據載入函數
-            fileName: 'berlin.geojson', // 數據文件路徑
-            fieldName: null, // 主要字段名稱（可選）
-            center: [13.405, 52.52], // 柏林中心座標
-            zoom: 12, // 最佳縮放級別
+            center: [116.4074, 39.9042], // 北京中心座標
+            zoom: 11, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
@@ -147,6 +117,21 @@ export const useDataStore = defineStore(
             boundsCenter: null, // 緩存的邊界框中心點（性能優化）
           },
           {
+            // 🏛️ 巴黎圖層配置
+            layerId: '巴黎', // 圖層唯一標識符
+            layerName: '巴黎', // 圖層顯示名稱
+            colorName: 'city-paris', // 淡紫色主題 - 代表法國優雅色彩
+            geoJsonData: null, // GeoJSON 地理數據（載入後填充）
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'paris.geojson', // 數據文件路徑
+            fieldName: null, // 主要字段名稱（可選）
+            center: [2.3522, 48.8566], // 巴黎中心座標
+            zoom: 12, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
+          },
+          {
             // 🏛️ 華盛頓圖層配置
             layerId: '華盛頓', // 圖層唯一標識符
             layerName: '華盛頓', // 圖層顯示名稱
@@ -156,6 +141,21 @@ export const useDataStore = defineStore(
             fileName: 'washingtondc.geojson', // 數據文件路徑
             fieldName: null, // 主要字段名稱（可選）
             center: [-77.0369, 38.9072], // 華盛頓中心座標
+            zoom: 12, // 最佳縮放級別
+            length: null, // 城市邊界長度（動態計算）
+            angle: null, // 主要方向角度（動態計算）
+            boundsCenter: null, // 緩存的邊界框中心點（性能優化）
+          },
+          {
+            // 🏛️ 柏林圖層配置
+            layerId: '柏林', // 圖層唯一標識符
+            layerName: '柏林', // 圖層顯示名稱
+            colorName: 'city-berlin', // 淺藍色主題 - 代表德國現代色彩
+            geoJsonData: null, // GeoJSON 地理數據（載入後填充）
+            loader: loadCityGeoJson, // 數據載入函數
+            fileName: 'berlin.geojson', // 數據文件路徑
+            fieldName: null, // 主要字段名稱（可選）
+            center: [13.405, 52.52], // 柏林中心座標
             zoom: 12, // 最佳縮放級別
             length: null, // 城市邊界長度（動態計算）
             angle: null, // 主要方向角度（動態計算）
