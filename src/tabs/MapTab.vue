@@ -511,8 +511,9 @@
           border: 1px solid var(--my-color-gray-200);
         "
       >
-        <div class="position-absolute top-0 start-50 translate-middle-x my-font-lg-white pt-3">
-          {{ currentCity }}
+        <div class="position-absolute top-0 start-50 translate-middle-x text-center pt-3">
+          <div class="my-font-sm-white">the axis of</div>
+          <div class="my-font-lg-white">{{ currentCity }}</div>
         </div>
         <div class="position-absolute bottom-0 start-50 translate-middle-x">
           <div class="d-flex align-items-center justify-content-center">

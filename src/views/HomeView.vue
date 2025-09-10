@@ -89,6 +89,20 @@
         }
       };
 
+      /**
+       * 🔄 切換底圖模式
+       * 在地圖模式和顏色模式之間切換
+       */
+      const toggleBasemap = () => {
+        if (defineStore.selectedBasemap === 'carto_dark') {
+          // 當前是地圖模式，切換到顏色模式
+          setColorTheme();
+        } else {
+          // 當前是顏色模式，切換到地圖模式
+          setBasemap('carto_dark');
+        }
+      };
+
       // 📊 獲取城市列表和底圖列表
       const cities = computed(() => dataStore.layers[0].groupLayers);
       const basemaps = defineStore.basemaps;
@@ -128,6 +142,7 @@
         navigateToCity,
         setBasemap,
         setColorTheme,
+        toggleBasemap,
         cities,
         basemaps,
         defineStore,
@@ -145,8 +160,11 @@
       <!-- 🗺️ 地圖組件 -->
       <MapTab @map-ready="setMapInstance" :current-city="currentCity" />
 
-      <!-- 🎛️ 左上角控制面板 -->
-      <div class="position-absolute top-0 start-0 p-3" style="z-index: 1000">
+      <!-- 🎛️ 左側中間控制面板 -->
+      <div
+        class="position-absolute"
+        style="top: 50%; left: 0; transform: translateY(-50%); z-index: 1000; padding: 1rem"
+      >
         <div class="bg-dark bg-opacity-75 rounded-3 p-3">
           <!-- 🌍 城市導航區域 -->
           <div class="mb-3">
@@ -165,26 +183,17 @@
 
           <!-- 🗺️ 底圖選擇區域 -->
           <div>
-            <div class="d-flex flex-column gap-1">
-              <!-- 地圖模式按鈕 -->
+            <div class="d-flex justify-content-center gap-2">
+              <!-- 地圖/顏色切換按鈕 -->
               <button
-                class="btn btn-sm"
+                class="btn align-items-center justify-content-center rounded-circle p-0"
                 :class="
                   defineStore.selectedBasemap === 'carto_dark' ? 'btn-light' : 'btn-outline-light'
                 "
-                @click="setBasemap('carto_dark')"
+                style="width: 40px; height: 40px"
+                @click="toggleBasemap"
               >
-                地圖
-              </button>
-              <!-- 顏色主題按鈕 -->
-              <button
-                class="btn btn-sm"
-                :class="
-                  defineStore.selectedBasemap.endsWith('_theme') ? 'btn-light' : 'btn-outline-light'
-                "
-                @click="setColorTheme"
-              >
-                顏色
+                <i class="fas fa-map"></i>
               </button>
             </div>
           </div>
