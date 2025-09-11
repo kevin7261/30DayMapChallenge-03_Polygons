@@ -103,13 +103,7 @@
           mapInstance.on('zoomend', handleZoomEnd);
           mapInstance.on('moveend', handleMoveEnd);
 
-          // 點擊空白處清除選取
-          mapInstance.on('click', function (e) {
-            if (!e.originalEvent.target.closest('.leaflet-interactive')) {
-              dataStore.setSelectedFeature(null);
-              resetAllLayerStyles();
-            }
-          });
+          // 移除地圖點擊事件處理
 
           // 設定 popup 面板的 z-index
           mapInstance.getPane('popupPane').style.zIndex = 2200;
@@ -176,49 +170,7 @@
         // 使用預設的透明背景，不設定任何特殊背景色
       };
 
-      /**
-       * 🎨 創建國家點標記
-       * 為每個國家創建一個白色點標記
-       */
-      const createCountryMarker = (layer) => {
-        const { layerName, center } = layer;
-        const [lng, lat] = center;
-
-        const icon = L.divIcon({
-          html: `<div
-           class="rounded-circle"
-           style="
-              background-color: white;
-              width: 12px;
-              height: 12px;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-              border: 2px solid #333;
-            ">
-            </div>`,
-          className: 'custom-point-icon',
-          iconSize: [12, 12],
-          iconAnchor: [6, 6],
-          popupAnchor: [0, -6],
-        });
-
-        const marker = L.marker([lat, lng], { icon });
-
-        // 綁定彈窗
-        marker.bindPopup(`
-          <div class="p-2">
-            <div class="mb-2 fw-bold">${layerName}</div>
-            <div class="text-muted">座標: ${lat.toFixed(4)}, ${lng.toFixed(4)}</div>
-          </div>
-        `);
-
-        // 綁定點擊事件
-        marker.on('click', () => {
-          emit('feature-selected', { properties: { name: layerName } });
-          highlightFeature(marker);
-        });
-
-        return marker;
-      };
+      // 移除地圖標記功能，改為在 HTML 上顯示中心點
 
       /**
        * 🎯 高亮顯示特定要素
@@ -245,26 +197,12 @@
       };
 
       /**
-       * 🔄 同步國家標記
-       * 為所有國家創建點標記
+       * 🔄 同步圖層（已移除標記功能）
+       * 不再在地圖上創建標記，改為在 HTML 上顯示
        */
       const syncLayers = () => {
-        if (!mapInstance) return;
-
-        const allLayers = dataStore.getAllLayers();
-
-        allLayers.forEach((layer) => {
-          const layerId = layer.layerId;
-
-          // 為每個國家創建標記
-          if (!layerGroups[layerId]) {
-            const marker = createCountryMarker(layer);
-            if (marker) {
-              layerGroups[layerId] = marker;
-              mapInstance.addLayer(marker);
-            }
-          }
-        });
+        // 移除地圖標記功能，不需要同步任何圖層
+        console.log('圖層同步已禁用，使用 HTML 中心點顯示');
       };
 
       /**
@@ -412,6 +350,11 @@
         <div class="position-absolute top-0 start-50 translate-middle-x text-center pt-3">
           <div class="my-font-sm-white">the kilometer zero of</div>
           <div class="my-font-lg-white">{{ currentCountry }}</div>
+        </div>
+        
+        <!-- 中心點顯示 -->
+        <div class="position-absolute top-50 start-50 translate-middle">
+          <div class="rounded-circle bg-white" style="width: 12px; height: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.4); border: 2px solid #333;"></div>
         </div>
         <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
           <div class="d-flex align-items-center justify-content-center">
