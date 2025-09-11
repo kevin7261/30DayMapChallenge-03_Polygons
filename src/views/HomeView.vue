@@ -35,40 +35,40 @@
       const setMapInstance = (map) => dataStore.setMapInstance(map);
 
       /**
-       * 🌍 導航到指定城市
-       * 將地圖視圖移動到選定城市的中心位置
-       * @param {string} cityId - 城市 ID
+       * 🌍 導航到指定國家
+       * 將地圖視圖移動到選定國家的中心位置
+       * @param {string} countryId - 國家 ID
        */
-      const navigateToCity = (cityId) => {
-        // 更新當前城市名稱
-        const city = cities.value?.find((c) => c.layerId === cityId);
-        if (city) {
-          console.log('🌍 切換到城市:', city.layerName);
-          currentCity.value = city.layerName;
+      const navigateToCountry = (countryId) => {
+        // 更新當前國家名稱
+        const country = countries.value?.find((c) => c.layerId === countryId);
+        if (country) {
+          console.log('🌍 切換到國家:', country.layerName);
+          currentCountry.value = country.layerName;
         }
-        dataStore.navigateToCity(cityId);
+        dataStore.navigateToCountry(countryId);
       };
 
       // 移除底圖切換功能，使用預設的標準地圖
 
-      // 📊 獲取城市列表
-      const cities = computed(() => dataStore.layers[0].groupLayers);
+      // 📊 獲取國家列表
+      const countries = computed(() => dataStore.layers[0].groupLayers);
 
-      // 🌍 當前選中的城市（預設為台灣）
-      const currentCity = ref('TAIWAN');
+      // 🌍 當前選中的國家（預設為台灣）
+      const currentCountry = ref('TAIWAN');
 
       // 🚀 初始化應用程式
       onMounted(() => {
         // 直接導航到台灣
-        navigateToCity('Taiwan');
+        navigateToCountry('Taiwan');
       });
 
       return {
         setMapInstance,
-        navigateToCity,
-        cities,
+        navigateToCountry,
+        countries,
         defineStore,
-        currentCity,
+        currentCountry,
       };
     },
   };
@@ -80,7 +80,7 @@
     <!-- 🗺️ 地圖區域容器 -->
     <div class="flex-grow-1 overflow-hidden position-relative">
       <!-- 🗺️ 地圖組件 -->
-      <MapTab @map-ready="setMapInstance" :current-city="currentCity" />
+      <MapTab @map-ready="setMapInstance" :current-country="currentCountry" />
 
       <!-- 🎛️ 左側中間控制面板 -->
       <div
@@ -88,17 +88,17 @@
         style="top: 50%; left: 0; transform: translateY(-50%); z-index: 1000; padding: 1rem"
       >
         <div class="bg-dark bg-opacity-75 rounded-3 p-3">
-          <!-- 🌍 城市導航區域 -->
+          <!-- 🌍 國家導航區域 -->
           <div class="">
             <div class="d-flex flex-column gap-1">
               <button
-                v-for="city in cities"
-                :key="city.layerId"
-                class="btn border-0 my-city-btn my-font-sm-white px-4 py-3"
-                :class="[currentCity === city.layerName ? 'active' : '']"
-                @click="navigateToCity(city.layerId)"
+                v-for="country in countries"
+                :key="country.layerId"
+                class="btn border-0 my-country-btn my-font-sm-white px-4 py-3"
+                :class="[currentCountry === country.layerName ? 'active' : '']"
+                @click="navigateToCountry(country.layerId)"
               >
-                {{ city.layerName }}
+                {{ country.layerName }}
               </button>
             </div>
           </div>

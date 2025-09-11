@@ -25,7 +25,7 @@
   export default {
     name: 'MapTab',
     props: {
-      currentCity: { type: String, default: '城市名稱' },
+      currentCountry: { type: String, default: '國家名稱' },
     },
     emits: ['map-ready'],
     setup(props, { emit }) {
@@ -46,28 +46,28 @@
       // 📊 計算屬性：檢查是否有任何圖層可見（現在所有圖層都直接可見）
       const isAnyLayerVisible = computed(() => dataStore.getAllLayers().length > 0);
 
-      // 🏙️ 當前城市信息
-      const currentCityInfo = computed(() => {
-        if (!props.currentCity) {
-          console.log('❌ currentCityInfo: 沒有當前城市');
+      // 🏙️ 當前國家信息
+      const currentCountryInfo = computed(() => {
+        if (!props.currentCountry) {
+          console.log('❌ currentCountryInfo: 沒有當前國家');
           return null;
         }
 
-        // 從dataStore中獲取城市信息
+        // 從dataStore中獲取國家信息
         const allLayers = dataStore.getAllLayers();
         console.log(
-          '🔍 查找城市:',
-          props.currentCity,
+          '🔍 查找國家:',
+          props.currentCountry,
           '可用圖層:',
           allLayers.map((l) => l.layerName)
         );
 
-        const cityLayer = allLayers.find((layer) => layer.layerName === props.currentCity);
-        if (cityLayer) {
-          console.log('✅ 找到城市圖層:', cityLayer.layerName);
+        const countryLayer = allLayers.find((layer) => layer.layerName === props.currentCountry);
+        if (countryLayer) {
+          console.log('✅ 找到國家圖層:', countryLayer.layerName);
           return {};
         } else {
-          console.log('❌ 未找到城市圖層:', props.currentCity);
+          console.log('❌ 未找到國家圖層:', props.currentCountry);
           return null;
         }
       });
@@ -177,22 +177,22 @@
       };
 
       /**
-       * 🎨 創建城市點標記
-       * 為每個城市創建一個點標記
+       * 🎨 創建國家點標記
+       * 為每個國家創建一個白色點標記
        */
-      const createCityMarker = (layer) => {
-        const { layerName, colorName, center } = layer;
+      const createCountryMarker = (layer) => {
+        const { layerName, center } = layer;
         const [lng, lat] = center;
 
         const icon = L.divIcon({
           html: `<div
            class="rounded-circle"
            style="
-              background-color: var(--my-color-${colorName});
+              background-color: white;
               width: 12px;
               height: 12px;
               box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-              border: 2px solid white;
+              border: 2px solid #333;
             ">
             </div>`,
           className: 'custom-point-icon',
@@ -245,8 +245,8 @@
       };
 
       /**
-       * 🔄 同步城市標記
-       * 為所有城市創建點標記
+       * 🔄 同步國家標記
+       * 為所有國家創建點標記
        */
       const syncLayers = () => {
         if (!mapInstance) return;
@@ -256,9 +256,9 @@
         allLayers.forEach((layer) => {
           const layerId = layer.layerId;
 
-          // 為每個城市創建標記
+          // 為每個國家創建標記
           if (!layerGroups[layerId]) {
-            const marker = createCityMarker(layer);
+            const marker = createCountryMarker(layer);
             if (marker) {
               layerGroups[layerId] = marker;
               mapInstance.addLayer(marker);
@@ -377,7 +377,7 @@
         mapContainer,
         mapContainerId,
         isAnyLayerVisible,
-        currentCityInfo,
+        currentCountryInfo,
         highlightFeature,
         invalidateSize,
         defineStore,
@@ -411,7 +411,7 @@
       >
         <div class="position-absolute top-0 start-50 translate-middle-x text-center pt-3">
           <div class="my-font-sm-white">the kilometer zero of</div>
-          <div class="my-font-lg-white">{{ currentCity }}</div>
+          <div class="my-font-lg-white">{{ currentCountry }}</div>
         </div>
         <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
           <div class="d-flex align-items-center justify-content-center">

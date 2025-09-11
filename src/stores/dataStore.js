@@ -38,55 +38,49 @@ export const useDataStore = defineStore(
      *   - loader: 數據載入函數
      *   - fileName: 數據文件路徑
      *   - fieldName: 主要字段名稱
-     *   - center: 城市中心座標
+     *   - center: 國家中心座標
      *   - zoom: 縮放級別
      */
     const layers = ref([
       {
-        // 🌍 世界城市地圖集合
-        // 包含各大洲代表性城市的座標點
-        groupName: '世界城市',
+        // 🌍 世界國家地圖集合
+        // 包含各大洲代表性國家的座標點
+        groupName: '世界國家',
         groupLayers: [
           {
-            // 🏝️ 台灣圖層配置
+            // 🏝️ 台灣國家配置
             layerId: 'Taiwan', // 圖層唯一標識符
             layerName: 'TAIWAN', // 圖層顯示名稱
-            colorName: 'city-taiwan', // 台灣主題色彩
             center: [121.51972, 25.04583], // 台灣中心座標 [經度, 緯度]
           },
           {
-            // 🏛️ 中國圖層配置
+            // 🏛️ 中國國家配置
             layerId: 'China', // 圖層唯一標識符
             layerName: 'CHINA', // 圖層顯示名稱
-            colorName: 'city-china', // 中國主題色彩
             center: [116.39288, 39.89877], // 中國中心座標 [經度, 緯度]
           },
           {
-            // 🏯 日本圖層配置
+            // 🏯 日本國家配置
             layerId: 'Japan', // 圖層唯一標識符
             layerName: 'JAPAN', // 圖層顯示名稱
-            colorName: 'city-japan', // 日本主題色彩
             center: [139.77449, 35.68404], // 日本中心座標 [經度, 緯度]
           },
           {
-            // 🏛️ 美國圖層配置
+            // 🏛️ 美國國家配置
             layerId: 'USA', // 圖層唯一標識符
             layerName: 'USA', // 圖層顯示名稱
-            colorName: 'city-usa', // 美國主題色彩
             center: [-77.03655, 38.89511], // 美國中心座標 [經度, 緯度]
           },
           {
-            // 🏛️ 法國圖層配置
+            // 🏛️ 法國國家配置
             layerId: 'France', // 圖層唯一標識符
             layerName: 'FRANCE', // 圖層顯示名稱
-            colorName: 'city-france', // 法國主題色彩
             center: [2.34889, 48.85333], // 法國中心座標 [經度, 緯度]
           },
           {
-            // 🏛️ 德國圖層配置
+            // 🏛️ 德國國家配置
             layerId: 'Germany', // 圖層唯一標識符
             layerName: 'GERMANY', // 圖層顯示名稱
-            colorName: 'city-germany', // 德國主題色彩
             center: [13.39889, 52.51083], // 德國中心座標 [經度, 緯度]
           },
         ],
@@ -178,18 +172,18 @@ export const useDataStore = defineStore(
     };
 
     /**
-     * 🌍 導航到指定城市
+     * 🌍 導航到指定國家
      *
-     * 將地圖視圖移動到指定城市的中心位置
+     * 將地圖視圖移動到指定國家的中心位置
      *
-     * @param {string} cityId - 城市圖層的唯一標識符
+     * @param {string} countryId - 國家圖層的唯一標識符
      * @returns {void}
      */
-    const navigateToCity = (cityId) => {
-      // 查找城市圖層
-      const cityLayer = findLayerById(cityId);
-      if (!cityLayer) {
-        console.error('❌ 找不到城市圖層:', cityId);
+    const navigateToCountry = (countryId) => {
+      // 查找國家圖層
+      const countryLayer = findLayerById(countryId);
+      if (!countryLayer) {
+        console.error('❌ 找不到國家圖層:', countryId);
         return;
       }
 
@@ -200,7 +194,7 @@ export const useDataStore = defineStore(
         setTimeout(() => {
           if (mapInstance.value) {
             console.log('🌍 地圖已準備就緒，重新嘗試移動');
-            navigateToCity(cityId);
+            navigateToCountry(countryId);
           } else {
             console.error('❌ 地圖實例仍未準備就緒');
           }
@@ -208,15 +202,15 @@ export const useDataStore = defineStore(
         return;
       }
 
-      // 使用城市中心座標
-      const [lng, lat] = cityLayer.center;
+      // 使用國家中心座標
+      const [lng, lat] = countryLayer.center;
       const targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng] 格式
       const optimalZoom = CITY_ZOOM_LEVEL; // 使用固定的縮放級別
 
       // 執行地圖導航
       try {
         mapInstance.value.setView(targetCenter, optimalZoom, { animate: false });
-        console.log(`🌍 成功導航到城市: ${cityLayer.layerName}`);
+        console.log(`🌍 成功導航到國家: ${countryLayer.layerName}`);
       } catch (error) {
         console.error('❌ 地圖導航失敗:', error);
       }
@@ -230,7 +224,7 @@ export const useDataStore = defineStore(
       setSelectedFeature, // 設定選中的地圖要素
       mapInstance, // 地圖實例
       setMapInstance, // 設定地圖實例
-      navigateToCity, // 導航到指定城市
+      navigateToCountry, // 導航到指定國家
       // 所有圖層都是可見的，所以直接返回所有圖層
       visibleLayers: computed(() => getAllLayers()),
     };
