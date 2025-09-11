@@ -21,7 +21,7 @@ export const useDataStore = defineStore(
   'data', // 商店唯一標識符
   () => {
     // 🎯 固定縮放級別常數
-    const CITY_ZOOM_LEVEL = 16;
+    const COUNTRY_ZOOM_LEVEL = 16;
     /**
      * 🗺️ 圖層配置數據 (Layer Configuration Data)
      *
@@ -63,7 +63,7 @@ export const useDataStore = defineStore(
             // 🏯 日本國家配置
             layerId: 'Japan', // 圖層唯一標識符
             layerName: 'JAPAN', // 圖層顯示名稱
-            center: [139.747858, 35.677236], // 日本中心座標 [經度, 緯度]
+            center: [139.774167, 35.684444], // 日本中心座標 [經度, 緯度]
           },
           {
             // 🏛️ 美國國家配置
@@ -205,7 +205,7 @@ export const useDataStore = defineStore(
       // 使用國家中心座標
       const [lng, lat] = countryLayer.center;
       const targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng] 格式
-      const optimalZoom = CITY_ZOOM_LEVEL; // 使用固定的縮放級別
+      const optimalZoom = COUNTRY_ZOOM_LEVEL; // 使用固定的縮放級別
 
       // 執行地圖導航
       try {
