@@ -37,7 +37,6 @@
       const mapContainer = ref(null);
       let mapInstance = null;
       let currentTileLayer = null;
-      let layerGroups = {};
 
       // 🎛️ 地圖控制狀態
       const isMapReady = ref(false);
@@ -292,7 +291,6 @@
           mapInstance = null;
         }
 
-        layerGroups = {};
         currentTileLayer = null;
         isMapReady.value = false;
       });
@@ -351,10 +349,10 @@
           <div class="my-font-sm-white">the kilometer zero of</div>
           <div class="my-font-lg-white">{{ currentCountry }}</div>
         </div>
-        
+
         <!-- 中心點顯示 -->
         <div class="position-absolute top-50 start-50 translate-middle">
-          <div class="rounded-circle bg-white" style="width: 12px; height: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.4); border: 2px solid #333;"></div>
+          <div class="rounded-circle bg-white" style="width: 12px; height: 12px"></div>
         </div>
         <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
           <div class="d-flex align-items-center justify-content-center">
