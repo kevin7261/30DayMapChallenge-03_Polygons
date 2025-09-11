@@ -43,8 +43,8 @@
       const isMapReady = ref(false);
       const mapContainerId = ref(`leaflet-map-${Math.random().toString(36).substr(2, 9)}`);
 
-      // 📊 計算屬性：檢查是否有任何圖層可見
-      const isAnyLayerVisible = computed(() => dataStore.getAllLayers().some((l) => l.geoJsonData));
+      // 📊 計算屬性：檢查是否有任何圖層可見（現在所有圖層都直接可見）
+      const isAnyLayerVisible = computed(() => dataStore.getAllLayers().length > 0);
 
       // 🏙️ 當前城市信息
       const currentCityInfo = computed(() => {
@@ -177,66 +177,47 @@
       };
 
       /**
-       * 🎨 創建要素圖層
-       * 將 GeoJSON 數據轉換為 Leaflet 圖層
+       * 🎨 創建城市點標記
+       * 為每個城市創建一個點標記
        */
-      const createFeatureLayer = (layer) => {
-        if (!layer.geoJsonData) return null;
+      const createCityMarker = (layer) => {
+        const { layerName, colorName, center } = layer;
+        const [lng, lat] = center;
 
-        const { layerName, colorName } = layer;
-
-        const geoJsonLayer = L.geoJSON(layer.geoJsonData, {
-          // 點要素轉換函數
-          pointToLayer: (feature, latlng) => {
-            if (feature.geometry.type === 'Point') {
-              const icon = L.divIcon({
-                html: `<div
-                 class="rounded-circle"
-                 style="
-                    background-color: var(--my-color-${colorName});
-                    width: 8px;
-                    height: 8px;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-                  ">
-                  </div>`,
-                className: 'custom-point-icon',
-                iconSize: [8, 8],
-                iconAnchor: [4, 4],
-                popupAnchor: [0, -4],
-              });
-              return L.marker(latlng, { icon });
-            }
-            return L.marker(latlng);
-          },
-          // 樣式設定函數 - 只處理 LineString
-          style: () => {
-            return {
-              color: 'white', // 所有時候都是白色
-              weight: 8, // 線寬改為8px
-              opacity: 0.8,
-              lineCap: 'square', // 直角線端
-              lineJoin: 'miter', // 直角連接
-            };
-          },
-          // 每個要素的處理函數
-          onEachFeature: (feature, layer) => {
-            // 綁定彈窗
-            layer.bindPopup(`
-              <div class="p-2">
-                <div class="mb-2">${layerName}</div>
-                <div>${feature.properties.name || '未命名'}</div>
-                 </div>
-               `);
-
-            // 綁定點擊事件
-            layer.on('click', () => {
-              emit('feature-selected', feature);
-              highlightFeature(feature);
-            });
-          },
+        const icon = L.divIcon({
+          html: `<div
+           class="rounded-circle"
+           style="
+              background-color: var(--my-color-${colorName});
+              width: 12px;
+              height: 12px;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+              border: 2px solid white;
+            ">
+            </div>`,
+          className: 'custom-point-icon',
+          iconSize: [12, 12],
+          iconAnchor: [6, 6],
+          popupAnchor: [0, -6],
         });
 
-        return geoJsonLayer;
+        const marker = L.marker([lat, lng], { icon });
+
+        // 綁定彈窗
+        marker.bindPopup(`
+          <div class="p-2">
+            <div class="mb-2 fw-bold">${layerName}</div>
+            <div class="text-muted">座標: ${lat.toFixed(4)}, ${lng.toFixed(4)}</div>
+          </div>
+        `);
+
+        // 綁定點擊事件
+        marker.on('click', () => {
+          emit('feature-selected', { properties: { name: layerName } });
+          highlightFeature(marker);
+        });
+
+        return marker;
       };
 
       /**
@@ -264,8 +245,8 @@
       };
 
       /**
-       * 🔄 同步圖層
-       * 根據存儲中的圖層狀態同步地圖上的圖層
+       * 🔄 同步城市標記
+       * 為所有城市創建點標記
        */
       const syncLayers = () => {
         if (!mapInstance) return;
@@ -275,20 +256,12 @@
         allLayers.forEach((layer) => {
           const layerId = layer.layerId;
 
-          if (layer.geoJsonData) {
-            // 顯示圖層
-            if (!layerGroups[layerId]) {
-              const geoJsonLayer = createFeatureLayer(layer);
-              if (geoJsonLayer) {
-                layerGroups[layerId] = geoJsonLayer;
-                mapInstance.addLayer(geoJsonLayer);
-              }
-            }
-          } else {
-            // 隱藏圖層
-            if (layerGroups[layerId]) {
-              mapInstance.removeLayer(layerGroups[layerId]);
-              delete layerGroups[layerId];
+          // 為每個城市創建標記
+          if (!layerGroups[layerId]) {
+            const marker = createCityMarker(layer);
+            if (marker) {
+              layerGroups[layerId] = marker;
+              mapInstance.addLayer(marker);
             }
           }
         });
@@ -327,11 +300,6 @@
             console.log('[MapTab] 地圖創建成功，開始初始化');
             setBasemap();
             syncLayers();
-
-            // 延遲載入城市圖層
-            setTimeout(() => {
-              dataStore.loadCityLayers();
-            }, 1000);
           } else {
             console.log('[MapTab] 地圖創建失敗，100ms 後重試');
             setTimeout(tryCreateMap, 100);

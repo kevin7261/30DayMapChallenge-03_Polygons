@@ -54,15 +54,13 @@
       // 📊 獲取城市列表
       const cities = computed(() => dataStore.layers[0].groupLayers);
 
-      // 🌍 當前選中的城市（預設為西安）
-      const currentCity = ref("XI'AN");
+      // 🌍 當前選中的城市（預設為台灣）
+      const currentCity = ref('TAIWAN');
 
       // 🚀 初始化應用程式
       onMounted(() => {
-        // 載入城市數據並導航到西安
-        dataStore.loadCityLayers().then(() => {
-          navigateToCity('Xian');
-        });
+        // 直接導航到台灣
+        navigateToCity('Taiwan');
       });
 
       return {
@@ -91,7 +89,7 @@
       >
         <div class="bg-dark bg-opacity-75 rounded-3 p-3">
           <!-- 🌍 城市導航區域 -->
-          <div class="mb-3">
+          <div class="">
             <div class="d-flex flex-column gap-1">
               <button
                 v-for="city in cities"
