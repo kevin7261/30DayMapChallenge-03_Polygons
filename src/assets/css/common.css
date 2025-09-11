@@ -138,30 +138,6 @@ body {
    🗺️ 底圖背景顏色類別 (Basemap Background Color Classes)
    ============================================================================= */
 
-.my-map-bg-red-theme {
-  background-color: #e17094 !important; /* 粉紅色 */
-}
-
-.my-map-bg-blue-theme {
-  background-color: #004a9f !important; /* 深藍色 */
-}
-
-.my-map-bg-green-theme {
-  background-color: #51b5ae !important; /* 青綠色 */
-}
-
-.my-map-bg-purple-theme {
-  background-color: #c4c8e5 !important; /* 淡紫色 */
-}
-
-.my-map-bg-lightblue-theme {
-  background-color: #00aee1 !important; /* 淺藍色 */
-}
-
-.my-map-bg-yellow-theme {
-  background-color: #e7d378 !important; /* 金黃色 */
-}
-
 .my-map-bg-transparent {
   background-color: transparent !important;
 }
@@ -197,8 +173,18 @@ body {
 
 /* 城市按鈕基礎樣式 */
 .my-city-btn {
+  background-color: transparent !important;
   color: var(--my-color-white) !important;
   letter-spacing: var(--my-letter-spacing) !important;
+  font-weight: 500 !important;
+  border: none !important;
+  text-decoration: none !important;
+}
+
+/* 覆蓋 Bootstrap 按鈕樣式 */
+.my-city-btn.btn {
+  color: var(--my-color-white) !important;
+  background-color: transparent !important;
 }
 
 /* 城市按鈕懸停效果 */
@@ -209,4 +195,33 @@ body {
 /* 城市按鈕活躍狀態 */
 .my-city-btn.active {
   background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* =============================================================================
+   🗺️ 底圖切換按鈕樣式 (Basemap Toggle Button Styles)
+   ============================================================================= */
+
+/* 底圖切換按鈕基礎樣式 */
+.my-basemap-toggle {
+  background-color: transparent !important;
+  border: 1px solid var(--my-color-white) !important;
+  color: var(--my-color-white) !important;
+}
+
+/* 底圖切換按鈕 - 地圖模式（活躍狀態） */
+.my-basemap-toggle-active {
+  background-color: var(--my-color-white) !important;
+  color: var(--my-color-black) !important;
+}
+
+/* 底圖切換按鈕 - 顏色模式（非活躍狀態） */
+.my-basemap-toggle-inactive {
+  background-color: transparent !important;
+  color: var(--my-color-white) !important;
+}
+
+/* 底圖切換按鈕懸停效果 */
+.my-basemap-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: var(--my-color-white) !important;
 }

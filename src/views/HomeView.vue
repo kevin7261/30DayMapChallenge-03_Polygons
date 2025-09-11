@@ -146,9 +146,9 @@
             <div class="d-flex justify-content-center gap-2">
               <!-- 地圖/顏色切換按鈕 -->
               <button
-                class="btn align-items-center justify-content-center rounded-circle p-0"
+                class="btn align-items-center justify-content-center rounded-circle p-0 my-basemap-toggle"
                 :class="
-                  defineStore.selectedBasemap === 'carto_dark' ? 'btn-light' : 'btn-outline-light'
+                  defineStore.selectedBasemap === 'carto_dark' ? 'my-basemap-toggle-active' : 'my-basemap-toggle-inactive'
                 "
                 style="width: 40px; height: 40px"
                 @click="toggleBasemap"

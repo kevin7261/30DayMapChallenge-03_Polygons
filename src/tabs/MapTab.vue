@@ -507,13 +507,13 @@
           <div class="my-font-sm-white">the axis of</div>
           <div class="my-font-lg-white">{{ currentCity }}</div>
         </div>
-        <div class="position-absolute bottom-0 start-50 translate-middle-x">
+        <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
           <div class="d-flex align-items-center justify-content-center">
             <span class="my-font-lg-white">02</span>
             <span class="my-bgcolor-white mx-3" style="width: 2px; height: 28px"></span>
             <span class="my-font-lg-white">Lines</span>
           </div>
-          <div class="my-font-sm-white pb-3">#30DayMapChallenge</div>
+          <div class="my-font-sm-white text-center pb-3">#30DayMapChallenge</div>
         </div>
       </div>
     </div>
