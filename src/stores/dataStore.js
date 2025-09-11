@@ -8,9 +8,6 @@
 // 核心依賴
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import L from 'leaflet';
-// 移除 GeoJSON 載入功能
-// 移除未使用的 useDefineStore import
 
 /**
  * 🏪 數據存儲商店定義 (Data Store Definition)
@@ -23,6 +20,8 @@ import L from 'leaflet';
 export const useDataStore = defineStore(
   'data', // 商店唯一標識符
   () => {
+    // 🎯 固定縮放級別常數
+    const CITY_ZOOM_LEVEL = 16;
     /**
      * 🗺️ 圖層配置數據 (Layer Configuration Data)
      *
@@ -54,7 +53,6 @@ export const useDataStore = defineStore(
             layerName: 'TAIWAN', // 圖層顯示名稱
             colorName: 'city-taiwan', // 台灣主題色彩
             center: [121.51972, 25.04583], // 台灣中心座標 [經度, 緯度]
-            zoom: 14, // 最佳縮放級別
           },
           {
             // 🏛️ 中國圖層配置
@@ -62,7 +60,6 @@ export const useDataStore = defineStore(
             layerName: 'CHINA', // 圖層顯示名稱
             colorName: 'city-china', // 中國主題色彩
             center: [116.39288, 39.89877], // 中國中心座標 [經度, 緯度]
-            zoom: 14, // 最佳縮放級別
           },
           {
             // 🏯 日本圖層配置
@@ -70,7 +67,6 @@ export const useDataStore = defineStore(
             layerName: 'JAPAN', // 圖層顯示名稱
             colorName: 'city-japan', // 日本主題色彩
             center: [139.77449, 35.68404], // 日本中心座標 [經度, 緯度]
-            zoom: 14, // 最佳縮放級別
           },
           {
             // 🏛️ 美國圖層配置
@@ -78,7 +74,6 @@ export const useDataStore = defineStore(
             layerName: 'USA', // 圖層顯示名稱
             colorName: 'city-usa', // 美國主題色彩
             center: [-77.03655, 38.89511], // 美國中心座標 [經度, 緯度]
-            zoom: 14, // 最佳縮放級別
           },
           {
             // 🏛️ 法國圖層配置
@@ -86,7 +81,6 @@ export const useDataStore = defineStore(
             layerName: 'FRANCE', // 圖層顯示名稱
             colorName: 'city-france', // 法國主題色彩
             center: [2.34889, 48.85333], // 法國中心座標 [經度, 緯度]
-            zoom: 14, // 最佳縮放級別
           },
           {
             // 🏛️ 德國圖層配置
@@ -94,7 +88,6 @@ export const useDataStore = defineStore(
             layerName: 'GERMANY', // 圖層顯示名稱
             colorName: 'city-germany', // 德國主題色彩
             center: [13.39889, 52.51083], // 德國中心座標 [經度, 緯度]
-            zoom: 14, // 最佳縮放級別
           },
         ],
       },
@@ -218,7 +211,7 @@ export const useDataStore = defineStore(
       // 使用城市中心座標
       const [lng, lat] = cityLayer.center;
       const targetCenter = [lat, lng]; // Leaflet 需要 [lat, lng] 格式
-      const optimalZoom = cityLayer.zoom || 14;
+      const optimalZoom = CITY_ZOOM_LEVEL; // 使用固定的縮放級別
 
       // 執行地圖導航
       try {
