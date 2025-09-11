@@ -23,7 +23,7 @@ export const useDefineStore = defineStore('define', {
     // 🗺️ 地圖視圖狀態
     mapView: {
       center: [25.04583, 121.51972], // 地圖中心點 [緯度, 經度] - 台灣
-      zoom: 10, // 縮放等級（調整到10級，顯示詳細的內容）
+      zoom: 14, // 縮放等級（調整到14級，顯示詳細的內容）
     },
     // 🗺️ 底圖配置列表（僅保留標準地圖）
     basemaps: [

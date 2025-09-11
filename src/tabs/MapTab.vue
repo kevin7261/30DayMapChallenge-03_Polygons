@@ -410,7 +410,7 @@
         "
       >
         <div class="position-absolute top-0 start-50 translate-middle-x text-center pt-3">
-          <div class="my-font-sm-white">the axis of</div>
+          <div class="my-font-sm-white">the kilometer zero of</div>
           <div class="my-font-lg-white">{{ currentCity }}</div>
         </div>
         <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
