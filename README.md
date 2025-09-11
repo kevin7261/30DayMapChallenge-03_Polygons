@@ -1,4 +1,4 @@
-# 🌍 30DayMapChallenge - 世界城市地圖
+# 🌍 30DayMapChallenge-01_Point - 世界城市地圖
 
 一個基於 Vue
 3 和 Leaflet 的互動式世界城市地圖應用程式，展示六大城市的 GeoJSON 數據。
@@ -56,7 +56,7 @@
 ## 📁 專案結構
 
 ```
-30DayMapChallenge-02_Lines/
+30DayMapChallenge-01_Point/
 ├── public/
 │   ├── data/
 │   │   └── geojson/           # GeoJSON 數據文件
@@ -99,7 +99,7 @@
 
    ```bash
    git clone <repository-url>
-   cd 30DayMapChallenge-02_Lines
+   cd 30DayMapChallenge-01_Point
    ```
 
 2. **安裝依賴**
@@ -299,7 +299,7 @@ VUE_APP_API_URL=https://your-api-domain.com
 - 專案維護者: [Your Name]
 - 電子郵件: [your.email@example.com]
 - 專案連結:
-  [https://github.com/your-username/30DayMapChallenge-02_Lines](https://github.com/your-username/30DayMapChallenge-02_Lines)
+  [https://github.com/kevin7261/30DayMapChallenge-01_Point](https://github.com/kevin7261/30DayMapChallenge-01_Point)
 
 ## 🙏 致謝
 
@@ -310,4 +310,4 @@ VUE_APP_API_URL=https://your-api-domain.com
 
 ---
 
-**30DayMapChallenge** - 探索世界城市的線條之美 🌍✨
+**30DayMapChallenge-01_Point** - 探索世界城市的點之美 🌍✨

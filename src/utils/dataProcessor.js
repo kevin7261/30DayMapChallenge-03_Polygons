@@ -4,7 +4,7 @@ export async function loadCityGeoJson(layer) {
     const layerId = layer.layerId;
     const colorName = layer.colorName;
 
-    const filePath = `/30DayMapChallenge-02_Lines/data/geojson/${layer.fileName}`;
+    const filePath = `/30DayMapChallenge-01_Point/data/geojson/${layer.fileName}`;
 
     const response = await fetch(filePath);
 
