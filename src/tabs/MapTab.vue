@@ -164,14 +164,8 @@
 
         const config = defineStore.basemaps.find((b) => b.value === defineStore.selectedBasemap);
 
-        // 檢查是否為顏色主題地圖
-        const isColorTheme = defineStore.selectedBasemap.endsWith('_theme');
-
-        if (isColorTheme) {
-          // 顏色主題地圖：不添加底圖圖層，只設定背景色
-          // 不添加任何底圖圖層
-        } else if (config && config.url) {
-          // 一般底圖：添加底圖圖層
+        // 添加標準底圖圖層
+        if (config && config.url) {
           currentTileLayer = L.tileLayer(config.url, {
             attribution: '© OpenStreetMap contributors',
             maxZoom: 18,
@@ -179,63 +173,7 @@
           mapInstance.addLayer(currentTileLayer);
         }
 
-        // 設定容器背景色（同時套用在地圖容器與其父容器）
-        const mapContainerElement = mapContainer.value;
-        const mapRootElement = mapContainerElement ? mapContainerElement.parentElement : null; // #map-container
-        if (mapContainerElement) {
-          console.log('🎨 設定底圖背景色:', defineStore.selectedBasemap);
-
-          const allBgClasses = [
-            'my-map-bg-blank',
-            'my-map-bg-black',
-            'my-map-bg-red-theme',
-            'my-map-bg-blue-theme',
-            'my-map-bg-green-theme',
-            'my-map-bg-purple-theme',
-            'my-map-bg-lightblue-theme',
-            'my-map-bg-yellow-theme',
-            'my-map-bg-city-beijing-theme',
-            'my-map-bg-city-xian-theme',
-            'my-map-bg-city-paris-theme',
-            'my-map-bg-city-berlin-theme',
-            'my-map-bg-city-rome-theme',
-            'my-map-bg-city-washington-theme',
-            'my-map-bg-transparent',
-          ];
-
-          // 移除所有背景顏色類別（內外容器都處理）
-          [mapContainerElement, mapRootElement].forEach((el) => {
-            if (!el) return;
-            el.classList.remove(...allBgClasses);
-          });
-
-          // 根據底圖類型添加對應的 CSS 類別
-          const basemapClassMap = {
-            blank: 'my-map-bg-blank',
-            black: 'my-map-bg-black',
-            red_theme: 'my-map-bg-red-theme',
-            blue_theme: 'my-map-bg-blue-theme',
-            green_theme: 'my-map-bg-green-theme',
-            purple_theme: 'my-map-bg-purple-theme',
-            orange_theme: 'my-map-bg-lightblue-theme',
-            yellow_theme: 'my-map-bg-yellow-theme',
-            // 城市專用顏色主題
-            'city-beijing_theme': 'my-map-bg-city-beijing-theme',
-            'city-xian_theme': 'my-map-bg-city-xian-theme',
-            'city-paris_theme': 'my-map-bg-city-paris-theme',
-            'city-berlin_theme': 'my-map-bg-city-berlin-theme',
-            'city-rome_theme': 'my-map-bg-city-rome-theme',
-            'city-washington_theme': 'my-map-bg-city-washington-theme',
-          };
-
-          const bgClass = basemapClassMap[defineStore.selectedBasemap] || 'my-map-bg-transparent';
-
-          // 內外容器都加入背景類別，確保顏色可見
-          [mapContainerElement, mapRootElement].forEach((el) => {
-            if (!el) return;
-            el.classList.add(bgClass);
-          });
-        }
+        // 使用預設的透明背景，不設定任何特殊背景色
       };
 
       /**
@@ -509,9 +447,9 @@
         </div>
         <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
           <div class="d-flex align-items-center justify-content-center">
-            <span class="my-font-lg-white">02</span>
+            <span class="my-font-lg-white">01</span>
             <span class="my-bgcolor-white mx-3" style="width: 2px; height: 28px"></span>
-            <span class="my-font-lg-white">Lines</span>
+            <span class="my-font-lg-white">Point</span>
           </div>
           <div class="my-font-sm-white text-center pb-3">#30DayMapChallenge</div>
         </div>

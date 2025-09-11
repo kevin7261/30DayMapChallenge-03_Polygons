@@ -10,7 +10,7 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import L from 'leaflet';
 import { loadCityGeoJson } from '../utils/dataProcessor.js';
-import { useDefineStore } from './defineStore.js';
+// 移除未使用的 useDefineStore import
 
 /**
  * 🏪 數據存儲商店定義 (Data Store Definition)
@@ -318,29 +318,7 @@ export const useDataStore = defineStore(
         return;
       }
 
-      // 檢查並更新底圖主題（如果當前是顏色主題模式）
-      const defineStoreInstance = useDefineStore();
-      const currentBasemap = defineStoreInstance.selectedBasemap;
-      const isColorTheme = currentBasemap?.endsWith('_theme');
-
-      if (isColorTheme) {
-        // 根據城市顏色切換到對應的顏色主題
-        const colorThemeMap = {
-          'city-beijing': 'city-beijing_theme',
-          'city-xian': 'city-xian_theme',
-          'city-paris': 'city-paris_theme',
-          'city-berlin': 'city-berlin_theme',
-          'city-rome': 'city-rome_theme',
-          'city-washington': 'city-washington_theme',
-        };
-
-        const themeBasemap = colorThemeMap[cityLayer.colorName];
-        if (themeBasemap && themeBasemap !== currentBasemap) {
-          console.log('🎨 切換城市顏色主題:', cityLayer.layerName, '→', themeBasemap);
-          // 直接更新全域設定的底圖，觸發監聽器更新背景
-          defineStoreInstance.selectedBasemap = themeBasemap;
-        }
-      }
+      // 移除顏色主題切換邏輯，使用預設的標準地圖
 
       // 執行地圖導航
       try {

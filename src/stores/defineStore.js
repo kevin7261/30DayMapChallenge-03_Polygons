@@ -17,50 +17,20 @@ import { defineStore } from 'pinia';
 
 export const useDefineStore = defineStore('define', {
   state: () => ({
-    // 🗺️ 當前選中的底圖類型
-    selectedBasemap: 'city-xian_theme',
+    // 🗺️ 當前選中的底圖類型（固定為標準地圖）
+    selectedBasemap: 'carto_dark',
 
     // 🗺️ 地圖視圖狀態
     mapView: {
       center: [34.3416, 108.9402], // 地圖中心點 [緯度, 經度] - 西安市中心
       zoom: 11, // 縮放等級（調整到11級，顯示詳細的內容）
     },
-    // 🗺️ 底圖配置列表
+    // 🗺️ 底圖配置列表（僅保留標準地圖）
     basemaps: [
       {
         label: 'Carto Dark',
         value: 'carto_dark',
         url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-      },
-      {
-        label: '紅色主題地圖',
-        value: 'red_theme',
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      },
-      {
-        label: '藍色主題地圖',
-        value: 'blue_theme',
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      },
-      {
-        label: '綠色主題地圖',
-        value: 'green_theme',
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      },
-      {
-        label: '紫色主題地圖',
-        value: 'purple_theme',
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      },
-      {
-        label: '橙色主題地圖',
-        value: 'orange_theme',
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-      },
-      {
-        label: '黃色主題地圖',
-        value: 'yellow_theme',
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
       },
     ],
   }),
