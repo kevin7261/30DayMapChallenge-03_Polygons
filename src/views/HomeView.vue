@@ -94,7 +94,7 @@
               <button
                 v-for="country in countries"
                 :key="country.layerId"
-                class="btn border-0 my-city-btn my-font-sm-white px-4 py-3"
+                class="btn border-0 my-country-btn my-font-sm-white px-4 py-3"
                 :class="[currentCountry === country.layerName ? 'active' : '']"
                 @click="navigateToCountry(country.layerId)"
               >

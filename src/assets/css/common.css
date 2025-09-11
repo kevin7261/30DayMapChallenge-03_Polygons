@@ -168,11 +168,11 @@ body {
 }
 
 /* =============================================================================
-   🏙️ 城市按鈕顏色樣式 (City Button Color Styles)
+   🏙️ 國家按鈕顏色樣式 (Country Button Color Styles)
    ============================================================================= */
 
-/* 城市按鈕基礎樣式 */
-.my-city-btn {
+/* 國家按鈕基礎樣式 */
+.my-country-btn {
   background-color: transparent !important;
   color: var(--my-color-white) !important;
   letter-spacing: var(--my-letter-spacing) !important;
@@ -182,18 +182,18 @@ body {
 }
 
 /* 覆蓋 Bootstrap 按鈕樣式 */
-.my-city-btn.btn {
+.my-country-btn.btn {
   color: var(--my-color-white) !important;
   background-color: transparent !important;
 }
 
-/* 城市按鈕懸停效果 */
-.my-city-btn:hover {
+/* 國家按鈕懸停效果 */
+.my-country-btn:hover {
   background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
-/* 城市按鈕活躍狀態 */
-.my-city-btn.active {
+/* 國家按鈕活躍狀態 */
+.my-country-btn.active {
   background-color: rgba(255, 255, 255, 0.2) !important;
 }
 
