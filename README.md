@@ -1,7 +1,6 @@
-# 🌍 30DayMapChallenge-01_Point - 世界城市地圖
+# 🌍 30DayMapChallenge-01_Point - 世界國家地圖
 
-一個基於 Vue
-3 和 Leaflet 的互動式世界城市地圖應用程式，展示六大城市的 GeoJSON 數據。
+一個基於 Vue 3 和 Leaflet 的互動式世界國家地圖應用程式，展示六大國家的座標點。
 
 ## 📋 目錄
 
@@ -18,9 +17,9 @@
 
 ### 🗺️ 地圖功能
 
-- **世界城市展示**: 顯示北京、柏林、巴黎、羅馬、華盛頓、西安六大城市
-- **城市導航**: 點擊按鈕快速導航到指定城市
-- **多種底圖**: 支援 14 種不同的底圖樣式
+- **世界國家展示**: 顯示台灣、中國、日本、美國、法國、德國六大國家
+- **國家導航**: 點擊按鈕快速導航到指定國家
+- **標準底圖**: 使用 Carto Dark 底圖樣式
 - **響應式設計**: 適配各種設備尺寸
 
 ### 🎨 用戶界面
@@ -28,6 +27,7 @@
 - **簡潔設計**: 基於 Bootstrap 5 的現代化界面
 - **直觀操作**: 左上角控制面板，操作簡單
 - **視覺效果**: 平滑的地圖動畫和過渡效果
+- **HTML 中心點**: 在截圖框框中央顯示固定的白色圓點
 
 ### 🚀 技術特色
 
@@ -44,13 +44,13 @@
 - **Leaflet 1.9+**: 地圖庫
 - **Pinia**: 狀態管理
 - **Bootstrap 5**: UI 框架
-- **Vite**: 構建工具
+- **Vue CLI**: 構建工具
 
 ### 核心組件
 
 - **HomeView**: 主頁面組件，整合地圖和控制面板
 - **MapTab**: 地圖顯示組件，處理地圖渲染和互動
-- **dataStore**: 數據管理，處理圖層和城市數據
+- **dataStore**: 數據管理，處理國家數據和導航
 - **defineStore**: 配置管理，處理底圖和地圖狀態
 
 ## 📁 專案結構
@@ -58,25 +58,17 @@
 ```
 30DayMapChallenge-01_Point/
 ├── public/
-│   ├── data/
-│   │   └── geojson/           # GeoJSON 數據文件
-│   │       ├── beijing.geojson
-│   │       ├── berlin.geojson
-│   │       ├── paris.geojson
-│   │       ├── rome.geojson
-│   │       ├── washingtondc.geojson
-│   │       └── xian.geojson
 │   └── index.html
 ├── src/
 │   ├── assets/
 │   │   └── css/               # 樣式文件
+│   │       ├── common.css     # 通用樣式
+│   │       └── variables.css  # CSS 變數
 │   ├── stores/
-│   │   ├── dataStore.js       # 數據存儲
+│   │   ├── dataStore.js       # 國家數據存儲
 │   │   └── defineStore.js     # 配置存儲
 │   ├── tabs/
 │   │   └── MapTab.vue         # 地圖組件
-│   ├── utils/
-│   │   └── dataProcessor.js   # 數據處理工具
 │   ├── views/
 │   │   └── HomeView.vue       # 主頁面
 │   ├── main.js                # 應用入口
@@ -98,7 +90,7 @@
 1. **克隆專案**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/kevin7261/30DayMapChallenge-01_Point.git
    cd 30DayMapChallenge-01_Point
    ```
 
@@ -127,43 +119,34 @@
 
 ### 開發服務器
 
-- 本地地址: `http://localhost:8080`
-- 網路地址: `http://[your-ip]:8080`
+- 本地地址: `http://localhost:8081/30DayMapChallenge-01_Point/`
+- 網路地址: `http://[your-ip]:8081/30DayMapChallenge-01_Point/`
 
 ## 📖 使用說明
 
 ### 基本操作
 
-1. **城市導航**
+1. **國家導航**
 
-   - 點擊左上角「城市導航」區域的按鈕
-   - 地圖會平滑移動到對應城市
-   - 支援的城市：北京、柏林、巴黎、羅馬、華盛頓、西安
+   - 點擊左上角「國家導航」區域的按鈕
+   - 地圖會平滑移動到對應國家
+   - 支援的國家：台灣、中國、日本、美國、法國、德國
 
-2. **底圖切換**
-
-   - 使用「底圖選擇」下拉選單
-   - 可選擇 14 種不同的底圖樣式
-   - 包括街道圖、衛星圖、地形圖等
-
-3. **地圖互動**
+2. **地圖互動**
    - 滑鼠滾輪：縮放地圖
    - 拖拽：移動地圖視圖
-   - 點擊城市邊界：查看城市信息
+   - 中心點：在截圖框框中央顯示固定的白色圓點
 
-### 支援的底圖
+### 支援的國家
 
-| 底圖名稱         | 類型   | 描述               |
-| ---------------- | ------ | ------------------ |
-| Carto Light      | 街道圖 | 預設底圖，簡潔明亮 |
-| OpenStreetMap    | 街道圖 | 開源地圖數據       |
-| Google Maps 街道 | 街道圖 | Google 街道視圖    |
-| Google Maps 衛星 | 衛星圖 | 衛星影像           |
-| Esri Street      | 街道圖 | Esri 街道地圖      |
-| Esri Topo        | 地形圖 | 地形圖視圖         |
-| 地形圖           | 地形圖 | OpenTopoMap        |
-| 白色地圖         | 空白   | 純白色背景         |
-| 黑色底圖         | 空白   | 純黑色背景         |
+| 國家名稱 | 座標 | 縮放級別 |
+|---------|------|----------|
+| 台灣     | 25.04583, 121.51972 | 16 |
+| 中國     | 39.89877, 116.39288 | 16 |
+| 日本     | 35.68404, 139.77449 | 16 |
+| 美國     | 38.89511, -77.03655 | 16 |
+| 法國     | 48.85333, 2.34889   | 16 |
+| 德國     | 52.51083, 13.39889  | 16 |
 
 ## 📚 API 文檔
 
@@ -171,15 +154,14 @@
 
 #### 方法
 
-- `getAllLayers()`: 獲取所有圖層
-- `findLayerById(layerId)`: 根據 ID 查找圖層
-- `navigateToCity(cityId)`: 導航到指定城市
+- `getAllLayers()`: 獲取所有國家圖層
+- `findLayerById(layerId)`: 根據 ID 查找國家圖層
+- `navigateToCountry(countryId)`: 導航到指定國家
 - `setMapInstance(map)`: 設定地圖實例
-- `loadCityLayers()`: 載入城市圖層數據
 
 #### 狀態
 
-- `layers`: 圖層配置數組
+- `layers`: 國家圖層配置數組
 - `mapInstance`: Leaflet 地圖實例
 - `selectedFeature`: 當前選中的要素
 
@@ -198,48 +180,45 @@
 
 ## 🛠️ 開發指南
 
-### 添加新城市
+### 添加新國家
 
-1. **準備 GeoJSON 數據**
+1. **準備國家座標**
 
-   - 將城市邊界數據轉換為 GeoJSON 格式
-   - 確保坐標系統為 WGS84 (EPSG:4326)
+   - 確定國家的中心座標 [經度, 緯度]
+   - 選擇合適的縮放級別
 
-2. **添加數據文件**
+2. **更新國家配置**
 
-   ```bash
-   # 將 GeoJSON 文件放入
-   public/data/geojson/your-city.geojson
-   ```
-
-3. **更新圖層配置**
    ```javascript
    // 在 src/stores/dataStore.js 中添加
    {
-     layerId: 'your-city',
-     layerName: 'Your City',
-     visible: true,
-     type: 'line',
-     colorName: 'blue',
-     fileName: 'your-city.geojson',
-     center: [lng, lat], // 城市中心坐標
-     zoom: 10,
+     layerId: 'NewCountry',
+     layerName: 'NEW COUNTRY',
+     center: [lng, lat], // 國家中心座標 [經度, 緯度]
    }
    ```
 
+3. **更新按鈕樣式**
+
+   - 按鈕會自動使用 `my-country-btn` 樣式
+   - 如需自定義樣式，請修改 `common.css`
+
 ### 自定義樣式
 
-1. **修改城市顏色**
+1. **修改國家按鈕樣式**
 
-   ```javascript
-   // 在 dataStore.js 中修改 colorName
-   colorName: 'your-color', // 對應 CSS 變數
+   ```css
+   /* 在 src/assets/css/common.css 中 */
+   .my-country-btn {
+     /* 自定義樣式 */
+   }
    ```
 
-2. **添加 CSS 變數**
-   ```css
-   /* 在 src/assets/css/variables.css 中 */
-   --my-color-your-color: #your-hex-color;
+2. **修改中心點樣式**
+
+   ```html
+   <!-- 在 src/tabs/MapTab.vue 中 -->
+   <div class="rounded-circle bg-white" style="width: 12px; height: 12px"></div>
    ```
 
 ### 開發工具
@@ -250,7 +229,7 @@
 
 ## 🚀 部署說明
 
-### 靜態部署
+### GitHub Pages 部署
 
 1. **構建專案**
 
@@ -258,9 +237,17 @@
    npm run build
    ```
 
-2. **部署 dist 目錄**
-   - 將 `dist` 目錄內容上傳到 Web 服務器
-   - 確保服務器支援 SPA 路由
+2. **部署到 GitHub Pages**
+
+   ```bash
+   npm run deploy
+   ```
+
+3. **訪問網站**
+
+   ```
+   https://kevin7261.github.io/30DayMapChallenge-01_Point/
+   ```
 
 ### 環境變數
 
@@ -279,7 +266,7 @@ VUE_APP_API_URL=https://your-api-domain.com
 ### 性能優化
 
 1. **代碼分割**: 使用動態導入減少初始包大小
-2. **圖片優化**: 壓縮 GeoJSON 文件大小
+2. **圖片優化**: 移除不必要的 GeoJSON 文件
 3. **緩存策略**: 配置適當的 HTTP 緩存頭
 
 ## 🤝 貢獻指南
@@ -298,8 +285,7 @@ VUE_APP_API_URL=https://your-api-domain.com
 
 - 專案維護者: [Your Name]
 - 電子郵件: [your.email@example.com]
-- 專案連結:
-  [https://github.com/kevin7261/30DayMapChallenge-01_Point](https://github.com/kevin7261/30DayMapChallenge-01_Point)
+- 專案連結: [https://github.com/kevin7261/30DayMapChallenge-01_Point](https://github.com/kevin7261/30DayMapChallenge-01_Point)
 
 ## 🙏 致謝
 
@@ -310,4 +296,4 @@ VUE_APP_API_URL=https://your-api-domain.com
 
 ---
 
-**30DayMapChallenge-01_Point** - 探索世界城市的點之美 🌍✨
+**30DayMapChallenge-01_Point** - 探索世界國家的點之美 🌍✨
