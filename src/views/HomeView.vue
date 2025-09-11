@@ -148,7 +148,9 @@
               <button
                 class="btn align-items-center justify-content-center rounded-circle p-0 my-basemap-toggle"
                 :class="
-                  defineStore.selectedBasemap === 'carto_dark' ? 'my-basemap-toggle-active' : 'my-basemap-toggle-inactive'
+                  defineStore.selectedBasemap === 'carto_dark'
+                    ? 'my-basemap-toggle-active'
+                    : 'my-basemap-toggle-inactive'
                 "
                 style="width: 40px; height: 40px"
                 @click="toggleBasemap"
