@@ -67,8 +67,8 @@ export const useDataStore = defineStore(
           },
           {
             // 🏛️ 美國國家配置
-            layerId: 'USA', // 圖層唯一標識符
-            layerName: 'USA', // 圖層顯示名稱
+            layerId: 'UnitedStates', // 圖層唯一標識符
+            layerName: 'UNITED STATES', // 圖層顯示名稱
             center: [-77.036548, 38.895108], // 美國中心座標 [經度, 緯度]
           },
           {
