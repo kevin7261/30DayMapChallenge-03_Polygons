@@ -328,41 +328,12 @@
     <!-- 🗺️ Leaflet 地圖容器 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
 
-    <!-- 📱 IG 截圖框框 -->
+    <!-- 中心點顯示 -->
     <div
       class="position-absolute top-50 start-50 translate-middle"
       style="z-index: 1000; pointer-events: none"
     >
-      <!-- 貼文尺寸框 (4:5) -->
-      <div
-        class="position-absolute top-50 start-50 translate-middle bg-transparent d-flex flex-column align-items-center justify-content-center"
-        style="
-          width: calc(80vw - 32px);
-          height: calc(100vw - 32px);
-          max-width: calc(80vh - 32px);
-          max-height: calc(100vh - 32px);
-          z-index: 1001;
-          border: 1px solid var(--my-color-gray-200);
-        "
-      >
-        <div class="position-absolute top-0 start-50 translate-middle-x text-center pt-3">
-          <div class="my-font-sm-white">the kilometer zero of</div>
-          <div class="my-font-lg-white">{{ currentCountry }}</div>
-        </div>
-
-        <!-- 中心點顯示 -->
-        <div class="position-absolute top-50 start-50 translate-middle">
-          <div class="rounded-circle bg-white" style="width: 12px; height: 12px"></div>
-        </div>
-        <div class="position-absolute bottom-0 start-50 translate-middle-x w-100">
-          <div class="d-flex align-items-center justify-content-center">
-            <span class="my-font-lg-white">01</span>
-            <span class="my-bgcolor-white mx-3" style="width: 2px; height: 28px"></span>
-            <span class="my-font-lg-white">Point</span>
-          </div>
-          <div class="my-font-sm-white text-center pb-3">#30DayMapChallenge</div>
-        </div>
-      </div>
+      <div class="rounded-circle bg-white" style="width: 4px; height: 4px"></div>
     </div>
   </div>
 </template>

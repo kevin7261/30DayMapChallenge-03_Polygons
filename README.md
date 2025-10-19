@@ -1,4 +1,4 @@
-# 🌍 30DayMapChallenge-01_Point - 世界國家地圖
+# 🌍 30DayMapChallenge-03_Polygons - 世界國家地圖
 
 一個基於 Vue 3 和 Leaflet 的互動式世界國家地圖應用程式，展示六大國家的座標點。
 
@@ -56,7 +56,7 @@
 ## 📁 專案結構
 
 ```
-30DayMapChallenge-01_Point/
+30DayMapChallenge-03_Polygons/
 ├── public/
 │   └── index.html
 ├── src/
@@ -90,8 +90,8 @@
 1. **克隆專案**
 
    ```bash
-   git clone https://github.com/kevin7261/30DayMapChallenge-01_Point.git
-   cd 30DayMapChallenge-01_Point
+   git clone https://github.com/kevin7261/30DayMapChallenge-03_Polygons.git
+   cd 30DayMapChallenge-03_Polygons
    ```
 
 2. **安裝依賴**
@@ -119,8 +119,8 @@
 
 ### 開發服務器
 
-- 本地地址: `http://localhost:8081/30DayMapChallenge-01_Point/`
-- 網路地址: `http://[your-ip]:8081/30DayMapChallenge-01_Point/`
+- 本地地址: `http://localhost:8081/30DayMapChallenge-03_Polygons/`
+- 網路地址: `http://[your-ip]:8081/30DayMapChallenge-03_Polygons/`
 
 ## 📖 使用說明
 
@@ -139,14 +139,14 @@
 
 ### 支援的國家
 
-| 國家名稱 | 座標 | 縮放級別 |
-|---------|------|----------|
-| 台灣     | 25.04583, 121.51972 | 16 |
-| 中國     | 39.89877, 116.39288 | 16 |
-| 日本     | 35.68404, 139.77449 | 16 |
-| 美國     | 38.89511, -77.03655 | 16 |
-| 法國     | 48.85333, 2.34889   | 16 |
-| 德國     | 52.51083, 13.39889  | 16 |
+| 國家名稱 | 座標                | 縮放級別 |
+| -------- | ------------------- | -------- |
+| 台灣     | 25.04583, 121.51972 | 16       |
+| 中國     | 39.89877, 116.39288 | 16       |
+| 日本     | 35.68404, 139.77449 | 16       |
+| 美國     | 38.89511, -77.03655 | 16       |
+| 法國     | 48.85333, 2.34889   | 16       |
+| 德國     | 52.51083, 13.39889  | 16       |
 
 ## 📚 API 文檔
 
@@ -246,7 +246,7 @@
 3. **訪問網站**
 
    ```
-   https://kevin7261.github.io/30DayMapChallenge-01_Point/
+   https://kevin7261.github.io/30DayMapChallenge-03_Polygons/
    ```
 
 ### 環境變數
@@ -285,7 +285,8 @@ VUE_APP_API_URL=https://your-api-domain.com
 
 - 專案維護者: [Your Name]
 - 電子郵件: [your.email@example.com]
-- 專案連結: [https://github.com/kevin7261/30DayMapChallenge-01_Point](https://github.com/kevin7261/30DayMapChallenge-01_Point)
+- 專案連結:
+  [https://github.com/kevin7261/30DayMapChallenge-03_Polygons](https://github.com/kevin7261/30DayMapChallenge-03_Polygons)
 
 ## 🙏 致謝
 
@@ -296,4 +297,4 @@ VUE_APP_API_URL=https://your-api-domain.com
 
 ---
 
-**30DayMapChallenge-01_Point** - 探索世界國家的點之美 🌍✨
+**30DayMapChallenge-03_Polygons** - 探索世界國家的點之美 🌍✨

@@ -17,20 +17,20 @@ import { defineStore } from 'pinia';
 
 export const useDefineStore = defineStore('define', {
   state: () => ({
-    // 🗺️ 當前選中的底圖類型（固定為標準地圖）
-    selectedBasemap: 'carto_dark',
+    // 🗺️ 當前選中的底圖類型（Google 衛星圖）
+    selectedBasemap: 'google_satellite',
 
     // 🗺️ 地圖視圖狀態
     mapView: {
-      center: [25.04583, 121.51972], // 地圖中心點 [緯度, 經度] - 台灣
-      zoom: 16, // 縮放等級（調整到16級，顯示詳細的內容）
+      center: [41.4036, 2.1744], // 地圖中心點 [緯度, 經度] - 巴塞隆納聖家堂
+      zoom: 18, // 縮放等級（調整到18級，顯示聖家堂建築細節）
     },
-    // 🗺️ 底圖配置列表（僅保留標準地圖）
+    // 🗺️ 底圖配置列表（Google 衛星圖）
     basemaps: [
       {
-        label: 'Carto Dark',
-        value: 'carto_dark',
-        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        label: 'Google Satellite',
+        value: 'google_satellite',
+        url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
       },
     ],
   }),
