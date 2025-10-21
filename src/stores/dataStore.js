@@ -59,7 +59,7 @@ export const useDataStore = defineStore(
             layerId: 'New York', // 圖層唯一標識符
             layerName: 'NEWYORK', // 圖層顯示名稱
             center: [-73.991, 40.760694], // 紐約座標 [經度, 緯度] (40°45'38.5"N 73°59'27.6"W)
-            zoom: 16, // 紐約縮放級別
+            zoom: 17, // 紐約縮放級別
           },
         ],
       },
