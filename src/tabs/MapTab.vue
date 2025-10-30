@@ -85,9 +85,30 @@
         }
 
         try {
+          // 計算初始中心與縮放：若無已保存視圖，採用第一個 groupLayers 的中心/縮放
+          const getInitialView = () => {
+            if (defineStore.mapView.center && defineStore.mapView.zoom !== null) {
+              return {
+                center: defineStore.mapView.center,
+                zoom: defineStore.mapView.zoom,
+              };
+            }
+            const first = dataStore.layers[0]?.groupLayers[0];
+            if (first && Array.isArray(first.center)) {
+              // Leaflet 需要 [lat, lng]
+              return {
+                center: [first.center[1], first.center[0]],
+                zoom: first.zoom ?? 16,
+              };
+            }
+            return { center: [0, 0], zoom: 2 };
+          };
+
+          const initial = getInitialView();
+
           mapInstance = L.map(mapContainer.value, {
-            center: defineStore.mapView.center,
-            zoom: defineStore.mapView.zoom,
+            center: initial.center,
+            zoom: initial.zoom,
             zoomControl: false,
             attributionControl: false,
             dragging: false, // 禁用拖拽
@@ -327,14 +348,6 @@
   <div id="map-container" class="h-100 w-100 position-relative bg-transparent z-0">
     <!-- 🗺️ Leaflet 地圖容器 -->
     <div :id="mapContainerId" ref="mapContainer" class="h-100 w-100"></div>
-
-    <!-- 中心點顯示 -->
-    <div
-      class="position-absolute top-50 start-50 translate-middle"
-      style="z-index: 1000; pointer-events: none"
-    >
-      <div class="rounded-circle bg-white" style="width: 4px; height: 4px"></div>
-    </div>
   </div>
 </template>
 

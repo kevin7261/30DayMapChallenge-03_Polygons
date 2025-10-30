@@ -17,7 +17,7 @@
   import MapTab from '../tabs/MapTab.vue';
   import { useDataStore } from '@/stores/dataStore.js';
   import { useDefineStore } from '@/stores/defineStore.js';
-  import { ref, onMounted, computed } from 'vue';
+  import { ref, computed } from 'vue';
 
   export default {
     name: 'HomeView',
@@ -54,14 +54,8 @@
       // 📊 獲取國家列表
       const countries = computed(() => dataStore.layers[0].groupLayers);
 
-      // 🌍 當前選中的國家（預設為台灣）
-      const currentCountry = ref('TAIWAN');
-
-      // 🚀 初始化應用程式
-      onMounted(() => {
-        // 直接導航到台灣
-        navigateToCountry('Taiwan');
-      });
+      // 🌍 當前選中的國家（預設為第一個 groupLayers 的項目）
+      const currentCountry = ref(dataStore.layers[0].groupLayers[0].layerName);
 
       return {
         setMapInstance,

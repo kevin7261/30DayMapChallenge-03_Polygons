@@ -20,10 +20,10 @@ export const useDefineStore = defineStore('define', {
     // 🗺️ 當前選中的底圖類型（Google 衛星圖）
     selectedBasemap: 'google_satellite',
 
-    // 🗺️ 地圖視圖狀態
+    // 🗺️ 地圖視圖狀態（啟動時不預設，改由第一個 groupLayers 決定）
     mapView: {
-      center: [41.4036, 2.1744], // 地圖中心點 [緯度, 經度] - 巴塞隆納聖家堂
-      zoom: 18, // 縮放等級（調整到18級，顯示聖家堂建築細節）
+      center: null, // 啟動時不設定，初始由資料決定
+      zoom: null, // 啟動時不設定，初始由資料決定
     },
     // 🗺️ 底圖配置列表（Google 衛星圖）
     basemaps: [
